@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name="utenti")
-public class Utente {
+@Table(name="users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -30,14 +30,13 @@ public class Utente {
 
     @Lob// ideale per immagini o dati di grandi dimensioni
     private String profileImage;
-    
 
-    public Utente() {
+    public User() {
     }
 
     ;
 
-    public Utente( String username, String email, String password, String firstName, String lastName, String city, String province,String profileImage List<Corgi> corgis, List<Post> posts, List<Comment> commenti, List<Message> sentMessages, List<Message> receivedMessages, List<QuizResult> quizResult) {
+    public User( String username, String email, String password, String firstName, String lastName, String city, String province,String profileImage, List<Corgi> corgis, List<Post> posts, List<Comment> commenti, List<Message> sentMessages, List<Message> receivedMessages, List<QuizResult> quizResult) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -45,7 +44,7 @@ public class Utente {
         this.lastName = lastName;
         this.city = city;
         this.province = province;
-        this.profileImage=profileImage
+        this.profileImage=profileImage;
         this.corgis = corgis;
         this.posts = posts;
         this.commenti = commenti;
@@ -194,7 +193,7 @@ public class Utente {
 
     @Override
     public String toString() {
-        return "Utente{" +
+        return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
