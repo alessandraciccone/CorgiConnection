@@ -12,7 +12,8 @@ public class QuizResult {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
+private Integer score;
+private Integer totalQuestions;
 
     public QuizResult(){};
 
@@ -31,8 +32,7 @@ public class QuizResult {
     @JoinColumn(name="quiz_id", nullable = false)
     private Quiz quiz;
 
-    private Integer score;
-    private Integer totalQuestions;
+
 
     public UUID getId() {
         return id;

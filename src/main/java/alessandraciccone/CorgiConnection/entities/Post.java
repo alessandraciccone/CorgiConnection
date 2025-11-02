@@ -1,6 +1,8 @@
 package alessandraciccone.CorgiConnection.entities;
 import jakarta.persistence.*;
 import alessandraciccone.CorgiConnection.entities.User;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,11 +16,13 @@ public class Post {
     @Column(nullable=false, length = 1000)
     private String content;
 
+private LocalDate datePost;
 
     public Post(){};
 
-    public Post(String content, User author, Corgi corgi, List<PostPhoto> photos, List<Comment> comments) {
+    public Post(String content, LocalDate datePost, User author, Corgi corgi, List<PostPhoto> photos, List<Comment> comments) {
         this.content = content;
+        this.datePost= datePost;
         this.author = author;
         this.corgi = corgi;
         this.photos = photos;
@@ -51,6 +55,14 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LocalDate getDatePost() {
+        return datePost;
+    }
+
+    public void setDatePost(LocalDate datePost) {
+        this.datePost = datePost;
     }
 
     public User getAuthor() {
@@ -86,12 +98,12 @@ public class Post {
     }
 
     @Override
+
     public String toString() {
         return "Post{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", author=" + author +
-                ", corgi=" + corgi + +
+                ", datePost=" + datePost +
                 '}';
     }
 }

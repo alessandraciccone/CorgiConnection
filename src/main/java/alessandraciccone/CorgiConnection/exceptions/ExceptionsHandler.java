@@ -1,8 +1,11 @@
 package alessandraciccone.CorgiConnection.exceptions;
 
 
+import alessandraciccone.CorgiConnection.payloads.ErrorsDTO;
+import alessandraciccone.CorgiConnection.payloads.ErrorsListDTO;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -13,7 +16,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class ExceptionsHandler {
 
-    @ExceptionHandler({BadRequestException.class})@ExceptionHandler({BadRequestException.class, DataIntegrityViolationException.class, BadCredentialsException.class})
+  @ExceptionHandler({BadRequestException.class, DataIntegrityViolationException.class, BadCredentialsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsDTO handleBadRequest(Exception ex) {
         return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());

@@ -1,3 +1,7 @@
+
+
+
+/*
 package alessandraciccone.CorgiConnection.security;
 
 
@@ -13,8 +17,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.Keys;
+
 @Component
 public class JwtTool {
     @Value("${jwt.secret}")
@@ -37,4 +40,8 @@ public class JwtTool {
                 //firmo il token con la chiave segreta
                 .signWith(getSigningKey()).compact();
     }
+
+
 }
+
+ */

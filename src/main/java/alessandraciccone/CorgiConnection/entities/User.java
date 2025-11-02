@@ -3,6 +3,7 @@ package alessandraciccone.CorgiConnection.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,8 @@ public class User {
     private String city;
     private String province;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date registrationDate;
 
     @Lob// ideale per immagini o dati di grandi dimensioni
     private String profileImage;
@@ -38,7 +41,7 @@ public class User {
 
     ;
 
-    public User( String username, String email, String password, String firstName, String lastName, String city, String province,String profileImage, List<Corgi> corgis, List<Post> posts, List<Comment> commenti, List<Message> sentMessages, List<Message> receivedMessages, List<QuizResult> quizResult) {
+    public User(String username, String email, String password, String firstName, String lastName, String city, String province, Date registrationDate, String profileImage, List<Corgi> corgis, List<Post> posts, List<Comment> commenti, List<Message> sentMessages, List<Message> receivedMessages, List<QuizResult> quizResult) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -46,7 +49,8 @@ public class User {
         this.lastName = lastName;
         this.city = city;
         this.province = province;
-        this.profileImage=profileImage;
+        this.registrationDate = registrationDate;
+        this.profileImage = profileImage;
         this.corgis = corgis;
         this.posts = posts;
         this.commenti = commenti;
@@ -73,8 +77,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizResult> quizResult;
-
-
 
 
     public UUID getId() {
@@ -137,6 +139,13 @@ public class User {
         this.province = province;
     }
 
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
 
     public String getProfileImage() {
         return profileImage;
@@ -205,6 +214,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", city='" + city + '\'' +
                 ", province='" + province + '\'' +
+                ", registrationDate=" + registrationDate +
                 ", profileImage='" + profileImage + '\'' +
                 '}';
     }
