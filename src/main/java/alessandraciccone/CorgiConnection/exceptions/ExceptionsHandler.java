@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class ExceptionsHandler {
 
-    @ExceptionHandler({BadRequestException.class}@ExceptionHandler({BadRequestException.class, DataIntegrityViolationException.class, BadCredentialsException.class})
+    @ExceptionHandler({BadRequestException.class})@ExceptionHandler({BadRequestException.class, DataIntegrityViolationException.class, BadCredentialsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsDTO handleBadRequest(Exception ex) {
         return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
