@@ -3,6 +3,7 @@ package alessandraciccone.CorgiConnection.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,6 +31,7 @@ public class User {
 
     @Lob// ideale per immagini o dati di grandi dimensioni
     private String profileImage;
+
 
     public User() {
     }
@@ -76,6 +78,8 @@ public class User {
 
     public void setId(UUID id) {
         this.id = id;
+    public UUID getId() {
+        return id;
     }
 
     public String getUsername() {
