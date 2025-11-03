@@ -218,7 +218,7 @@ public List<UserResponseDTO> getUsersByCity(String city){
     public boolean usernameExists(String username){
         return userRepository.existsByUsername(username);
     }
-    
+
     //convertiamo entity a responseDTO
 
     private UserResponseDTO mapToResponseDTO (User user){
