@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.UUID;
 
-public interface PetFrindlyThingsRepository extends JpaRepository<PetFriendlyThings, UUID>, JpaSpecificationExecutor<PetFriendlyThings> {
+public interface PetFriendlyThingsRepository extends JpaRepository<PetFriendlyThings, UUID>, JpaSpecificationExecutor<PetFriendlyThings> {
 }
