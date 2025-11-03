@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
+
+   //uso optional. la classe optionale può contenere un valore come non può contenerlo. gestisce l'assenza di valore in modo più sicuro rispetto a null
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
 
