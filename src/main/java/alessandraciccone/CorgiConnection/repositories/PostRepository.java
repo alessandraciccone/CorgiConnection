@@ -1,5 +1,6 @@
 package alessandraciccone.CorgiConnection.repositories;
 
+import alessandraciccone.CorgiConnection.entities.Corgi;
 import alessandraciccone.CorgiConnection.entities.Gender;
 import alessandraciccone.CorgiConnection.entities.Post;
 import alessandraciccone.CorgiConnection.entities.User;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -24,6 +26,31 @@ List <Post> findByAuthor_Id(UUID author_Id);
 List<Post> findByDatePost(LocalDate date);
 
 long countByAuthor(User author);
+
+List <Post> findByCorgi(Corgi corgi);
+List<Post> findByCorgi_Id(UUID corgi_Id);
+List <Post> findByDatePostAfter(LocalDate date);
+List <Post> findByDatePostBefore(LocalDate date);
+List <Post> findByDatePostBetween(LocalDate startDate, LocalDate endDate);
+
+@Query("SELECT p FROM Post p WHERE p.author.city = :city")
+List<Post> findPostsByAuthorCity(@Param("city") String city);
+@Query
+        ("SELECT p FROM Post p WHERE p.datePost>= :date ORDER BY p.datePost DESC")
+    List<Post> findRecentPosts(@Param("date")LocalDate date);
+
+@Query
+        ("SELECT p FROM Post p WHERE size(p.photos)>0")
+        List<Post> findPostsWitPhotos();
+
+@Query
+        ("SELECT p FROM Post p WHERE SIZE(p.comments) >0")
+    List<Post> findPostsWithComments();
+
+@Query
+        ("SELECT COUNT(p) FROM Post p WHERE p.author.city= :city")
+    long countPostsByCity(@Param("city")String city);
+
 
 
 }

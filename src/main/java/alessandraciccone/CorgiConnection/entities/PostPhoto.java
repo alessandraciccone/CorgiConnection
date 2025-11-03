@@ -16,12 +16,16 @@ public class PostPhoto {
     @Column(nullable = false)
     private String imageUrl;
 
+@Column
+private String captionPhoto;
+
 
     public PostPhoto(){};
 
-    public PostPhoto(String imageUrl) {
+    public PostPhoto(String imageUrl,String captionPhoto) {
 
         this.imageUrl = imageUrl;
+        this.captionPhoto=captionPhoto;
 
     }
 
@@ -42,6 +46,14 @@ public class PostPhoto {
         this.imageUrl = imageUrl;
     }
 
+    public String getCaptionPhoto() {
+        return captionPhoto;
+    }
+
+    public void setCaptionPhoto(String captionPhoto) {
+        this.captionPhoto = captionPhoto;
+    }
+
     public Post getPost() {
         return post;
     }
@@ -55,6 +67,7 @@ public class PostPhoto {
         return "PostPhoto{" +
                 "id=" + id +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", captionPhoto='" + captionPhoto + '\'' +
                 '}';
     }
 }
