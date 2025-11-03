@@ -14,11 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
+@Service
 public class CorgiService {
     @Autowired
     private CorgiRepository corgiRepository;
@@ -124,7 +125,7 @@ public long countCorgis(){
                 .filter(corgi->corgi.getOwner().getId().equals(owner_Id))
                 .count();
     }
-       o, 
+
 
 //converto entity a response
     private CorgiResponseDTO mapToResponseDTO(Corgi corgi) {

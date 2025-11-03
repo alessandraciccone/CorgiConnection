@@ -22,12 +22,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+   // @Autowired
+    //private PasswordEncoder passwordEncoder;
 
     //creo nuovo utente(registrazione)
     public UserResponseDTO createUser(UserDTO userDTO) {
@@ -42,7 +43,7 @@ public class UserService {
         User newUser = new User();
         newUser.setUsername((userDTO.username()));
         newUser.setEmail(userDTO.email());
-        newUser.setPassword(passwordEncoder.encode(userDTO.password()));
+       // newUser.setPassword(passwordEncoder.encode(userDTO.password()));
         newUser.setFirstName(userDTO.firstName());
         newUser.setLastName(userDTO.lastName());
         newUser.setCity(userDTO.city());
