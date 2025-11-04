@@ -27,10 +27,10 @@ public class UserService {
   @Autowired
     private UserRepository userRepository;
 
-  //  @Autowired
-    //private PasswordEncoder passwordEncoder;
+   @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    //creo nuovo utente(registrazione)
+    //creo nuovo utente
     public UserResponseDTO createUser(UserDTO userDTO) {
         //verifico che la mail e l'username non esistano
         if (userRepository.existsByEmail(userDTO.email())) {
@@ -59,6 +59,14 @@ public class UserService {
 
         return mapToResponseDTO(savedUser);
     }
+
+    //aòltrimenti non riesce a trovare la password nel login non essendoci nel dto. sto usando il sto x il login controller
+    public User getUserByUsernameEntity(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("Utente con username " + username + " non trovato"));
+    }
+
+
 
     // trovo utente per id
     public UserResponseDTO fetUserById(UUID id) {
