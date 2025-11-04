@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @Column(name="registration_date", nullable=false)
     private Date registrationDate;
 
-    @Lob
+
     private String profileImage;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)

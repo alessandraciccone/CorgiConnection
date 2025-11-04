@@ -12,7 +12,7 @@ public class PostPhoto {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private UUID id;
 
-    @Lob
+
     @Column(nullable = false)
     private String imageUrl;
 
