@@ -1,5 +1,5 @@
 
-/*
+
 package alessandraciccone.CorgiConnection.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -92,4 +92,4 @@ public class SecurityConfig {
 
 }
 
-*/
+

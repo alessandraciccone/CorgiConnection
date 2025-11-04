@@ -1,6 +1,7 @@
 
-/*
+
 package alessandraciccone.CorgiConnection.security;
+import alessandraciccone.CorgiConnection.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,4 @@ public class JwtFilter extends OncePerRequestFilter {
             pathMatcher.match("/api/pet-friendly/**", path) || // Luoghi pet-friendly (pubblici)
             pathMatcher.match("/api/quizzes/public/**", path); // Quiz pubblici
 
-}*/
+}

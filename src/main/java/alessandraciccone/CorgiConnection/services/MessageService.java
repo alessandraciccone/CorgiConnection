@@ -10,10 +10,12 @@ import alessandraciccone.CorgiConnection.repositories.MessageRepository;
 import alessandraciccone.CorgiConnection.repositories.PostRepository;
 import alessandraciccone.CorgiConnection.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class MessageService {
     @Autowired
     private MessageRepository messageRepository;

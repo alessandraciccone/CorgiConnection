@@ -27,8 +27,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-   // @Autowired
-    //private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //creo nuovo utente(registrazione)
     public UserResponseDTO createUser(UserDTO userDTO) {
