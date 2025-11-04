@@ -21,7 +21,7 @@ public class PetFriendlyThings {
     @Enumerated(EnumType.STRING)
     private ThingsType type;
 
-    @Lob
+
     private String descriptionThing;
 
     private String address;

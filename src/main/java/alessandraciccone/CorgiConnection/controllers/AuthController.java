@@ -68,13 +68,12 @@ public class AuthController {
 
     //login post http://localhost:3001/auth/login
 
-@PostMapping("/login")
-    public ResponseEntity<Map<String,Object>> login(@RequestBody  UserDTO userDTO){
-        Map<String, Object>response= new HashMap<>();
-
+    @PostMapping("/login")
+    public ResponseEntity<Map<String,Object>> login(@RequestBody UserDTO userDTO){
+        Map<String, Object> response = new HashMap<>();
 
         if(userDTO.username()==null||userDTO.username().isEmpty()){
-            response.put("error"," Username non può essere vuoto!");
+            response.put("error","Username non può essere vuoto!");
             return ResponseEntity.badRequest().body(response);
         }
 
@@ -83,28 +82,29 @@ public class AuthController {
             return ResponseEntity.badRequest().body(response);
         }
 
-    try {
-        // Recupero utente per username
-        User user = userService.getUserByUsernameEntity(userDTO.username());
+        try {
+            User user = userService.getUserByUsernameEntity(userDTO.username());
 
-        // Verifico la password
-        if (!passwordEncoder.matches(userDTO.password(), user.getPassword())) {
+            if (!passwordEncoder.matches(userDTO.password(), user.getPassword())) {
+                response.put("error", "Credenziali non valide");
+                return ResponseEntity.status(401).body(response);
+            }
+
+            // Generazione del token JWT
+            String token = jwtTool.generateToken(user);
+
+            response.put("message", "Login avvenuto con successo");
+            response.put("userId", user.getId());
+            response.put("token", token);  // token pronto da usare sul front-end
+            return ResponseEntity.ok(response);
+
+        } catch (NotFoundException e) {
             response.put("error", "Credenziali non valide");
             return ResponseEntity.status(401).body(response);
         }
-
-        // String token = jwtService.generateToken(user);
-
-        response.put("message", "Login avvenuto con successo");
-        response.put("userId", user.getId());
-        // response.put("token", token);
-        return ResponseEntity.ok(response);
-
-    } catch (NotFoundException e) {
-        response.put("error", "Credenziali non valide");
-        return ResponseEntity.status(401).body(response);
     }
+
 }
-}
+
 
 

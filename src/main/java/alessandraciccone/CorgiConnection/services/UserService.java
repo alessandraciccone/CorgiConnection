@@ -49,7 +49,7 @@ public class UserService {
         newUser.setCity(userDTO.city());
         newUser.setPassword(userDTO.province());
         newUser.setRegistrationDate(new Date());
-        newUser.setProfileImage(userDTO.profileImage() != null ? userDTO.password() : "/images/default-user.jpg");
+        newUser.setProfileImage((userDTO.profileImage() != null ? userDTO.password() : "/images/default-user.jpg"));
 
         // salvo utente sul db
 
@@ -127,7 +127,7 @@ public class UserService {
         if (updateDTO.lastName() != null) user.setLastName(updateDTO.lastName());
         if (updateDTO.city() != null) user.setCity(updateDTO.city());
         if (updateDTO.province() != null) user.setProvince(updateDTO.province());
-        if (updateDTO.profileImage() != null) user.setProfileImage(updateDTO.profileImage());
+        if (updateDTO.profileImage() != null) user.setProfileImage(user.getProfileImage());
 
 
         User updateUser = userRepository.save(user);

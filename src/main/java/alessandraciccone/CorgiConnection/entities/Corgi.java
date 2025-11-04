@@ -26,7 +26,6 @@ public class Corgi {
     private String color;
     private String personality;
 
-    @Lob
     private String photo;
 
     public Corgi() {
