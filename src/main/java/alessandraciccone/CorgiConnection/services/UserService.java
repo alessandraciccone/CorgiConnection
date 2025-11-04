@@ -43,13 +43,14 @@ public class UserService {
         User newUser = new User();
         newUser.setUsername((userDTO.username()));
         newUser.setEmail(userDTO.email());
+       // newUser.setPassword(passwordEncoder.encode(userDTO.password()));
         newUser.setFirstName(userDTO.firstName());
         newUser.setLastName(userDTO.lastName());
         newUser.setCity(userDTO.city());
-        newUser.setPassword(passwordEncoder.encode(userDTO.password()));
-        newUser.setProvince(userDTO.province());
-        newUser.setProfileImage(userDTO.profileImage() != null ? userDTO.profileImage() : "/images/default-user.jpg");
-newUser.setRegistrationDate(new Date());
+        newUser.setPassword(userDTO.province());
+        newUser.setRegistrationDate(new Date());
+        newUser.setProfileImage((userDTO.profileImage() != null ? userDTO.password() : "/images/default-user.jpg"));
+
         // salvo utente sul db
 
         User savedUser = userRepository.save(newUser);
@@ -126,7 +127,7 @@ newUser.setRegistrationDate(new Date());
         if (updateDTO.lastName() != null) user.setLastName(updateDTO.lastName());
         if (updateDTO.city() != null) user.setCity(updateDTO.city());
         if (updateDTO.province() != null) user.setProvince(updateDTO.province());
-        if (updateDTO.profileImage() != null) user.setProfileImage(updateDTO.profileImage());
+        if (updateDTO.profileImage() != null) user.setProfileImage(user.getProfileImage());
 
 
         User updateUser = userRepository.save(user);

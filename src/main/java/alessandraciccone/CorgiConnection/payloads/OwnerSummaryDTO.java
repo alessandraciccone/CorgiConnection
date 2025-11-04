@@ -8,8 +8,8 @@ import java.util.UUID;
 public record OwnerSummaryDTO(
 
 
-UUID id,
-String username, String city,
-String profileImage
+        UUID id,
+        String username, String city,
+       String profileImage
 ) {
 }

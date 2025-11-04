@@ -33,10 +33,11 @@ public class User implements UserDetails {
     private String province;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="registration_date", nullable=false)
     private Date registrationDate;
 
 
+
+    @Column(name = "profile_image")
     private String profileImage;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
@@ -71,7 +72,7 @@ public class User implements UserDetails {
         this.city = city;
         this.province = province;
         this.registrationDate = registrationDate;
-        this.profileImage = profileImage;
+        this.profileImage=profileImage;
         this.corgis = corgis;
         this.posts = posts;
         this.commenti = commenti;
@@ -116,9 +117,7 @@ public class User implements UserDetails {
         this.registrationDate = registrationDate;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
+
 
     public void setCorgis(List<Corgi> corgis) {
         this.corgis = corgis;
@@ -170,6 +169,10 @@ public class User implements UserDetails {
 
     public String getProfileImage() {
         return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public List<Corgi> getCorgis() {
