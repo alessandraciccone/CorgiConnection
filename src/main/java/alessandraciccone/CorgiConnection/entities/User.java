@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private String province;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="registration_date", nullable=false)
     private Date registrationDate;
 
     @Lob
