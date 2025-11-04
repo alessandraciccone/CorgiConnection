@@ -1,10 +1,12 @@
-
-
 package alessandraciccone.CorgiConnection.security;
+
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,80 +18,53 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    //configuro la catena di filtri di sicurezza
+    private final JwtFilter jwtFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity JwtFilter jwtFilter) throws Exception {
-
-        //disabilito il form predefinito di spring
-
-        httpSecurity.formLogin(formLogin -> formLogin.disable());
-
-        //disabilito CSFR
-
-        httpSecurity.csrf(csfr -> csfr.disable());
-
-        //non creo sessioni server-side
-
-        httpSecurity.sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        //configuro autorizzazione endpoint
-
-        httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/api/corgi-info/**").permitAll()
-                .requestMatchers("/api/pet-friendly/**").permitAll()
-                .requestMatchers("/api/quizzes/public/**").permitAll()
-                .requestMatchers("/upload/**").permitAll()
-
-                //tutti gli altri richiedono autorizzazione
-                .anyRequest().authenticated()
-        );
-        //aggiungo filtro jwt
-        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
-        //abilito il corso
-
-        httpSecurity.cors(Customizer.withDefaults());
-
-
-        @Bean
-                public CorsConfigurationSource corsConfigurationSource(){
-            CorsConfiguration configuration= new CorsConfiguration();
-
-
-            configuration.setAllowedOrigins(List.of(
-                    "http://localhost:3000",      // React in sviluppo locale
-                    "http://localhost:5173",      // Vite in sviluppo locale
-                    "https://corgi-connection.netlify.app"  // Frontend in produzione (esempio)
-            ));
-
-            configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-
-            configuration.setAllowedHeaders(List.of("*"));
-
-            configuration.setAllowCredentials(true);
-
-            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-            source.registerCorsConfiguration("/**", configuration);
-
-            return source;
-        }
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder(12);
-        }
-
-        @Bean
-        public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-            return configuration.getAuthenticationManager();
-        }
-
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
     }
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .formLogin(form -> form.disable())
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll() // login, registrazione pubblici
+                        .anyRequest().authenticated()           // tutto il resto protetto
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
-
-

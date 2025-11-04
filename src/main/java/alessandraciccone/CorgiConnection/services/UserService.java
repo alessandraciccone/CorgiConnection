@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    @Autowired
+  @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+  //  @Autowired
+    //private PasswordEncoder passwordEncoder;
 
     //creo nuovo utente(registrazione)
     public UserResponseDTO createUser(UserDTO userDTO) {
@@ -73,6 +73,13 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("utente con email " + email + "non è stato trovato"));
         return mapToResponseDTO(user);
     }
+
+    public User getUserById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Utente con ID " + id + " non trovato"));
+    }
+
+
 // trovo utente per username
 
     public UserResponseDTO getUserByUsername(String username) {
@@ -222,18 +229,20 @@ public List<UserResponseDTO> getUsersByCity(String city){
 
     //convertiamo entity a responseDTO
 
-    private UserResponseDTO mapToResponseDTO (User user){
-            return new UserResponseDTO(
+    private UserResponseDTO mapToResponseDTO (User user) {
+        return new UserResponseDTO(
 
-                    user.getId(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getCity(),
-                    user.getProvince(),
-                    user.getRegistrationDate(),
-                    user.getProfileImage()
-            );
-        }
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getCity(),
+                user.getProvince(),
+                user.getRegistrationDate(),
+                user.getProfileImage()
+        );
     }
+}
+
+

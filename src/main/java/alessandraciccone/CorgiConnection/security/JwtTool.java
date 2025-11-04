@@ -1,39 +1,37 @@
 package alessandraciccone.CorgiConnection.security;
-
 import alessandraciccone.CorgiConnection.entities.User;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import alessandraciccone.CorgiConnection.exceptions.UnauthorizedException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtTool {
-
     @Value("${jwt.secret}")
     private String secret;
 
-    private SecretKey getSigningKey() {
-        // Assicurati che il secret sia lungo almeno 32 caratteri
-        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    public String createToken (User user) {
+        return Jwts.builder().issuedAt(new Date(System.currentTimeMillis())).expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+                .subject(String.valueOf(user.getId())).signWith(Keys.hmacShaKeyFor(secret.getBytes())).compact();
     }
 
-    public String createToken(User user) {
-        long now = System.currentTimeMillis();
-        long expirationTime = now + 1000L * 60 * 60 * 24 * 365; // 1 anno
-
-        return Jwts.builder()
-                .issuedAt(new Date(now))
-                .expiration(new Date(expirationTime))
-                .subject(user.getId().toString())
-                .claim("username", user.getUsername())
-                .claim("email", user.getEmail())
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+    public void verifyToken(String accessToken) {
+        try {
+            Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(accessToken);
+        } catch (Exception ex) {
+            throw new UnauthorizedException("Non autorizzato!");
+        }
     }
 
+    public UUID extractIdFromToken(String accessToken) {
+        return UUID.fromString(Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build()
+                .parseSignedClaims(accessToken)
+                .getPayload()
+                .getSubject());
+    }
 }
