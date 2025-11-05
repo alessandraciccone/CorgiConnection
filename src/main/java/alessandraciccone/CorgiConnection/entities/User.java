@@ -79,6 +79,8 @@ public class User implements UserDetails {
         this.sentMessages = sentMessages;
         this.receivedMessages = receivedMessages;
         this.quizResult = quizResult;
+    public UUID getId() {
+        return id;
     }
 
     public UUID getId() {
