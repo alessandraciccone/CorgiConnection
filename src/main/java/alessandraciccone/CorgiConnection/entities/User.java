@@ -60,6 +60,7 @@ public class User implements UserDetails {
 
     public User() {}
 
+<<<<<<< Updated upstream
     public User(String username, String email, String password, String firstName, String lastName,
                 String city, String province, Date registrationDate, String profileImage,
                 List<Corgi> corgis, List<Post> posts, List<Comment> commenti,
@@ -79,6 +80,13 @@ public class User implements UserDetails {
         this.sentMessages = sentMessages;
         this.receivedMessages = receivedMessages;
         this.quizResult = quizResult;
+<<<<<<< Updated upstream
+=======
+=======
+    public UUID getId() {
+        return id;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     }
 
     public UUID getId() {
