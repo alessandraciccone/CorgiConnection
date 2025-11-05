@@ -36,7 +36,6 @@ public class User implements UserDetails {
     private Date registrationDate;
 
 
-
     @Column(name = "profile_image")
     private String profileImage;
 
@@ -58,7 +57,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizResult> quizResult;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String username, String email, String password, String firstName, String lastName,
                 String city, String province, Date registrationDate, String profileImage,
@@ -72,101 +72,90 @@ public class User implements UserDetails {
         this.city = city;
         this.province = province;
         this.registrationDate = registrationDate;
-        this.profileImage=profileImage;
+        this.profileImage = profileImage;
         this.corgis = corgis;
         this.posts = posts;
         this.commenti = commenti;
         this.sentMessages = sentMessages;
         this.receivedMessages = receivedMessages;
         this.quizResult = quizResult;
+
+
+    }
+
+
     public UUID getId() {
         return id;
     }
 
-    public UUID getId() {
-        return id;
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-
-
-    public void setCorgis(List<Corgi> corgis) {
-        this.corgis = corgis;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
-
-    public void setCommenti(List<Comment> commenti) {
-        this.commenti = commenti;
-    }
-
-    public void setSentMessages(List<Message> sentMessages) {
-        this.sentMessages = sentMessages;
-    }
-
-    public void setReceivedMessages(List<Message> receivedMessages) {
-        this.receivedMessages = receivedMessages;
-    }
-
-    public void setQuizResult(List<QuizResult> quizResult) {
-        this.quizResult = quizResult;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public String getCity() {
         return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getProvince() {
         return province;
     }
 
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public Date getRegistrationDate() {
         return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public String getProfileImage() {
@@ -181,24 +170,48 @@ public class User implements UserDetails {
         return corgis;
     }
 
+    public void setCorgis(List<Corgi> corgis) {
+        this.corgis = corgis;
+    }
+
     public List<Post> getPosts() {
         return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public List<Comment> getCommenti() {
         return commenti;
     }
 
+    public void setCommenti(List<Comment> commenti) {
+        this.commenti = commenti;
+    }
+
     public List<Message> getSentMessages() {
         return sentMessages;
+    }
+
+    public void setSentMessages(List<Message> sentMessages) {
+        this.sentMessages = sentMessages;
     }
 
     public List<Message> getReceivedMessages() {
         return receivedMessages;
     }
 
+    public void setReceivedMessages(List<Message> receivedMessages) {
+        this.receivedMessages = receivedMessages;
+    }
+
     public List<QuizResult> getQuizResult() {
         return quizResult;
+    }
+
+    public void setQuizResult(List<QuizResult> quizResult) {
+        this.quizResult = quizResult;
     }
 
     @Override
@@ -207,25 +220,23 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", profileImage='" + profileImage + '\'' +
                 '}';
     }
 
-    // -------------------- UserDetails methods --------------------
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Per ora non gestiamo ruoli, restituiamo lista vuota
         return Collections.emptyList();
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
