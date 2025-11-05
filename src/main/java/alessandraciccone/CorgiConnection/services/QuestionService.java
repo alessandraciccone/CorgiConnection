@@ -1,6 +1,5 @@
 package alessandraciccone.CorgiConnection.services;
 
-
 import alessandraciccone.CorgiConnection.entities.Answer;
 import alessandraciccone.CorgiConnection.entities.Question;
 import alessandraciccone.CorgiConnection.entities.Quiz;
@@ -19,46 +18,35 @@ import java.util.UUID;
 
 @Service
 public class QuestionService {
+
     @Autowired
     private QuestionRepository questionRepository;
 
     @Autowired
     private QuizRepository quizRepository;
 
-// cerco tutte le domande
-
-
-    public List <QuestionResponseDTO> getAllQuestions(){
-        List <Question> questions = questionRepository.findAll();
-        if(questions.isEmpty()){
-            throw  new NotFoundException("Nessuna domanda trovata");
-
+    public List<QuestionResponseDTO> getAllQuestions() {
+        List<Question> questions = questionRepository.findAll();
+        if (questions.isEmpty()) {
+            throw new NotFoundException("Nessuna domanda trovata");
         }
-        return questions.stream()
-                .map(this::MapToResponseDTO)
-                .toList();
+        return questions.stream().map(this::mapToResponseDTO).toList();
     }
 
-
-    //cerco x id
-    public QuestionResponseDTO getQuestionById(UUID id){
-        Question question = questionRepository.findById(id).orElseThrow(()->new NotFoundException("domanda con id" + id +" non è stata trovata"));
-        return MapToResponseDTO(question);
+    public QuestionResponseDTO getQuestionById(UUID id) {
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Domanda con id " + id + " non trovata"));
+        return mapToResponseDTO(question);
     }
-
-//get by quiz
-
 
     public List<QuestionResponseDTO> getQuestionsByQuiz(UUID quizId) {
         List<Question> questions = questionRepository.findByQuiz_Id(quizId);
         if (questions.isEmpty()) {
             throw new NotFoundException("Nessuna domanda trovata per il quiz con id: " + quizId);
         }
-        return questions.stream().map(this::MapToResponseDTO).toList();
+        return questions.stream().map(this::mapToResponseDTO).toList();
     }
 
-
-    //Creo una domanda
     public QuestionResponseDTO createQuestion(QuestionDTO dto) {
         Quiz quiz = quizRepository.findById(dto.quizId())
                 .orElseThrow(() -> new BadRequestException("Quiz non valido o inesistente"));
@@ -69,12 +57,8 @@ public class QuestionService {
         question.setOrderNumber(dto.orderNumber());
 
         Question saved = questionRepository.save(question);
-        return MapToResponseDTO(saved);
+        return mapToResponseDTO(saved);
     }
-
-
-
-    //modifico una domanda
 
     public QuestionResponseDTO updateQuestion(UUID id, QuestionUpdateDTO dto) {
         Question question = questionRepository.findById(id)
@@ -93,11 +77,8 @@ public class QuestionService {
             question.setOrderNumber(dto.orderNumber());
 
         Question updated = questionRepository.save(question);
-        return MapToResponseDTO(updated);
+        return mapToResponseDTO(updated);
     }
-
-//cancello una domanda
-
 
     public void deleteQuestion(UUID id) {
         Question question = questionRepository.findById(id)
@@ -105,8 +86,7 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-
-    private QuestionResponseDTO MapToResponseDTO(Question question) {
+    private QuestionResponseDTO mapToResponseDTO(Question question) {
         List<UUID> answerIds = question.getAnswers() != null
                 ? question.getAnswers().stream().map(Answer::getId).toList()
                 : List.of();
@@ -119,5 +99,4 @@ public class QuestionService {
                 question.getOrderNumber()
         );
     }
-
 }
