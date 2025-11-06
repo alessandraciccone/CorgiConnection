@@ -21,14 +21,14 @@ public class PetFriendlyThingSpecification {
         };
     }
     // FILTRO X LUOGO( BEACH, EVENT, RESTAURANT, PARK, HOTEL, VER AND OTHER
-public static Specification<PetFriendlyThings> typeEquals(ThingsType type){
+    public static Specification<PetFriendlyThings> typeEquals(ThingsType type){
         return (root, query, criteriaBuilder) -> {
             if(type==null){
                 return criteriaBuilder.conjunction();
             }
             return criteriaBuilder.equal(root.get("type"), type);
         };
-}
+    }
 
 //filtro per città
 
@@ -37,13 +37,13 @@ public static Specification<PetFriendlyThings> typeEquals(ThingsType type){
             if (city == null || city.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-return  criteriaBuilder.like(
-        criteriaBuilder.lower(root.get("cityThing")),
-        "%" + city.toLowerCase() +"%"
-);
+            return  criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("cityThing")),
+                    "%" + city.toLowerCase() +"%"
+            );
         };
     }
-// filtro x provincia
+    // filtro x provincia
     public static Specification<PetFriendlyThings> districtContains(String disctrict) {
         return (root, query, criteriaBuilder) -> {
             if (disctrict == null || disctrict.isEmpty()) {
@@ -81,7 +81,7 @@ return  criteriaBuilder.like(
             );
         };
     }
-//filtro x descrizione usando una parola chiave
+    //filtro x descrizione usando una parola chiave
     public static Specification<PetFriendlyThings> descriptionContains(String keyword) {
         return (root, query, criteriaBuilder) -> {
             if (keyword == null || keyword.isEmpty()) {
@@ -130,10 +130,10 @@ return  criteriaBuilder.like(
     //filtro eventi compresi tra due date
     public static Specification<PetFriendlyThings> eventDateBetweem(Date startDate, Date endDate){
         return(root, query, criteriaBuilder) -> {
-           if(startDate==null||endDate==null){
-               return criteriaBuilder.conjunction();
-           }
-           return criteriaBuilder.between(root.get("eventTime"), startDate,endDate);
+            if(startDate==null||endDate==null){
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.between(root.get("eventTime"), startDate,endDate);
         };
     }
 

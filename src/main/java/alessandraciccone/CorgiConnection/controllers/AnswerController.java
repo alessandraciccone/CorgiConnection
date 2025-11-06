@@ -1,9 +1,8 @@
 package alessandraciccone.CorgiConnection.controllers;
 
-import alessandraciccone.CorgiConnection.payloads.AnswerDTO;
-import alessandraciccone.CorgiConnection.payloads.AnswerResponseDTO;
-import alessandraciccone.CorgiConnection.payloads.AnswerUpdateDTO;
+import alessandraciccone.CorgiConnection.payloads.*;
 import alessandraciccone.CorgiConnection.services.AnswerService;
+import alessandraciccone.CorgiConnection.services.PetFriendlyThingsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class AnswerController {
 
     // CREA NUOVA RISPOSTA
     //POST http://localhost:3001/answers
-     @PostMapping
+    @PostMapping
     public ResponseEntity<List<AnswerResponseDTO>> createAnswers(@Valid @RequestBody List<AnswerDTO> answers) {
         List<AnswerResponseDTO> saved = answers.stream()
                 .map(answerService::createAnswer)
@@ -76,4 +75,5 @@ public class AnswerController {
     public ResponseEntity<AnswerResponseDTO> getCorrectAnswerForQuestion(@PathVariable UUID questionId) {
         return ResponseEntity.ok(answerService.getCorrectAnswerForQuestion(questionId));
     }
+
 }
