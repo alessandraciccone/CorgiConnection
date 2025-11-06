@@ -51,7 +51,12 @@ public List<QuizResultResponseDTO> getAllResults() {
             .map(this::mapToResponseDTO)
             .collect(Collectors.toList());
 }
+    public QuizResultResponseDTO getResultById(UUID id) {
+        QuizResult result = quizResultRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Risultato del quiz non trovato con ID: " + id));
 
+        return mapToResponseDTO(result);
+    }
 
 //aggiorno ounteggio e domande
 
