@@ -202,6 +202,12 @@ public List<UserResponseDTO> getUsersByCity(String city){
                 .collect(Collectors.toList());//raccoglie tutti gli elementi trasformati in una nuova lista
 }
 
+    public void updateProfileImage(UUID userId, String imageUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Utente con ID " + userId + " non trovato"));
+        user.setProfileImage(imageUrl);
+        userRepository.save(user);
+    }
 
 //trovo utenti per provincia
 

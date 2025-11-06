@@ -1,14 +1,21 @@
 package alessandraciccone.CorgiConnection.controllers;
 
 
+import alessandraciccone.CorgiConnection.entities.User;
+import alessandraciccone.CorgiConnection.exceptions.NotFoundException;
 import alessandraciccone.CorgiConnection.payloads.UserDTO;
 import alessandraciccone.CorgiConnection.payloads.UserResponseDTO;
 import alessandraciccone.CorgiConnection.payloads.UserUpdateDTO;
+import alessandraciccone.CorgiConnection.services.CloudinaryService;
 import alessandraciccone.CorgiConnection.services.UserService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +26,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+@Autowired
+CloudinaryService cloudinaryService;
     // CREA NUOVO UTENTE
     //http://localhost:3001/users
     @PostMapping
@@ -75,6 +83,41 @@ public class UserController {
     ) {
         return userService.getAllUser(page, size, sortBy);
     }
+
+
+    @PostMapping("users/{id}/profile-image")
+    public ResponseEntity<UserResponseDTO>uploadProfileImage(
+            @PathVariable UUID id,
+            @RequestParam("file") MultipartFile file )throws  IOException{
+        if(file==null||file.isEmpty()){
+            throw new BadRequestException("file con immagine vuota o mancante");
+        }
+
+        String contentType= file.getContentType();
+        if(contentType==null|| !contentType.startsWith("image/")){
+            throw  new BadRequestException("Il file caricato non è idoneo!");
+        }
+
+        long maxSize = 5 * 1024 * 1024; // 5mg
+        if (file.getSize() > maxSize) {
+            throw new BadRequestException("Il file immagine supera la dimensione massima consentita di 5 MB");
+        }
+        // verifico utente esistemte e autorizzazione
+
+        User user = userService.getUserById(id);
+        if(user== null){
+            throw new NotFoundException("Utente con id" +id +"non trovato");
+        }
+
+        String ImageUrl= cloudinaryService.upload(file,"users/profiles");
+        userService.updateProfileImage(id, ImageUrl);
+
+        UserResponseDTO responseDTO= userService.fetUserById(id);
+        return ResponseEntity.ok(responseDTO);
+
+    }
+
+
 
     // RICERCA UTENTI CON FILTRI
     // base link http://localhost:3001/users/search

@@ -2,6 +2,7 @@ package alessandraciccone.CorgiConnection.services;
 
 import alessandraciccone.CorgiConnection.entities.Corgi;
 import alessandraciccone.CorgiConnection.entities.Post;
+import alessandraciccone.CorgiConnection.entities.PostPhoto;
 import alessandraciccone.CorgiConnection.entities.User;
 import alessandraciccone.CorgiConnection.exceptions.BadRequestException;
 import alessandraciccone.CorgiConnection.exceptions.NotFoundException;
@@ -18,7 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +40,8 @@ public class PostService {
 
     @Autowired
     private CorgiRepository corgiRepository;
-
+@Autowired
+public CloudinaryService cloudinaryService;
     // Crea un nuovo post
     public PostResponseDTO createPost(PostDTO postDTO) {
         User author = userRepository.findById(postDTO.author_ID())
@@ -260,6 +264,40 @@ public class PostService {
         return postRepository.countByAuthor(author);
     }
 
+//upload immagine
+public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException {
+    // Verifica post esistente
+    Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new NotFoundException("Post con id " + postId + " non è stato trovato"));
+
+    // Validazioni file
+    if (file == null || file.isEmpty()) {
+        throw new BadRequestException("Il file immagine è obbligatorio e non può essere vuoto");
+    }
+    String contentType = file.getContentType();
+    if (contentType == null || !contentType.toLowerCase().startsWith("image/")) {
+        throw new BadRequestException("Il file caricato non è un'immagine valida");
+    }
+    long maxSizeBytes = 5L * 1024 * 1024;  // 5 MB
+    if (file.getSize() > maxSizeBytes) {
+        throw new BadRequestException("Il file immagine supera la dimensione massima consentita di 5 MB");
+    }
+
+    // Upload a Cloudinary
+    String imageUrl = cloudinaryService.upload(file, "posts/photos");
+
+    // Creo una nuova entità PostPhoto
+    PostPhoto photo = new PostPhoto();
+    photo.setImageUrl(imageUrl);
+    photo.setCaptionPhoto(null); // puoi adattare se vuoi ricevere anche una caption
+    photo.setPost(post);
+
+    // Aggiungi la foto al post
+    post.getPhotos().add(photo);
+
+    // Salva
+    postRepository.save(post);
+}
 
     //  Post in PostResponseDTO
     private PostResponseDTO mapToResponseDTO(Post post) {

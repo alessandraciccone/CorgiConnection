@@ -26,6 +26,14 @@ public class CorgiService {
     @Autowired
     private UserRepository userRepository;
 
+    //metto la foto
+    public void updateCorgiPhoto(UUID id, String imageUrl) {
+        Corgi corgi = corgiRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Il cagnolino con id " + id + " non è stato trovato"));
+        corgi.setPhoto(imageUrl);
+        corgiRepository.save(corgi);
+    }
+
 
     //creo un nuovo corgi
 
