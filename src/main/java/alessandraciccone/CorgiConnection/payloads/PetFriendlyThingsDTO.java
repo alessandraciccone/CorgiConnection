@@ -12,7 +12,7 @@ public record PetFriendlyThingsDTO(
 
         @NotBlank(message="Il nome del luogo è obbligatorio!")
         @Size(min=2, max=200, message="Il nome deve avere tra i due e i 200 caratteri!")
-String petFriendyName,
+String petFriendlyName,
 
         @NotNull(message="Il tipo è obbligatorio!")
         ThingsType type,
