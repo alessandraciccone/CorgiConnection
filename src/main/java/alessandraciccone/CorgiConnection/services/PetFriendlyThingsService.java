@@ -54,7 +54,18 @@ public class PetFriendlyThingsService {
             return mapToResponseDTO(thing);
         }
 
-        //aggiorna
+//cerco tutti
+public List<PetFriendlyThingsResponseDTO> findAll() {
+    return petFriendlyThingsRepository.findAll()
+            .stream()
+            .map(this::mapToResponseDTO)
+            .collect(Collectors.toList());
+}
+
+
+
+
+    //aggiorna
 
         public PetFriendlyThingsResponseDTO updatePetFriendlyThing(UUID id, PetFriendlyThingsUpdateDTO updateDTO) {
             PetFriendlyThings thing = petFriendlyThingsRepository.findById(id).orElseThrow(() -> new NotFoundException("Evento con id" + id + "non trovato"));

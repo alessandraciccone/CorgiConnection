@@ -41,6 +41,14 @@ public  class PetFriendlyThingsController {
         return ResponseEntity.ok(thing);
     }
 
+//cerco tutti gli eventi
+    //http://localhost:8888/pet-friendly-things
+    @GetMapping("/all/no-page")
+    public ResponseEntity<List<PetFriendlyThingsResponseDTO>> getAllPetFriendlyThingsNoPage() {
+        List<PetFriendlyThingsResponseDTO> allThings = petFriendlyThingsService.findAll();
+        return ResponseEntity.ok(allThings);
+    }
+
 
     // aggiorno evento
 //http://localhost:8888/pet-friendly-things/{id}

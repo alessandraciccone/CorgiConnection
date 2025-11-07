@@ -63,7 +63,7 @@ public class PetFriendlyThingSpecification {
                 return criteriaBuilder.conjunction();
             }
             return  criteriaBuilder.like(
-                    criteriaBuilder.lower(root.get("regionThing")),
+                    criteriaBuilder.lower(root.get("region")),
                     "%" + region.toLowerCase() +"%"
             );
         };
