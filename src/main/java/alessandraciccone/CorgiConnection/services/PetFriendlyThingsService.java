@@ -33,14 +33,14 @@ public class PetFriendlyThingsService {
         public PetFriendlyThingsResponseDTO createPetFriendlyThing(PetFriendlyThingsDTO dto) {
             PetFriendlyThings newThing = new PetFriendlyThings();
 
-            newThing.setPetFriendlyName(dto.petFriendyName());
+            newThing.setPetFriendlyName(dto.petFriendlyName());
             newThing.setType(dto.type());
             newThing.setDescriptionThing(dto.descriptionThing());
             newThing.setAddress(dto.address());
             newThing.setCityThing(dto.cityThing());
             newThing.setDistrictThing(dto.districtThing());
             newThing.setRegion(dto.region());
-            newThing.setEventTime(dto.eventThing());
+            newThing.setEventTime(dto.eventTime());
             newThing.setActive(true);
 
             PetFriendlyThings savedThing = petFriendlyThingsRepository.save(newThing);

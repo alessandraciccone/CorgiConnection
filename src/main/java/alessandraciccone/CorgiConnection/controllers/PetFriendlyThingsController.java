@@ -5,6 +5,7 @@ import alessandraciccone.CorgiConnection.payloads.PetFriendlyThingsDTO;
 import alessandraciccone.CorgiConnection.payloads.PetFriendlyThingsResponseDTO;
 import alessandraciccone.CorgiConnection.payloads.PetFriendlyThingsUpdateDTO;
 import alessandraciccone.CorgiConnection.services.PetFriendlyThingsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public  class PetFriendlyThingsController {
     // creo nuovo evento
     //http://localhost:8888/pet-friendly-things
     @PostMapping
-    public ResponseEntity<PetFriendlyThingsResponseDTO> createPetFriendlyThing(@RequestBody PetFriendlyThingsDTO petFriendlyThingsDTO) {
+    public ResponseEntity<PetFriendlyThingsResponseDTO> createPetFriendlyThing( @Valid @RequestBody PetFriendlyThingsDTO petFriendlyThingsDTO) {
         PetFriendlyThingsResponseDTO createdThing = petFriendlyThingsService.createPetFriendlyThing(petFriendlyThingsDTO);
         return ResponseEntity.ok(createdThing);
     }
