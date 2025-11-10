@@ -38,6 +38,10 @@ public class User implements UserDetails {
 
     @Column(name = "profile_image")
     private String profileImage;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Roles roles = Roles.USER;
+
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Corgi> corgis;
@@ -61,7 +65,7 @@ public class User implements UserDetails {
     }
 
     public User(String username, String email, String password, String firstName, String lastName,
-                String city, String province, Date registrationDate, String profileImage,
+                String city, String province, Date registrationDate, String profileImage, Roles roles,
                 List<Corgi> corgis, List<Post> posts, List<Comment> commenti,
                 List<Message> sentMessages, List<Message> receivedMessages, List<QuizResult> quizResult) {
         this.username = username;
@@ -73,6 +77,7 @@ public class User implements UserDetails {
         this.province = province;
         this.registrationDate = registrationDate;
         this.profileImage = profileImage;
+        this.roles=roles;
         this.corgis = corgis;
         this.posts = posts;
         this.commenti = commenti;
@@ -166,6 +171,14 @@ public class User implements UserDetails {
         this.profileImage = profileImage;
     }
 
+    public Roles getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Roles roles) {
+        this.roles = roles;
+    }
+
     public List<Corgi> getCorgis() {
         return corgis;
     }
@@ -227,14 +240,20 @@ public class User implements UserDetails {
                 ", province='" + province + '\'' +
                 ", registrationDate=" + registrationDate +
                 ", profileImage='" + profileImage + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Per ora non gestiamo ruoli, restituiamo lista vuota
-        return Collections.emptyList();
+        return List.of(() -> "ROLES_" + this.roles.name());
     }
+
+    public Roles getRole() {
+        return roles;
+    }
+
+
 
 
     @Override

@@ -1,5 +1,6 @@
 package alessandraciccone.CorgiConnection.services;
 
+import alessandraciccone.CorgiConnection.entities.Roles;
 import alessandraciccone.CorgiConnection.entities.User;
 import alessandraciccone.CorgiConnection.exceptions.BadRequestException;
 import alessandraciccone.CorgiConnection.exceptions.NotFoundException;
@@ -89,6 +90,14 @@ public class UserService {
 
     public UserResponseDTO getUserByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Utente con username" + username + "non è stato trovato"));
+        return mapToResponseDTO(user);
+    }
+
+    //promuovo utente esustente ad admuin
+    public UserResponseDTO promoteToAdmin(UUID userId) {
+        User user = getUserById(userId);
+        user.setRoles(Roles.ADMIN);
+        userRepository.save(user);
         return mapToResponseDTO(user);
     }
 

@@ -83,7 +83,11 @@ CloudinaryService cloudinaryService;
     ) {
         return userService.getAllUser(page, size, sortBy);
     }
-
+//promuovo utente esistente ad admin
+    @PutMapping("/{id}/promote")
+    public UserResponseDTO promoteToAdmin(@PathVariable UUID id) {
+        return userService.promoteToAdmin(id);
+    }
 
     @PostMapping("users/{id}/profile-image")
     public ResponseEntity<UserResponseDTO>uploadProfileImage(

@@ -29,11 +29,13 @@ public class JwtTool {
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getId().toString())
+                .claim("roles", user.getRoles().name())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     public void verifyToken(String token) {
         if (token == null || token.split("\\.").length != 3) {
