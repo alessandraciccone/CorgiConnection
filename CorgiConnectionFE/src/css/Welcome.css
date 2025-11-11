@@ -1,124 +1,106 @@
-.cartoon-corgi {
-  width: 350px;
-  height: auto;
-  border: none;
-  outline: none;
-  display: block;
-  margin: 0 ;
-  position: absolute;
-  bottom: 5px; 
-  left: 50%;
-  transform: translateX(-50%);
-}
 
-.container {
+
+
+.container-fluid {
   position: relative;
-  height: 100vh;
-  width: 80%; /* più stretto per lasciare vedere il body */
-  margin: 0 auto; /* centrato orizzontalmente */
+  width: 100%;
+  max-width: 600px; /* regola a seconda dell'immagine */
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: transparent !important
+}
+
+.cartoon-corgi {
+  width: 600px;
+  height: auto;
+  display: block;
+  z-index: 1;
+  position: relative;
+  border:none;
+  background-color: transparent !important;
 }
 
 
+
+/* Fumetti */
 .speech-bubble {
   position: absolute;
-  bottom: 480px; 
-  left: 40%;
-  transform: translateX(-30%);
-  border: 1px solid #d17b49;
-  border-radius: 20px;
-  padding: 15px 20px;
-  max-width: 250px;
+  z-index: 2;
+  background:white;
+  border: 2px solid #d17b49;
+  box-shadow: 3px 3px 5px rgba(209, 123, 73, 0.3);
   font-family: 'Comic Sans MS', cursive, sans-serif;
   font-size: 1rem;
+  padding: 1.2em;
+  border-radius: 80px;
   text-align: center;
-  box-shadow: 4px 4px 4px #d17b49;
-  color:#D35400
+  opacity: 1;
+  width:500px
 }
 
-.speech-bubble::after {
-  content: '';
-  /* genero con content il triangolino del fumetto */
-  position: absolute;
-  bottom: -20px;
-  /* saposto il tringolino sotto il fumetto */
-  left: 50%;
-  /* lo centro */
+/* Posizione fumetto Alessandra */
+.speech-bubble.main {
+  top: 0%   ;
+  left: 80%;  
+  width: 220px;
   transform: translateX(-50%);
-  /* uso i bordi x le dimensioni */
-  border-width: 10px;
-  border-style: solid;
-  border-color: #fff transparent transparent transparent;
-  filter: drop-shadow(2px 2px 0 #d17b49);
-}
-.speech-bubble.dog {
-  position: absolute;
-  bottom: 320px;
-  left: 60%;
-  transform: translateX(-40%) rotate(-5deg); /* leggera inclinazione verso sinistra */
-  background: #fff;
-  border: 1px solid #d17b49;
-  border-radius: 20px;
-  padding: 12px 18px;
-  max-width: 220px;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  font-size: 0.95rem;
-  text-align: center;
-  box-shadow: 4px 4px 4 #d17b49;
 }
 
+/* Posizione fumetto Gaspare */
+.speech-bubble.dog {
+  top: 26%;   
+  left: 100%;  
+  width: 300px;
+  transform: translateX(-50%);
+}
+
+/* Triangolini */
+.speech-bubble.main::after,
 .speech-bubble.dog::after {
   content: '';
   position: absolute;
-  bottom: -20px;
-  left: 35%; /* spostato verso sinistra */
-  transform: translateX(-50%) rotate(-25deg); /* inclinato verso sinistra */
+  top: 100%;
+  left: 30%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+  filter: drop-shadow(1px 2px 0 #d17b49);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .speech-bubble.main {
+    top: 0.5%;
+    left: 50%;
+    width: 200px;
+    font-size: 0.75rem;
+    padding: 0.8em;
+  }
+
+  .cartoon-corgi{
+    width: 200px;
+  }
+  
+  .speech-bubble.dog {
+    top: 30%;
+    left: 65%;
+    width: 250px;
+    font-size: 0.75rem;
+    padding: 0.8em;
+  
+    
+  }
+  .speech-bubble.main::after,
+.speech-bubble.dog::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 10%;
+  transform: translateX(-10%);
   border-width: 10px;
   border-style: solid;
   border-color: #fff transparent transparent transparent;
-  filter: drop-shadow(2px 2px 0 #d17b49);
+  filter: drop-shadow(1px 2px 0 #d17b49);
 }
-
-
-.speech-bubble,
-.speech-bubble.dog {
-  opacity: 0;
-  animation: fadeIn 2s ease-in forwards;
-  animation-delay: 0.5s; /* ritardo opzionale */
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@media (max-width: 600px) {
-  .container {
-    width: 90%; /* ancora più stretto su mobile */
-    padding-bottom: 120px; /* spazio extra per la navbar */
-  }
-
-  .cartoon-corgi {
-    width: 180px; /* più piccolo su mobile */
-  }
-
-  .speech-bubble {
-    bottom: 400px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 200px;
-    font-size: 0.9rem;
-  }
-
-  .speech-bubble.dog {
-    bottom: 250px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-5deg);
-    max-width: 180px;
-    font-size: 0.85rem;
-  }
 }
