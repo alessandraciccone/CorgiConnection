@@ -1,6 +1,6 @@
 nav.split-nav {
   background-color: #fde4c8;
-  border: 2px solid #fb7414;
+  border-bottom: 2px solid #0c0b0a !important;
   padding: 1rem;
   font-family: 'Segoe UI', sans-serif;
   color: inherit;
@@ -52,7 +52,7 @@ nav.split-nav {
   box-sizing: border-box;
 }
 
-/* correzione padding mobile */
+
 @media (max-width: 576px) {
   nav.split-nav {
     padding: 0.5rem 0.75rem;

@@ -13,14 +13,19 @@ const Welcome = () => {
 
       {/* Fumetto Alessandra */}
       <div className="speech-bubble main">
-        Ciao! Benvenuti su Corgi Connection, il posto dove i Corgi si
-        incontrano!
+        <span>
+          {" "}
+          Ciao! Benvenuti su Corgi Connection, il posto dove i Corgi si
+          incontrano!
+        </span>
       </div>
 
       {/* Fumetto Gaspare */}
       <div className="speech-bubble dog">
-        Io mi chiamo Gaspare, e lei è la mia umana Alessandra! Registrati e
-        vieni a conoscere nuovi amici insieme a noi ❤️
+        <span>
+          Io mi chiamo Gaspare, e lei è la mia umana Alessandra! Registrati e
+          vieni a conoscere nuovi amici insieme a noi ❤️
+        </span>
       </div>
     </div>
   );
