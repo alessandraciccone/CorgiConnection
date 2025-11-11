@@ -5,7 +5,7 @@ import facebook from "../assets/img/facebook.png";
 import istagram from "../assets/img/istagram.png";
 import phone from "../assets/img/phone.png";
 import chisiamo from "../assets/img/chisiamo.png";
-
+import adopt from "../assets/img/adopt.png";
 const Footer = () => {
   const year = new Date().getFullYear();
 
@@ -19,11 +19,14 @@ const Footer = () => {
         <div className="footer-links">
           <div className="about">
             <img src={chisiamo} className="chisiamoicon" alt=" chisiamo icon" />
-
             <a href="/about">Chi siamo</a>
           </div>
-          <a href="/adopt">Adotta un corgi</a>
-          <a href="/gallery">Galleria</a>
+          <div className="adopt">
+            <img src={adopt} className="adoptIcon" alt=" adopt icon" />
+            <a href="/adopt">Adotta un corgi</a>
+          </div>
+
+          <a href="/gallery">🎞️Galleria</a>
           <div className="contattiLink">
             <img src={phone} className="phoneIcon" alt=" phone icon" />
             <a href="/contact">Contatti</a>

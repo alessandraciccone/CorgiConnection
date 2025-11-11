@@ -145,6 +145,21 @@ body {
 }
 
 
+.adopt{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adoptIcon{
+   width: 24px;
+  height: 24px;
+  /* border: 1px, solid, black; */
+  border:none;
+  border-radius: 50%; 
+  object-fit: cover;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .footer-links,

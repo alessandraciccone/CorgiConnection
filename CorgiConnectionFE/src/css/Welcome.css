@@ -55,11 +55,11 @@
 }
 
 .register-link {
-  background-image: none !important;
-  background: none !important;
+   
   color: rgb(229, 95, 18)!important;;
   font-weight: bold;
   text-decoration: none;
+  background-image:none !important ;
 }
 .register-link:hover {
   text-decoration: none !important;
