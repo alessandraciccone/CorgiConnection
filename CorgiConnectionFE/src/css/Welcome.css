@@ -4,7 +4,7 @@
 .container-fluid {
   position: relative;
   width: 100%;
-  max-width: 600px; /* regola a seconda dell'immagine */
+  max-width: 600px; 
   margin: 0 auto;
   padding: 2rem;
   background-color: transparent !important
@@ -41,7 +41,7 @@
 /* Posizione fumetto Alessandra */
 .speech-bubble.main {
   top: 0%   ;
-  left: 80%;  
+  left: 70%;  
   width: 220px;
   transform: translateX(-50%);
 }
@@ -49,7 +49,7 @@
 /* Posizione fumetto Gaspare */
 .speech-bubble.dog {
   top: 20%;   
-  left: 110%;
+  left: 100%;
   width: 300px;
   transform: translateX(-50%);
 }
@@ -89,11 +89,19 @@
 animation-fill-mode: both;
 }
 
+.quote {
+  text-align: center;
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-top: 3em ;
+  color: #444;
+  max-width: 600px;
+}
 /* Responsive */
 @media (max-width: 576px) {
   .speech-bubble.main {
     top: 0.5%;
-    left: 50%;
+    left: 30%;
     width: 200px;
     font-size: 0.75rem;
     padding: 0.8em;
@@ -104,8 +112,8 @@ animation-fill-mode: both;
   }
   
   .speech-bubble.dog {
-    top: 30%;
-    left: 65%;
+    top: 20%;
+    left: 45%;
     width: 250px;
     font-size: 0.75rem;
     padding: 0.8em;

@@ -36,7 +36,13 @@ const PaperNav = () => {
 
             <li>
               <a href="#">
-                <img src={CorgiIcon} alt="Corgi Icon" width="35" height="24" />
+                <img
+                  className="profilo"
+                  src={CorgiIcon}
+                  alt="Corgi Icon"
+                  width="35"
+                  height="24"
+                />
               </a>
             </li>
           </ul>

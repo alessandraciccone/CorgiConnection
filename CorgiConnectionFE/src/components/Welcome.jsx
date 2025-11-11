@@ -27,6 +27,10 @@ const Welcome = () => {
           vieni a conoscere nuovi amici insieme a noi ❤️
         </span>
       </div>
+      <div className="quote">
+        <p>“Un mondo senza Corgi è come un cielo senza arcobaleni.” 🌈</p>
+        <p> cit. Gaspare</p>
+      </div>
     </div>
   );
 };

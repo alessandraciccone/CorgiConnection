@@ -1,21 +1,23 @@
 import React from "react";
-import "./Footer.css";
+import "../css/Footer.css";
+import Logo from "../assets/img/logo.png";
 
 const Footer = () => {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="corgi-footer">
       <div className="footer-content">
         <div className="footer-logo">
-          <img src="/assets/corgi-logo.png" alt="Corgi Connection Logo" />
-          <h3>Corgi Connection</h3>
+          <h3>Corgi Connection 🐾 Dove i Corgi si incontrano</h3>
         </div>
 
-        <nav className="footer-links">
+        <div className="footer-links">
           <a href="/about">Chi siamo</a>
           <a href="/adopt">Adotta un corgi</a>
           <a href="/gallery">Galleria</a>
           <a href="/contact">Contatti</a>
-        </nav>
+        </div>
 
         <div className="footer-social">
           <a
@@ -33,11 +35,13 @@ const Footer = () => {
             Facebook
           </a>
         </div>
-
-        <p className="footer-copy">
-          © 2025 Corgi Connection. Tutti i diritti riservati.
-        </p>
       </div>
+      <div className="footer-logo">
+        <img src={Logo} alt="Logo Corgi Connection" />
+      </div>
+      <p className="footer-copy">
+        © {year} Corgi Connection. Tutti i diritti riservati.
+      </p>
     </footer>
   );
 };

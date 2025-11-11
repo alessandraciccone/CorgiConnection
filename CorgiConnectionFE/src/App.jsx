@@ -12,7 +12,6 @@ const App = () => {
   return (
     <>
       <PaperNav />
-      <Footer />
       <div className="container py-4">
         <Routes>
           <Route path="/" element={<Welcome />} />{" "}
@@ -20,6 +19,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
+        <Footer />
       </div>
     </>
   );
