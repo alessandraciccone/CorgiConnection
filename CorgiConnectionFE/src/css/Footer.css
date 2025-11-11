@@ -81,6 +81,70 @@ body {
   margin-bottom:0
 }
 
+.facebookWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+.facebookIcon {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%; 
+  object-fit: cover;
+}
+
+.istagramWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+
+
+.istagramIcon {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%; 
+  object-fit: cover;
+}
+
+
+
+
+
+.contattiLink{
+    display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phoneIcon{
+ width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%; 
+  object-fit: cover;
+}
+
+
+.about{
+    display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chisiamoicon{
+ width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%; 
+  object-fit: cover;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .footer-links,
