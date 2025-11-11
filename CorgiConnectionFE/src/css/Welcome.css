@@ -1,0 +1,124 @@
+.cartoon-corgi {
+  width: 350px;
+  height: auto;
+  border: none;
+  outline: none;
+  display: block;
+  margin: 0 ;
+  position: absolute;
+  bottom: 5px; 
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.container {
+  position: relative;
+  height: 100vh;
+  width: 80%; /* più stretto per lasciare vedere il body */
+  margin: 0 auto; /* centrato orizzontalmente */
+}
+
+
+.speech-bubble {
+  position: absolute;
+  bottom: 480px; 
+  left: 40%;
+  transform: translateX(-30%);
+  border: 1px solid #d17b49;
+  border-radius: 20px;
+  padding: 15px 20px;
+  max-width: 250px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  box-shadow: 4px 4px 4px #d17b49;
+  color:#D35400
+}
+
+.speech-bubble::after {
+  content: '';
+  /* genero con content il triangolino del fumetto */
+  position: absolute;
+  bottom: -20px;
+  /* saposto il tringolino sotto il fumetto */
+  left: 50%;
+  /* lo centro */
+  transform: translateX(-50%);
+  /* uso i bordi x le dimensioni */
+  border-width: 10px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+  filter: drop-shadow(2px 2px 0 #d17b49);
+}
+.speech-bubble.dog {
+  position: absolute;
+  bottom: 320px;
+  left: 60%;
+  transform: translateX(-40%) rotate(-5deg); /* leggera inclinazione verso sinistra */
+  background: #fff;
+  border: 1px solid #d17b49;
+  border-radius: 20px;
+  padding: 12px 18px;
+  max-width: 220px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-size: 0.95rem;
+  text-align: center;
+  box-shadow: 4px 4px 4 #d17b49;
+}
+
+.speech-bubble.dog::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 35%; /* spostato verso sinistra */
+  transform: translateX(-50%) rotate(-25deg); /* inclinato verso sinistra */
+  border-width: 10px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+  filter: drop-shadow(2px 2px 0 #d17b49);
+}
+
+
+.speech-bubble,
+.speech-bubble.dog {
+  opacity: 0;
+  animation: fadeIn 2s ease-in forwards;
+  animation-delay: 0.5s; /* ritardo opzionale */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (max-width: 600px) {
+  .container {
+    width: 90%; /* ancora più stretto su mobile */
+    padding-bottom: 120px; /* spazio extra per la navbar */
+  }
+
+  .cartoon-corgi {
+    width: 180px; /* più piccolo su mobile */
+  }
+
+  .speech-bubble {
+    bottom: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 200px;
+    font-size: 0.9rem;
+  }
+
+  .speech-bubble.dog {
+    bottom: 250px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-5deg);
+    max-width: 180px;
+    font-size: 0.85rem;
+  }
+}
