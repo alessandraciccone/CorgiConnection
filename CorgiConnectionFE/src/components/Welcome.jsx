@@ -23,8 +23,11 @@ const Welcome = () => {
       {/* Fumetto Gaspare */}
       <div className="speech-bubble dog">
         <span>
-          Io mi chiamo Gaspare, e lei è la mia umana Alessandra! Registrati e
-          vieni a conoscere nuovi amici insieme a noi ❤️
+          Io mi chiamo Gaspare, e lei è la mia umana Alessandra!{" "}
+          <a href="#" className="register-link">
+            Registrati
+          </a>{" "}
+          e vieni a conoscere nuovi amici insieme a noi ❤️
         </span>
       </div>
       <div className="quote">

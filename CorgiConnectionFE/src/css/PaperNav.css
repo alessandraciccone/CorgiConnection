@@ -21,6 +21,7 @@ ul.inline {
   gap: 1rem;
   padding: 0;
   margin-left:0.3em;
+    
 
 }
 
@@ -29,10 +30,13 @@ ul.inline li a {
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
+  
 }
 
 ul.inline li a:hover {
   color: #ff914d;
+  
+
 }
 .profilo{
   border-radius:50%

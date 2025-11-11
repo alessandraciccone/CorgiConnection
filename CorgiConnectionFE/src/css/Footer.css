@@ -63,7 +63,9 @@ body {
   color: #0f0f0f;
   transition: color 0.3s ease;
   background-color: #fde4c8;
-  font-size: 0.95rem
+  font-size: 0.95rem;
+  background-image: none !important;
+  background: none !important;
 }
 
 .footer-links a:hover,
