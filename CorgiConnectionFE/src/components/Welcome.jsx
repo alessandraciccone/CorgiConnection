@@ -1,5 +1,6 @@
 import cartooncorgi from "../assets/img/cartooncorgi.png";
 import "../css/Welcome.css";
+import { Link } from "react-router-dom";
 
 const Welcome = () => {
   return (
@@ -24,9 +25,9 @@ const Welcome = () => {
       <div className="speech-bubble dog">
         <span>
           Io mi chiamo Gaspare, e lei è la mia umana Alessandra!{" "}
-          <a href="#        " className="register-link">
-            Registrati
-          </a>{" "}
+          <Link to="/register" className="register-link">
+            Registrati{" "}
+          </Link>
           e vieni a conoscere nuovi amici insieme a noi ❤️
         </span>
       </div>

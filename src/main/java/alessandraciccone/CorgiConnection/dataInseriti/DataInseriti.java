@@ -12,5 +12,15 @@ id 88129b3d-6541-4deb-8587-d78c3294fb54
 cane id 2da1f5b8-1c2f-4ed4-8f76-860532bdc99c
 
 
+Mattia96
+email mattiarossi@gmail.com
+password Mattia123
+Mattia Rossi
+
+
+Miky06
+miky06@gmail.com
+mik333
+Michela Bianchi
 
 */

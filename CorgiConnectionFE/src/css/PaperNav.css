@@ -65,7 +65,10 @@ nav.split-nav {
   box-sizing: border-box;
 }
 
-
+.welcome-link{
+  text-decoration:none !important;
+  background-image: none !important;
+}
 
 
 @media (max-width: 576px) {

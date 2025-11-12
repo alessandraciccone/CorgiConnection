@@ -1,0 +1,106 @@
+form {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff8f0;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #4a4a4a;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"] {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid #ffd6a5;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  border-color: #ff9f1c;
+  outline: none;
+}
+
+button[type="submit"] {
+  display: block;
+  margin: 1.5rem auto;
+  padding: 0.5rem 1rem;
+  background-color: #ff9f1c;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px; /* più tondo */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+button[type="submit"]:hover {
+  background-color: #ff7f00;
+}
+
+.success-message {
+  color: #2ecc71;
+  font-weight: bold;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 1rem;
+  text-align: center;
+}
+.corgi-intro {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;     
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.corgi-image {
+  width: 120px;
+  height: auto;
+  margin-bottom: 1rem;
+  border: none;
+}
+
+.corgi-message {
+  font-size: 1.1rem;
+  color: #ff7f50;
+  font-weight: bold;
+  border-radius: 12px;
+  max-width: 300px;
+  text-align: center;
+  margin-bottom:0
+}
+.accountLogin{
+    text-align:center;
+    color:#ff7f50;
+    font-weight: bold;
+}
+
+.login-link{
+    color:#e74c3c!important;
+    text-decoration:none;
+    background-image:none!important ;
+}

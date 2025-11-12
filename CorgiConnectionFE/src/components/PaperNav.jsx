@@ -1,11 +1,14 @@
 import "../css/PaperNav.css";
 import CorgiIcon from "../assets/img/corgi-icon.png";
+import { Link } from "react-router-dom";
 
 const PaperNav = () => {
   return (
     <nav className="border fixed split-nav">
       <div className="nav-brand">
-        <h3>Corgi Connection 🐾</h3>
+        <Link to="/" className="welcome-link">
+          <h3>Corgi Connection 🐾</h3>
+        </Link>
       </div>
       <div className="collapsible">
         <input id="collapsible1" type="checkbox" name="collapsible1" />
@@ -26,7 +29,9 @@ const PaperNav = () => {
               <a href="#">Cosa facciamo oggi?</a>
             </li>
             <li>
-              <a href="#">Log in</a>
+              <Link to="/login" className="login-link-nav">
+                Log in
+              </Link>
             </li>
             <li>
               <a href="#">
