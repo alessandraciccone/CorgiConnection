@@ -6,6 +6,8 @@ import istagram from "../assets/img/istagram.png";
 import phone from "../assets/img/phone.png";
 import chisiamo from "../assets/img/chisiamo.png";
 import adopt from "../assets/img/adopt.png";
+import faq from "../assets/img/faq.png";
+
 const Footer = () => {
   const year = new Date().getFullYear();
 
@@ -27,9 +29,15 @@ const Footer = () => {
           </div>
 
           <a href="/gallery">🎞️Galleria</a>
+
           <div className="contattiLink">
             <img src={phone} className="phoneIcon" alt=" phone icon" />
             <a href="/contact">Contatti</a>
+          </div>
+
+          <div className="faq">
+            <img src={faq} className="faqIcon" alt=" faq icon" />
+            <a href="/contact">FAQ</a>
           </div>
         </div>
 

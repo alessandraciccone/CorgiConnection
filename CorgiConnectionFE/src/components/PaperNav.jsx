@@ -1,6 +1,6 @@
-import React from "react";
 import "../css/PaperNav.css";
 import CorgiIcon from "../assets/img/corgi-icon.png";
+
 const PaperNav = () => {
   return (
     <nav className="border fixed split-nav">
@@ -25,24 +25,12 @@ const PaperNav = () => {
             <li>
               <a href="#">Cosa facciamo oggi?</a>
             </li>
-
             <li>
               <a href="#">Log in</a>
             </li>
-
-            <li>
-              <a href="#">FAQ </a>
-            </li>
-
             <li>
               <a href="#">
-                <img
-                  className="profilo"
-                  src={CorgiIcon}
-                  alt="Corgi Icon"
-                  width="35"
-                  height="24"
-                />
+                <img className="profilo" src={CorgiIcon} alt="Corgi Icon" />
               </a>
             </li>
           </ul>
