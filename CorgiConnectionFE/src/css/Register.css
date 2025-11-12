@@ -63,6 +63,15 @@ button[type="submit"]:hover {
   text-align: center;
 }
 
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.corgi-intro {
+  animation: bounceIn 1s ease-out;
+}
 .error-message {
   color: #e74c3c;
   font-weight: bold;
@@ -88,7 +97,6 @@ button[type="submit"]:hover {
   font-size: 1.1rem;
   color: #ff7f50;
   font-weight: bold;
-  border-radius: 12px;
   max-width: 300px;
   text-align: center;
   margin-bottom:0

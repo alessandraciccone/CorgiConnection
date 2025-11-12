@@ -1,0 +1,46 @@
+@keyframes bounceIn{
+    0% { transform: scale(0.5); opacity: 0;}
+   60%{ transform: scale( 1.2); opacity:1;}
+   100% {trasnform:scale(1);}
+}
+  .girlDiv{
+    animation: bounceIn 1s ease-out;
+   }
+
+
+   .girl-message{
+    color:#e74c3c;
+    font-weight:bold;
+    margin-top: 1rem;
+    text-align: center;
+   }
+
+
+   .girlDiv{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-bottom:2rem;
+   }
+
+   .girl-image{
+   width:120px;
+   height:auto;
+   margin-bottom :1rem;
+   border:none;
+   }
+
+   .girl-intro {
+  font-size: 1rem;
+  color: #ff7f50 !important;
+  font-weight: bold;
+  max-width: 300px;
+  text-align: center;
+  margin-bottom:0
+}
+
+.accountRegister{
+    text-align:center;
+     color:#ff7f50;
+    font-weight: bold;
+}
