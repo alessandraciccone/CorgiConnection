@@ -5,11 +5,7 @@ import correrecorgi from "../assets/img/correrecorgi.png";
 
 const Profilo = () => {
   const navigate = useNavigate();
-  const [fotoProfilo, setFotoProfilo] = useState(null);
   const [utente, setUtente] = useState(null);
-  const [modificaUtente, setModificaUtente] = useState(false);
-  const [infoCane, setInfoCane] = useState("");
-
   const [profiloUtente, setProfiloUtente] = useState({
     username: "",
     email: "",
@@ -17,57 +13,79 @@ const Profilo = () => {
     lastName: "",
     city: "",
     province: "",
-    registrationDate: "",
     profileImage: "",
   });
+  const [fotoProfilo, setFotoProfilo] = useState(null);
+  const [infoCane, setInfoCane] = useState("");
+  const [modificaUtente, setModificaUtente] = useState(false);
 
   const fileInputProfiloRef = useRef(null);
-  const userId = "b3e0a997-5506-4e7e-8dd3-bd19d8989a66";
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    if (!token || !userId) return;
+
     const fetchUtente = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) throw new Error("Token non trovato");
-
         const response = await fetch(`http://localhost:8888/users/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-
         if (!response.ok) throw new Error("Errore nel recupero utente");
+
         const data = await response.json();
         setUtente(data);
         setProfiloUtente(data);
+
+        const fotoSalvata = localStorage.getItem(`fotoProfilo-${userId}`);
+        setFotoProfilo(fotoSalvata || null);
+
+        const infoSalvata = localStorage.getItem(`infoCane-${userId}`);
+        setInfoCane(infoSalvata || "");
       } catch (error) {
-        console.error("Errore:", error);
+        console.error(error);
       }
     };
 
     fetchUtente();
   }, []);
 
-  useEffect(() => {
-    const storedFoto = localStorage.getItem("fotoProfilo");
-    if (storedFoto) setFotoProfilo(storedFoto);
-  }, []);
-
-  useEffect(() => {
-    const storedInfo = localStorage.getItem("infoCane");
-    if (storedInfo) setInfoCane(storedInfo);
-  }, []);
-
   const handleFotoProfilo = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    const userId = localStorage.getItem("userId");
+    if (!file || !userId) return;
 
     const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = reader.result;
-      setFotoProfilo(base64);
-      localStorage.setItem("fotoProfilo", base64);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const maxSize = 500;
+        let { width, height } = img;
+
+        if (width > height) {
+          if (width > maxSize) {
+            height *= maxSize / width;
+            width = maxSize;
+          }
+        } else {
+          if (height > maxSize) {
+            width *= maxSize / height;
+            height = maxSize;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+
+        const base64 = canvas.toDataURL("image/png");
+        if (base64.length < 1024 * 1024) {
+          localStorage.setItem(`fotoProfilo-${userId}`, base64);
+          setFotoProfilo(base64);
+        } else alert("Immagine troppo grande, prova un file più leggero!");
+      };
+      img.src = event.target.result;
     };
     reader.readAsDataURL(file);
   };
@@ -79,15 +97,17 @@ const Profilo = () => {
 
   const handleChangeInfoCane = (e) => {
     const value = e.target.value;
+    const userId = localStorage.getItem("userId");
     setInfoCane(value);
-    localStorage.setItem("infoCane", value);
+    localStorage.setItem(`infoCane-${userId}`, value);
   };
 
   const handleInviaUtente = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token non trovato");
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    if (!token || !userId) return;
 
+    try {
       const response = await fetch(`http://localhost:8888/users/${userId}`, {
         method: "POST",
         headers: {
@@ -96,17 +116,15 @@ const Profilo = () => {
         },
         body: JSON.stringify(profiloUtente),
       });
-
       if (!response.ok) throw new Error("Errore nell'aggiornamento profilo");
-      const result = await response.json();
-      console.log("Profilo utente aggiornato:", result);
     } catch (error) {
-      console.error("Errore:", error);
+      console.error(error);
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     setUtente(null);
     setFotoProfilo(null);
     setInfoCane("");
@@ -134,57 +152,28 @@ const Profilo = () => {
               <div className="dati-utente">
                 {modificaUtente ? (
                   <>
-                    <input
-                      type="text"
-                      name="username"
-                      placeholder="Username"
-                      value={profiloUtente.username}
-                      onChange={handleChangeUtente}
-                      className="input-block"
-                    />
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      value={profiloUtente.email}
-                      onChange={handleChangeUtente}
-                      className="input-block"
-                    />
-                    <input
-                      type="text"
-                      name="firstName"
-                      placeholder="Nome"
-                      value={profiloUtente.firstName}
-                      onChange={handleChangeUtente}
-                      className="input-block"
-                    />
-                    <input
-                      type="text"
-                      name="lastName"
-                      placeholder="Cognome"
-                      value={profiloUtente.lastName}
-                      onChange={handleChangeUtente}
-                      className="input-block"
-                    />
-                    <input
-                      type="text"
-                      name="city"
-                      placeholder="Città"
-                      value={profiloUtente.city}
-                      onChange={handleChangeUtente}
-                      className="input-block"
-                    />
-                    <input
-                      type="text"
-                      name="province"
-                      placeholder="Provincia"
-                      value={profiloUtente.province}
-                      onChange={handleChangeUtente}
-                      className="input-block"
-                    />
+                    {[
+                      "username",
+                      "email",
+                      "firstName",
+                      "lastName",
+                      "city",
+                      "province",
+                    ].map((field) => (
+                      <input
+                        key={field}
+                        type={field === "email" ? "email" : "text"}
+                        name={field}
+                        placeholder={
+                          field.charAt(0).toUpperCase() + field.slice(1)
+                        }
+                        value={profiloUtente[field]}
+                        onChange={handleChangeUtente}
+                        className="input-block"
+                      />
+                    ))}
                     <div className="card mt-2">
                       <div className="card-body canecard">
-                        <label htmlFor="infoCane">Info sul cane:</label>
                         <textarea
                           id="infoCane"
                           value={infoCane}

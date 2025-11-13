@@ -38,13 +38,13 @@ const Login = () => {
         const errorData = await response.json();
         throw new Error(errorData.message || "Errore nel login");
       }
-
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      localStorage.setItem("userId", data.id); // ✅ deve esistere
+      localStorage.setItem("userId", data.userId); // ✅ fondamentale
 
       setSuccess(true);
       setFormData({ username: "", password: "" });
+      console.log("Risposta login:", data);
 
       // ✅ Vai al profilo
       navigate("/profilo");
