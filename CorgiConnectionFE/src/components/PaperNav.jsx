@@ -34,9 +34,9 @@ const PaperNav = () => {
               </Link>
             </li>
             <li>
-              <a href="#">
+              <Link to="/profilo" className="profile-link-nac">
                 <img className="profilo" src={CorgiIcon} alt="Corgi Icon" />
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

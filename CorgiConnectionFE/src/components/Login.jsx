@@ -17,7 +17,6 @@ const Login = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -32,18 +31,14 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-      localStorage.setItem(
-        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiM2UwYTk5Ny01NTA2LTRlN2UtOGRkMy1iZDE5ZDg5ODlhNjYiLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE3NjI5NTcyNTIsImV4cCI6MTc5NDQ5MzI1Mn0.XoloFKRAjLyytYhZO3i786AhqoMmlJSQqosP5qwHwRE",
-        data.token
-      );
-      setSuccess(true);
-      setFormData({ username: "", password: "" });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Errore nel login");
       }
+
+      const data = await response.json();
+
+      localStorage.setItem("token", data.token);
 
       setSuccess(true);
       setFormData({ username: "", password: "" });
