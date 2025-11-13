@@ -6,8 +6,11 @@ import alessandraciccone.CorgiConnection.exceptions.BadRequestException;
 import alessandraciccone.CorgiConnection.exceptions.NotFoundException;
 import alessandraciccone.CorgiConnection.exceptions.UnauthorizedException;
 import alessandraciccone.CorgiConnection.payloads.CorgiDTO;
+import alessandraciccone.CorgiConnection.payloads.CorgiRequestDTO;
 import alessandraciccone.CorgiConnection.payloads.CorgiResponseDTO;
 import alessandraciccone.CorgiConnection.payloads.CorgiUpdateDTO;
+import alessandraciccone.CorgiConnection.repositories.CorgiRepository;
+import alessandraciccone.CorgiConnection.repositories.UserRepository;
 import alessandraciccone.CorgiConnection.services.CloudinaryService;
 import alessandraciccone.CorgiConnection.services.CorgiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +30,37 @@ public class CorgiController {
 
    @Autowired
     private CorgiService corgiService;
-
+@Autowired
+private CorgiRepository corgiRepository;
 @Autowired
 private CloudinaryService cloudinaryService;
-   // POST http://localhost:8888/corgis
+@Autowired
+private UserRepository userRepository;
 
+
+
+   // POST http://localhost:8888/corgis
     @PostMapping
-    public ResponseEntity<CorgiResponseDTO> createCorgi(@RequestBody CorgiDTO  corgiDTO){
-        return ResponseEntity.status(201).body(corgiService.createCorgi(corgiDTO));
+    public ResponseEntity<?> createCorgi(@RequestBody CorgiRequestDTO dto) {
+        if (dto.ownerId() == null) {
+            throw new IllegalArgumentException("Owner ID must not be null");
+        }
+
+        User owner = userRepository.findById(dto.ownerId())
+                .orElseThrow(() -> new RuntimeException("Owner not found"));
+
+        Corgi corgi = new Corgi();
+        corgi.setName(dto.name());
+        corgi.setAge(dto.age());
+        corgi.setGender(dto.gender());
+        corgi.setType(dto.type());
+        corgi.setColor(dto.color());
+        corgi.setPersonality(dto.personality());
+        corgi.setPhoto(dto.photo());
+        corgi.setOwner(owner);
+
+        corgiRepository.save(corgi);
+        return ResponseEntity.ok(corgi);
     }
 // GET CORGI PER ID http://localhost:8888/corgis/{id}
 
