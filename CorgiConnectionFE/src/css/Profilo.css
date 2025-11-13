@@ -57,6 +57,9 @@ background-color: #fff8f0 !important;
   text-align: center;
   margin-bottom:1em
 }
+
+
+
 .foto-col {
   display: flex;
   flex-direction: column;
@@ -76,7 +79,6 @@ background-color: #fff8f0 !important;
 
 .btn-small-profilo {
   background-color: #ffd997;
-  border: none;
   padding: 6px 12px;
   border-radius: 5px;
   cursor: pointer;
@@ -96,4 +98,99 @@ background-color: #fff8f0 !important;
 
 .btn-small-profilo:hover {
   background-color:  #ffc022f8;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.goCorgi {
+  animation: bounceIn 1s ease-out;
+}
+
+
+.btn-small-logout:hover {
+  background-color:  #ffc022f8;
+}
+
+.bottoni-profilo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+
+.emoji-click {
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 5px;
+  background-color: #ffd997;
+  transition: transform 0.2s ease;
+  border:solid black 1px;
+}
+
+
+.btn-small-save{
+     font-size: 20px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 5px;
+  background-color: #ffd997;
+  transition: transform 0.2s ease;
+}
+.emoji-click:hover {
+  transform: scale(1.2);
+}
+
+.logout-link {
+  color: #d17b49;
+  text-decoration: none!important ;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+}
+
+.logout-link:hover {
+  color: #a94442;
+}
+
+.xlogout{
+    text-align: center;
+}
+
+
+.input-block {
+  width: 100%;         
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.input-block:focus {
+  border-color: #d17b49;   
+  outline: none;             
+  box-shadow: 0 0 0 2px #ffd99755; 
+}
+
+/* .canecard{
+    background-color: #fffab7;
+} */
+
+.canecard{
+
+ background-color: #fff8e6; /* colore caldo e visibile */
+  border: 1px solid #d17b49;
+  
+
 }

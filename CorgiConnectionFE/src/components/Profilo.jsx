@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/Profilo.css";
 import correrecorgi from "../assets/img/correrecorgi.png";
 
 const Profilo = () => {
+  const navigate = useNavigate();
   const [fotoProfilo, setFotoProfilo] = useState(null);
   const [utente, setUtente] = useState(null);
   const [modificaUtente, setModificaUtente] = useState(false);
@@ -21,6 +23,7 @@ const Profilo = () => {
 
   const fileInputProfiloRef = useRef(null);
   const userId = "b3e0a997-5506-4e7e-8dd3-bd19d8989a66";
+
   useEffect(() => {
     const fetchUtente = async () => {
       try {
@@ -50,6 +53,7 @@ const Profilo = () => {
     const storedFoto = localStorage.getItem("fotoProfilo");
     if (storedFoto) setFotoProfilo(storedFoto);
   }, []);
+
   useEffect(() => {
     const storedInfo = localStorage.getItem("infoCane");
     if (storedInfo) setInfoCane(storedInfo);
@@ -102,25 +106,27 @@ const Profilo = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); //  rimuove solo il token
+    localStorage.removeItem("token");
     setUtente(null);
-    setFotoProfilo(null); //  nasconde la foto in sessione
-    setInfoCane(""); //  svuota lo stato temporaneo
+    setFotoProfilo(null);
+    setInfoCane("");
+    navigate("/login");
   };
 
   return (
     <div className="container">
-      <div classname="goCorgi">
+      <div className="goCorgi">
         <img
           className="CCorgi"
           src={correrecorgi}
           alt="Corgi e ragazza che corrono"
         />
         <p className="textCorgi">
-          "Scrivi qualcosa sul tuo corgi: com’è, cosa ama fare… <br></br> e
-          pubblica un post per conoscere nuovi amici a quattro zampe!"
+          Scrivi qualcosa sul tuo corgi: com’è, cosa ama fare… <br />e poi
+          pubblica un post per conoscere nuovi amici a quattro zampe!
         </p>
       </div>
+
       <div className="row">
         <div className="col-12 col-lg-6 mb-4">
           <div className="card mt-2">
@@ -177,29 +183,26 @@ const Profilo = () => {
                       className="input-block"
                     />
                     <div className="card mt-2">
-                      <div className="card-body">
-                        <label htmlFor="infoCane">
-                          Info opzionali sul cane:
-                        </label>
+                      <div className="card-body canecard">
+                        <label htmlFor="infoCane">Info sul cane:</label>
                         <textarea
                           id="infoCane"
                           value={infoCane}
                           onChange={handleChangeInfoCane}
-                          placeholder="Scrivi qualcosa sul tuo cane..."
-                          className="input-block"
+                          className="input-block cane-textarea"
                           rows={4}
                         />
                       </div>
                     </div>
-                    <button
-                      className="btn-small mt-2"
+                    <span
+                      className="emoji-click"
                       onClick={() => {
                         handleInviaUtente();
                         setModificaUtente(false);
                       }}
                     >
-                      💾 Salva profilo utente
-                    </button>
+                      ✔️
+                    </span>
                   </>
                 ) : utente ? (
                   <>
@@ -212,29 +215,25 @@ const Profilo = () => {
                     <p className="card-text">Provincia: {utente.province}</p>
                     {infoCane && (
                       <div className="card mt-2">
-                        <div className="card-body">
-                          <h5>🐶 Info sul cane</h5>
-                          <p>{infoCane}</p>
+                        <div className="card-body canecard">
+                          <p className="info-cane">{infoCane}</p>
                         </div>
                       </div>
                     )}
-                    <button
-                      className="btn-small mt-2"
-                      onClick={() => setModificaUtente(true)}
-                    >
-                      ✏️ Modifica profilo
-                    </button>
-                    <button
-                      className="btn-small mt-2 ms-2"
-                      onClick={handleLogout}
-                    >
-                      🚪 Logout
-                    </button>
+                    <div className="bottoni-profilo">
+                      <span
+                        className="emoji-click"
+                        onClick={() => setModificaUtente(true)}
+                      >
+                        🖊️
+                      </span>
+                    </div>
                   </>
                 ) : (
                   <p>Caricamento dati utente...</p>
                 )}
               </div>
+
               <div className="foto-col">
                 {fotoProfilo && (
                   <img src={fotoProfilo} className="foto" alt="Foto profilo" />
@@ -256,6 +255,16 @@ const Profilo = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="xlogout">
+        <p>
+          Vuoi uscire dal tuo profilo?{" "}
+          <span className="logout-link" onClick={handleLogout}>
+            clicca qui
+          </span>{" "}
+          e torna presto a trovarci! 🐶
+        </p>
       </div>
     </div>
   );
