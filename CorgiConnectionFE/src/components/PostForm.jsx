@@ -13,7 +13,7 @@ const PostForm = ({ onPostCreated }) => {
       return;
     }
 
-    // 1. Crea il post
+    // 1. Creo il post sul backend (solo content)
     const res = await fetch("http://localhost:8888/posts", {
       method: "POST",
       headers: {
@@ -28,38 +28,18 @@ const PostForm = ({ onPostCreated }) => {
       return;
     }
 
-    let post = null;
-    try {
-      post = await res.json();
-    } catch (err) {
-      console.error("Risposta non in formato JSON:", err);
+    const post = await res.json();
+
+    // 2. Salvo la foto in localStorage come base64 (se presente)
+    if (photo) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        localStorage.setItem(`postPhoto-${post.id}`, reader.result);
+      };
+      reader.readAsDataURL(photo);
     }
 
-    // 2. Carica la foto se presente
-    if (post && post.id && photo) {
-      const formData = new FormData();
-      formData.append("file", photo); // ✅ nome corretto per il backend
-
-      const photoRes = await fetch(
-        `http://localhost:8888/posts/${post.id}/photo`,
-        {
-          method: "POST", // ✅ deve essere POST, non PUT
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (!photoRes.ok) {
-        console.error(
-          "Errore nel caricamento della foto:",
-          await photoRes.text()
-        );
-      }
-    }
-
-    // 3. Reset del form
+    // 3. Reset form
     setContent("");
     setPhoto(null);
     onPostCreated();

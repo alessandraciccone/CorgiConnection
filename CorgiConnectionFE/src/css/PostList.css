@@ -2,4 +2,14 @@
   max-width: 300px;
   height: auto;
   border-radius: 6px;
+  
+  /* text-align: center; */
+}
+
+.post-list {
+    display: flex;
+    flex-wrap: wrap;      
+    justify-content: center;
+    gap: 15px;            
+    padding: 20px;
 }

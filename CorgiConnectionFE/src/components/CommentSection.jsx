@@ -4,13 +4,11 @@ const CommentSection = ({ postId }) => {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
 
-  // Carica i commenti del post dal localStorage
   useEffect(() => {
     const saved = localStorage.getItem(`comments-${postId}`);
     setComments(saved ? JSON.parse(saved) : []);
   }, [postId]);
 
-  // Salva nel localStorage
   const saveComments = (newComments) => {
     setComments(newComments);
     localStorage.setItem(`comments-${postId}`, JSON.stringify(newComments));
@@ -39,21 +37,29 @@ const CommentSection = ({ postId }) => {
 
   return (
     <div className="comments">
-      <ul>
+      <ul className="comment-list">
         {comments.map((c) => (
-          <li key={c.id}>
+          <li key={c.id} className="comment-item">
             {c.text}
-            <button onClick={() => handleDelete(c.id)}>❌</button>
+            <button
+              className="comment-delete"
+              onClick={() => handleDelete(c.id)}
+            >
+              ❌
+            </button>
           </li>
         ))}
       </ul>
 
       <textarea
+        className="comment-textarea"
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Scrivi un commento..."
       />
-      <button onClick={handleSubmit}>Commenta</button>
+      <button className="small-button" onClick={handleSubmit}>
+        Commenta
+      </button>
     </div>
   );
 };
