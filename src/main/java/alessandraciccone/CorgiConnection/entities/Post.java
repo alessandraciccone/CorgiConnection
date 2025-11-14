@@ -20,11 +20,10 @@ private LocalDate datePost;
 
     public Post(){};
 
-    public Post(String content, LocalDate datePost, User author, Corgi corgi, List<PostPhoto> photos, List<Comment> comments) {
+    public Post(String content, LocalDate datePost, User author, List<PostPhoto> photos, List<Comment> comments) {
         this.content = content;
         this.datePost= datePost;
         this.author = author;
-        this.corgi = corgi;
         this.photos = photos;
         this.comments = comments;
     }
@@ -33,9 +32,7 @@ private LocalDate datePost;
     @JoinColumn(name="author_id", nullable = false)
     private User author;
 
-   @ManyToOne
-    @JoinColumn(name="corgi_id")
-    private Corgi corgi;
+
 
    @OneToMany(mappedBy = "post", cascade= CascadeType.ALL)
     private List<PostPhoto> photos;
@@ -73,13 +70,7 @@ private LocalDate datePost;
         this.author = author;
     }
 
-    public Corgi getCorgi() {
-        return corgi;
-    }
 
-    public void setCorgi(Corgi corgi) {
-        this.corgi = corgi;
-    }
 
     public List <PostPhoto> getPhotos() {
         return photos;

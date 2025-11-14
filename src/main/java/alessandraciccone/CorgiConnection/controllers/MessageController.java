@@ -22,7 +22,7 @@ public class MessageController {
 
 
 //AGGIUNGI UN MESSAGGIO
-    //http://localhost:3001/messages
+    //http://localhost:8888/messages
 
     @PostMapping
     public ResponseEntity<MessageResponseDTO> sendMessage(@RequestBody MessageDTO dto) {

@@ -1,10 +1,8 @@
 package alessandraciccone.CorgiConnection.specifications;
 
-import alessandraciccone.CorgiConnection.entities.Corgi;
 import alessandraciccone.CorgiConnection.entities.Post;
 import alessandraciccone.CorgiConnection.entities.User;
 import jakarta.persistence.criteria.Join;
-import org.springframework.boot.autoconfigure.rsocket.RSocketProperties;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
@@ -110,45 +108,6 @@ public class PostSpecification {
         };
     }
 
-
-    //filtro per parola corgi
-
-    public static Specification<Post> corgiEquals(Corgi corgi) {
-        return (root, query, criteriaBuilder) -> {
-            if (corgi == null) {
-                return criteriaBuilder.conjunction();
-
-            }
-            return criteriaBuilder.equal(root.get("corgi"), corgi);
-        };
-    }
-
-    //filtro x corgi id
-
-    public static Specification<Post> corgiIdEquals(UUID corgi_Id) {
-        return (root, query, criteriaBuilder) -> {
-            if (corgi_Id == null) {
-                return criteriaBuilder.conjunction();
-
-            }
-            return criteriaBuilder.equal(root.get("corgi").get("id"), corgi_Id);
-        };
-    }
-
-//filtro per nome del corgi
-
-    public static Specification<Post> corgiNameContains(String corgiName) {
-        return (root, query, criteriaBuilder) -> {
-            if (corgiName == null || corgiName.isEmpty()) {
-                return criteriaBuilder.conjunction();
-            }
-            Join<Post, Corgi> corgiJoin = root.join("corgi");
-            return criteriaBuilder.like(
-                    criteriaBuilder.lower(corgiJoin.get("name")),
-                    "%" + corgiName.toLowerCase() + "%"
-            );
-        };
-    }
 
     //filtro x data esatta
 

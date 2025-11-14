@@ -20,7 +20,9 @@ const PaperNav = () => {
         <div className="collapsible-body">
           <ul className="inline">
             <li>
-              <a href="#">Home</a>
+              <Link to="/home" className="login-link-nav">
+                Home
+              </Link>
             </li>
             <li>
               <a href="#">Lo sapevi?</a>

@@ -140,8 +140,8 @@ const Profilo = () => {
           alt="Corgi e ragazza che corrono"
         />
         <p className="textCorgi">
-          Scrivi qualcosa sul tuo corgi: com’è, cosa ama fare… <br />e poi
-          pubblica un post per conoscere nuovi amici a quattro zampe!
+          Scrivi qualcosa su di te e sul tuo cagnolino… <br />e poi pubblica un
+          post per conoscere nuovi amici a quattro zampe!
         </p>
       </div>
 

@@ -1,17 +1,13 @@
 package alessandraciccone.CorgiConnection.repositories;
 
-import alessandraciccone.CorgiConnection.entities.Corgi;
-import alessandraciccone.CorgiConnection.entities.Gender;
 import alessandraciccone.CorgiConnection.entities.Post;
 import alessandraciccone.CorgiConnection.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,8 +23,6 @@ List<Post> findByDatePost(LocalDate date);
 
 long countByAuthor(User author);
 
-List <Post> findByCorgi(Corgi corgi);
-List<Post> findByCorgi_Id(UUID corgi_Id);
 List <Post> findByDatePostAfter(LocalDate date);
 List <Post> findByDatePostBefore(LocalDate date);
 List <Post> findByDatePostBetween(LocalDate startDate, LocalDate endDate);

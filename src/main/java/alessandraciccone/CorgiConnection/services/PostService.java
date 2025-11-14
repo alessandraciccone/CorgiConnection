@@ -1,13 +1,11 @@
 package alessandraciccone.CorgiConnection.services;
 
-import alessandraciccone.CorgiConnection.entities.Corgi;
 import alessandraciccone.CorgiConnection.entities.Post;
 import alessandraciccone.CorgiConnection.entities.PostPhoto;
 import alessandraciccone.CorgiConnection.entities.User;
 import alessandraciccone.CorgiConnection.exceptions.BadRequestException;
 import alessandraciccone.CorgiConnection.exceptions.NotFoundException;
 import alessandraciccone.CorgiConnection.payloads.*;
-import alessandraciccone.CorgiConnection.repositories.CorgiRepository;
 import alessandraciccone.CorgiConnection.repositories.PostRepository;
 import alessandraciccone.CorgiConnection.repositories.UserRepository;
 import alessandraciccone.CorgiConnection.specifications.PostSpecification;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +23,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,35 +34,19 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private CorgiRepository corgiRepository;
+
 @Autowired
 public CloudinaryService cloudinaryService;
     // Crea un nuovo post
-    public PostResponseDTO createPost(PostDTO postDTO) {
-        User author = userRepository.findById(postDTO.author_ID())
-                .orElseThrow(() -> new NotFoundException("Autore con id " + postDTO.author_ID() + " non è stato trovato"));
-
-        Corgi corgi = null;
-        if (postDTO.corgi_Id() != null) {
-            corgi = corgiRepository.findById(postDTO.corgi_Id())
-                    .orElseThrow(() -> new NotFoundException("Cagnolino con id " + postDTO.corgi_Id() + " non è stato trovato"));
-
-            if (!corgi.getOwner().getId().equals(author.getId())) {
-                throw new BadRequestException("Puoi postare solo i tuoi cagnolini!");
-            }
-        }
-
+    public PostResponseDTO createPost(PostDTO postDTO, User authenticatedUser) {
         Post newPost = new Post();
         newPost.setContent(postDTO.content());
         newPost.setDatePost(LocalDate.now());
-        newPost.setAuthor(author);
-        newPost.setCorgi(corgi);
+        newPost.setAuthor(authenticatedUser);
 
         Post savedPost = postRepository.save(newPost);
         return mapToResponseDTO(savedPost);
     }
-
     // Trova post per ID
     public PostResponseDTO getPostById(UUID id) {
         Post post = postRepository.findById(id)
@@ -83,16 +63,7 @@ public CloudinaryService cloudinaryService;
             post.setContent(updateDTO.content());
         }
 
-        if (updateDTO.corgi_Id() != null) {
-            Corgi corgi = corgiRepository.findById(updateDTO.corgi_Id())
-                    .orElseThrow(() -> new NotFoundException("Cagnolino con id " + updateDTO.corgi_Id() + " non è stato trovato"));
 
-            if (!corgi.getOwner().getId().equals(post.getAuthor().getId())) {
-                throw new BadRequestException("Puoi associare solo i tuoi cagnolini ai post!");
-            }
-
-            post.setCorgi(corgi);
-        }
 
         Post updatedPost = postRepository.save(post);
         return mapToResponseDTO(updatedPost);
@@ -148,8 +119,7 @@ public CloudinaryService cloudinaryService;
             String authorLastName,
             String authorCity,
             String contentKeyword,
-            UUID corgi_Id,
-            String corgiName,
+
             LocalDate exactDate,
             LocalDate dateAfter,
             LocalDate dateBefore,
@@ -185,12 +155,7 @@ public CloudinaryService cloudinaryService;
         if (contentKeyword != null && !contentKeyword.isEmpty()) {
             spec = spec.and(PostSpecification.contentContains(contentKeyword));
         }
-        if (corgi_Id != null) {
-            spec = spec.and(PostSpecification.corgiIdEquals(corgi_Id));
-        }
-        if (corgiName != null && !corgiName.isEmpty()) {
-            spec = spec.and(PostSpecification.corgiNameContains(corgiName));
-        }
+
         if (exactDate != null) {
             spec = spec.and(PostSpecification.dateEquals(exactDate));
         }
@@ -199,7 +164,7 @@ public CloudinaryService cloudinaryService;
             spec = spec.and(PostSpecification.dateAfter(dateAfter));
         }
         if (dateBefore != null) {
-            spec = spec.and(PostSpecification.dateAfter(dateBefore));
+            spec = spec.and(PostSpecification.dateBefore(dateBefore));
         }
 
         if (startDate != null && endDate != null) {
@@ -310,17 +275,6 @@ public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException 
                 post.getAuthor().getProfileImage()
         );
 
-        CorgiSummaryDTO corgiSummary = null;
-        if (post.getCorgi() != null) {
-            corgiSummary = new CorgiSummaryDTO(
-                    post.getCorgi().getId(),
-                    post.getCorgi().getName(),
-                    post.getCorgi().getAge(),
-                    post.getCorgi().getGender(),
-                    post.getCorgi().getPhoto()
-            );
-        }
-
         List<PhotoSummaryDTO> photoSummary = new ArrayList<>();
         if (post.getPhotos() != null) {
             photoSummary = post.getPhotos().stream()
@@ -337,10 +291,8 @@ public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException 
         return new PostResponseDTO(
                 post.getId(),
                 post.getContent(),
-                post.getCorgi()!=null ? post.getCorgi().getId(): null,
                 post.getDatePost(),
                 authorSummary,
-                corgiSummary,
                 photoSummary,
                 commentsCount
         );

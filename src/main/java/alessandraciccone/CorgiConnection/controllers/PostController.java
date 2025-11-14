@@ -1,14 +1,17 @@
 package alessandraciccone.CorgiConnection.controllers;
 
 
+import alessandraciccone.CorgiConnection.entities.User;
 import alessandraciccone.CorgiConnection.payloads.PostDTO;
 import alessandraciccone.CorgiConnection.payloads.PostResponseDTO;
 import alessandraciccone.CorgiConnection.payloads.PostUpdateDTO;
 import alessandraciccone.CorgiConnection.services.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,10 +33,11 @@ public class PostController {
 
 
     @PostMapping
-    public ResponseEntity<PostResponseDTO> createPost(@RequestBody PostDTO postDTO) {
-        return ResponseEntity.ok(postService.createPost(postDTO));
+    public ResponseEntity<PostResponseDTO> createPost(@RequestBody @Valid PostDTO postDTO,
+                                                      @AuthenticationPrincipal User user) {
+        PostResponseDTO response = postService.createPost(postDTO, user);
+        return ResponseEntity.ok(response);
     }
-
 //metto immagine
 //http://localhost:8888/posts/{id}/photo
     @PostMapping(value = "/{id}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -123,7 +127,7 @@ public class PostController {
     ) {
         return ResponseEntity.ok(postService.searchPost(
                 author_id, authorUsername, authorFirstName, authorLastName, authorCity,
-                contentKeyword, corgi_Id, corgiName, exactDate, dateAfter, dateBefore,
+                contentKeyword,  exactDate, dateAfter, dateBefore,
                 startDate, endDate, hasPhotos, hasComments, page, size, sortBy
         ));
     }

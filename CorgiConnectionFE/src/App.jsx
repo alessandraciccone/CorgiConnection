@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Profilo from "./components/Profilo";
-const Home = () => <h2>Home Page</h2>;
+import Home from "./components/Home";
 const Admin = () => <h2>Admin Panel</h2>;
 
 const App = () => {
@@ -20,6 +20,7 @@ const App = () => {
           <Route path="/" element={<Welcome />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Home />} />
           {/* <Route path="/curiosita" element={<Curiosita />} />
           <Route path="/cosa-facciamo" element={<CosaFacciamo />} />
           <Route path="/quiz" element={<Quiz />} /> */}
