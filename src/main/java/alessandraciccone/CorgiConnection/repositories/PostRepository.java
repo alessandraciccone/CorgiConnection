@@ -39,9 +39,7 @@ List<Post> findPostsByAuthorCity(@Param("city") String city);
         ("SELECT p FROM Post p WHERE p.datePost>= :date ORDER BY p.datePost DESC")
     List<Post> findRecentPosts(@Param("date")LocalDate date);
 
-@Query
-        ("SELECT p FROM Post p WHERE size(p.photos)>0")
-        List<Post> findPostsWitPhotos();
+
 
 @Query
         ("SELECT p FROM Post p WHERE SIZE(p.comments) >0")

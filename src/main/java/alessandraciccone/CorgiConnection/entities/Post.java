@@ -20,12 +20,19 @@ private LocalDate datePost;
 
     public Post(){};
 
+<<<<<<< Updated upstream
     public Post(String content, LocalDate datePost, User author, Corgi corgi, List<PostPhoto> photos, List<Comment> comments) {
         this.content = content;
         this.datePost= datePost;
         this.author = author;
         this.corgi = corgi;
         this.photos = photos;
+=======
+    public Post(String content, LocalDate datePost, User author, List<Comment> comments) {
+        this.content = content;
+        this.datePost= datePost;
+        this.author = author;
+>>>>>>> Stashed changes
         this.comments = comments;
     }
 
@@ -37,8 +44,7 @@ private LocalDate datePost;
     @JoinColumn(name="corgi_id")
     private Corgi corgi;
 
-   @OneToMany(mappedBy = "post", cascade= CascadeType.ALL)
-    private List<PostPhoto> photos;
+
 
    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -81,13 +87,7 @@ private LocalDate datePost;
         this.corgi = corgi;
     }
 
-    public List <PostPhoto> getPhotos() {
-        return photos;
-    }
 
-    public void setPhotos(List<PostPhoto> photos) {
-        this.photos = photos;
-    }
 
     public List <Comment> getComments() {
         return comments;

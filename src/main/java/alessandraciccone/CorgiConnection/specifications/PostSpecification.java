@@ -194,14 +194,7 @@ public class PostSpecification {
         };
     }
 
-    //filtro per post con almeno una foto
 
-
-    public static Specification<Post> hasPhotos() {
-        return (root, query, criteriaBuilder) -> {
-            return criteriaBuilder.isNotEmpty(root.get("photos"));
-        };
-    }
 
     //filtro post com almeno un commento
     public static Specification<Post> hasComment() {
