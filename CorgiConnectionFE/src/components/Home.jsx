@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import PostForm from "./PostForm";
 import PostList from "./PostList";
 import SearchBar from "./SearchBar";
 import "../css/Home.css";
@@ -12,8 +11,9 @@ const Home = () => {
     contentKeyword: "",
   });
 
+  const token = localStorage.getItem("token");
+
   const fetchPosts = async () => {
-    const token = localStorage.getItem("token");
     if (!token) {
       console.error("Token mancante: impossibile effettuare la richiesta.");
       return;
@@ -26,25 +26,30 @@ const Home = () => {
       sortBy: "datePost",
     }).toString();
 
-    const res = await fetch(`http://localhost:8888/posts/search?${query}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error("Errore nella ricerca dei post:", res.status, errorText);
-      return;
-    }
-
-    let data = null;
     try {
-      data = await res.json();
-      setPosts(data.content || []);
+      const res = await fetch(`http://localhost:8888/posts/search?${query}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Errore nella ricerca dei post:", res.status, errorText);
+        return;
+      }
+
+      const data = await res.json();
+      const postsWithUser = (data.content || []).map((post) => ({
+        ...post,
+        authorUsername: post.author?.username || "Anonimo",
+      }));
+
+      setPosts(postsWithUser);
     } catch (err) {
-      console.error("Risposta non in formato JSON:", err);
+      console.error("Errore durante fetchPosts:", err);
     }
   };
 
@@ -54,6 +59,7 @@ const Home = () => {
 
   return (
     <>
+      {/* Immagine decorativa */}
       <div className="corgiPost">
         <img className="corgiPostImg" src={corgipost} alt="immagine corgi" />
         <p className="corgiPostP">
@@ -63,9 +69,9 @@ const Home = () => {
       </div>
 
       <div className="home-container">
-        <PostForm onPostCreated={fetchPosts} />
+        {/* Se vuoi creare nuovi post, possiamo gestirlo direttamente dentro PostList */}
         <SearchBar filters={filters} setFilters={setFilters} />
-        <PostList posts={posts} onRefresh={fetchPosts} />
+        <PostList posts={posts} />
       </div>
     </>
   );

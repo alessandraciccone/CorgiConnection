@@ -1,15 +1,51 @@
-.fotopost {
-  max-width: 300px;
-  height: auto;
-  border-radius: 6px;
-  
-  /* text-align: center; */
+/* Container principale */
+.post-list-container {
+  padding: 20px;
 }
 
+/* Textarea “Crea Post” */
+.create-post {
+  margin-bottom: 20px;
+
+}
+
+textarea.edit-textarea {
+  background-color: #fff8e6;
+  border-radius: 5px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+/* Lista post */
 .post-list {
-    display: flex;
-    flex-wrap: wrap;      
-    justify-content: center;
-    gap: 15px;            
-    padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Card post */
+.post-card {
+  border: 1px solid #0a0a0a;
+  padding: 10px;
+  background-color: #fff8e6;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  flex: 1 1 100%; /* mobile: 1 colonna */
+}
+
+.post-card:hover {
+  background-color: #e9ecef;
+}
+
+.post-card.editing {
+  background-color: #fff8e6;
+}
+
+/* Responsive: 2 colonne su large */
+@media (min-width: 992px) {
+  .post-card {
+    flex: 0 0 calc(50% - 10px);
+  }
 }

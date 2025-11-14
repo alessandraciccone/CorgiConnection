@@ -1,99 +1,89 @@
-import { useState } from "react";
-import CommentSection from "./CommentSection";
-import MessageButton from "./MessageButton";
-import "../css/PostCard.css";
+import React, { useState } from "react";
 
-const PostCard = ({ post, onRefresh }) => {
-  const [editing, setEditing] = useState(false);
-  const [content, setContent] = useState(post.content);
-  const [newPhoto, setNewPhoto] = useState(null);
-
-  const currentUserId = localStorage.getItem("userId");
-  const isAuthor = currentUserId && post.author.id === currentUserId;
+const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
+  const [editContent, setEditContent] = useState(post.content);
+  const [isEditing, setIsEditing] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  // Recupero la foto dal localStorage
-  const storedPhoto = localStorage.getItem(`postPhoto-${post.id}`);
-  const photoToShow = newPhoto ? URL.createObjectURL(newPhoto) : storedPhoto;
+  const handleUpdate = async () => {
+    try {
+      const res = await fetch(`http://localhost:8888/posts/${post.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content: editContent }),
+      });
 
-  const handleDelete = async () => {
-    await fetch(`http://localhost:8888/posts/${post.id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    // Rimuovo la foto dal localStorage
-    localStorage.removeItem(`postPhoto-${post.id}`);
-
-    onRefresh();
+      if (res.ok) {
+        onPostUpdated(post.id, editContent);
+        setIsEditing(false);
+      } else {
+        console.error("Errore aggiornamento post:", res.status);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleUpdate = async () => {
-    await fetch(`http://localhost:8888/posts/${post.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ content }),
-    });
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`http://localhost:8888/posts/${post.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    // Aggiorno la foto in localStorage se selezionata
-    if (newPhoto) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        localStorage.setItem(`postPhoto-${post.id}`, reader.result);
-      };
-      reader.readAsDataURL(newPhoto);
+      if (res.ok) {
+        onPostDeleted(post.id);
+      } else {
+        console.error("Errore eliminazione post:", res.status);
+      }
+    } catch (err) {
+      console.error(err);
     }
-
-    setEditing(false);
-    onRefresh();
   };
 
   return (
-    <div className="cardPost">
-      <h3 className="author-name">
-        {post.author.firstName} {post.author.lastName} (@{post.author.username})
-      </h3>
+    <div className={`card post-card ${isEditing ? "editing" : ""}`}>
+      <div className="card-body">
+        <p>
+          <strong>Autore:</strong> {post.author?.username || "Sconosciuto"}
+        </p>
+        <p>
+          <strong>Data:</strong> {post.date}
+        </p>
 
-      {editing ? (
-        <>
+        {isEditing ? (
           <textarea
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            rows={4}
             className="edit-textarea"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
           />
-          <input type="file" onChange={(e) => setNewPhoto(e.target.files[0])} />
-          <button className="save-btn" onClick={handleUpdate}>
-            Salva
-          </button>
-        </>
-      ) : (
-        <p className="post-text">{post.content}</p>
-      )}
-
-      {photoToShow && <img className="fotopost" src={photoToShow} alt="Post" />}
-
-      <div className="actions">
-        {isAuthor ? (
-          <>
-            <button className="edit-btn" onClick={() => setEditing(!editing)}>
-              ✏️
-            </button>
-            <button className="delete-btn" onClick={handleDelete}>
-              🗑️
-            </button>
-          </>
         ) : (
-          <MessageButton recipientId={post.author.id} />
+          <p className="card-text">{post.content}</p>
         )}
+
+        <button
+          onClick={() => setIsEditing(!isEditing)}
+          className="btn btn-secondary me-2"
+        >
+          {isEditing ? "❌" : "✏️"}
+        </button>
+        {isEditing && (
+          <button onClick={handleUpdate} className="btn btn-success me-2">
+            ✔️
+          </button>
+        )}
+
+        <button onClick={handleDelete} className="btn btn-danger">
+          ✖️
+        </button>
       </div>
-
-      <hr className="divider" />
-
-      <CommentSection postId={post.id} />
     </div>
   );
 };
