@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import MessageButton from "./MessageButton";
 import CommentSection from "./CommentSection";
 
@@ -51,9 +52,7 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Sei sicuro di voler eliminare questo post?")) {
-      return;
-    }
+    if (!window.confirm("Sei sicuro di voler eliminare questo post?")) return;
 
     try {
       const res = await fetch(`http://localhost:8888/posts/${post.id}`, {
@@ -85,7 +84,9 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
           }}
         >
           <div>
-            <strong>{post.author?.username || "Sconosciuto"}</strong>
+            <Link to={`/profile/${post.author?.id}`} className="username-link">
+              <strong>@{post.author?.username || "Sconosciuto"}</strong>
+            </Link>
             <br />
             <small style={{ color: "#666" }}>
               {post.datePost
@@ -124,23 +125,13 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
             alignItems: "center",
           }}
         >
-          {isLoggedIn && isPostOwner ? (
-            <>
-              {isEditing ? (
+          {isLoggedIn &&
+            (isPostOwner ? (
+              isEditing ? (
                 <>
                   <button
                     onClick={handleUpdate}
-                    style={{
-                      marginTop: "10px",
-                      color: "#0e0d0dff",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                      backgroundColor: "white", // ⬅️ CAMBIATO
-                      fontSize: "14px",
-                      marginRight: "8px",
-                    }}
+                    className="btn btn-light btn-sm"
                   >
                     ✔️ Salva
                   </button>
@@ -149,17 +140,7 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
                       setIsEditing(false);
                       setEditContent(post.content);
                     }}
-                    style={{
-                      marginTop: "10px",
-                      color: "#0e0d0dff",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                      backgroundColor: "white", // ⬅️ CAMBIATO
-                      fontSize: "14px",
-                      marginRight: "8px",
-                    }}
+                    className="btn btn-light btn-sm"
                   >
                     ❌ Annulla
                   </button>
@@ -168,41 +149,21 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
                 <>
                   <button
                     onClick={() => setIsEditing(true)}
-                    style={{
-                      marginTop: "10px",
-                      color: "#0e0d0dff",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                      backgroundColor: "white", // ⬅️ CAMBIATO
-                      fontSize: "14px",
-                      marginRight: "8px",
-                    }}
+                    className="btn btn-light btn-sm"
                   >
                     ✏️ Modifica
                   </button>
                   <button
                     onClick={handleDelete}
-                    style={{
-                      marginTop: "10px",
-                      color: "#0e0d0dff",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                      backgroundColor: "white", // ⬅️ CAMBIATO
-                      fontSize: "14px",
-                    }}
+                    className="btn btn-light btn-sm"
                   >
                     🗑️ Elimina
                   </button>
                 </>
-              )}
-            </>
-          ) : (
-            isLoggedIn && <MessageButton recipientId={post.author?.id} />
-          )}
+              )
+            ) : (
+              <MessageButton recipientId={post.author?.id} />
+            ))}
         </div>
 
         <CommentSection postId={post.id} />
