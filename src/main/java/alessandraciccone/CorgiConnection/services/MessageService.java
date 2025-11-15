@@ -200,34 +200,34 @@ public class MessageService {
 
 
 //creo dto, cioè organizzo ogni conversazione tra utenti
-     return conversationUserIds.stream()
-             .map(otherUserId -> {
-        User otherUser = userRepository.findById(otherUserId).orElse(null);
-        if (otherUser == null) return null;
+        return conversationUserIds.stream()
+                .map(otherUserId -> {
+                    User otherUser = userRepository.findById(otherUserId).orElse(null);
+                    if (otherUser == null) return null;
 
-        List<MessageResponseDTO> messages = getConversation(userId, otherUserId);
+                    List<MessageResponseDTO> messages = getConversation(userId, otherUserId);
 
-        long unreadCount = messages.stream()
-                .filter(msg -> !msg.isRead() && msg.receiver().id().equals(userId))
-                .count();
+                    long unreadCount = messages.stream()
+                            .filter(msg -> !msg.isRead() && msg.receiver().id().equals(userId))
+                            .count();
 
-        return new ConversationDTO(
-                otherUserId,
-                otherUser.getUsername(),
-                otherUser.getProfileImage(),
-                messages,
-                (int) unreadCount
-        );
-    })
-            .filter(Objects::nonNull)
+                    return new ConversationDTO(
+                            otherUserId,
+                            otherUser.getUsername(),
+                            otherUser.getProfileImage(),
+                            messages,
+                            (int) unreadCount
+                    );
+                })
+                .filter(Objects::nonNull)
                 .sorted(Comparator.comparing((ConversationDTO conv) ->
-            conv.messages().isEmpty() ? new Date(0) :
-            conv.messages().get(conv.messages().size() - 1).sentAt()
+                        conv.messages().isEmpty() ? new Date(0) :
+                                conv.messages().get(conv.messages().size() - 1).sentAt()
                 ).reversed())
-            .collect(Collectors.toList());
-}
+                .collect(Collectors.toList());
+    }
 
-        private MessageResponseDTO mapToResponseDTO(Message message) {
+    private MessageResponseDTO mapToResponseDTO(Message message) {
         UserMessageSummaryDTO senderSummary = new UserMessageSummaryDTO(
                 message.getSender().getId(),
                 message.getSender().getUsername(),
@@ -260,4 +260,3 @@ public class MessageService {
     }
 
 }
-

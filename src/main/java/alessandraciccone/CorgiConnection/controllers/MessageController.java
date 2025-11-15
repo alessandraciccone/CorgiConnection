@@ -22,7 +22,7 @@ public class MessageController {
 
 
 //AGGIUNGI UN MESSAGGIO
-    //http://localhost:8888/messages
+    //http://localhost:3001/messages
 
     @PostMapping
     public ResponseEntity<MessageResponseDTO> sendMessage(@RequestBody MessageDTO dto) {
@@ -120,6 +120,3 @@ public class MessageController {
         return ResponseEntity.ok(messageService.getAllConversations(userId));
     }
 }
-
-
-

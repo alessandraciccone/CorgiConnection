@@ -10,12 +10,14 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Profilo from "./components/Profilo";
 import Home from "./components/Home";
+import SearchBar from "./components/SearchBar";
 const Admin = () => <h2>Admin Panel</h2>;
 
 const App = () => {
   return (
     <>
       <PaperNav />
+      <SearchBar serf />
       <div className="container py-4">
         <Routes>
           <Route path="/" element={<Welcome />} />
