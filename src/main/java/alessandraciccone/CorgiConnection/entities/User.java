@@ -43,8 +43,7 @@ public class User implements UserDetails {
     private Roles roles = Roles.USER;
 
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private List<Corgi> corgis;
+
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Post> posts;
@@ -65,8 +64,8 @@ public class User implements UserDetails {
     }
 
     public User(String username, String email, String password, String firstName, String lastName,
-                String city, String province, Date registrationDate, String profileImage, Roles roles,
-                List<Corgi> corgis, List<Post> posts, List<Comment> commenti,
+                String city, String province, Date registrationDate, String profileImage, Roles roles
+            , List<Post> posts, List<Comment> commenti,
                 List<Message> sentMessages, List<Message> receivedMessages, List<QuizResult> quizResult) {
         this.username = username;
         this.email = email;
@@ -78,7 +77,6 @@ public class User implements UserDetails {
         this.registrationDate = registrationDate;
         this.profileImage = profileImage;
         this.roles=roles;
-        this.corgis = corgis;
         this.posts = posts;
         this.commenti = commenti;
         this.sentMessages = sentMessages;
@@ -179,13 +177,6 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public List<Corgi> getCorgis() {
-        return corgis;
-    }
-
-    public void setCorgis(List<Corgi> corgis) {
-        this.corgis = corgis;
-    }
 
     public List<Post> getPosts() {
         return posts;

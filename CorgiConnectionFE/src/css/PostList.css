@@ -1,0 +1,50 @@
+/* Container principale */
+.post-list-container {
+  padding: 20px;
+}
+
+/* Textarea “Crea Post” */
+.create-post {
+  margin-bottom: 20px;
+
+}
+
+textarea.edit-textarea {
+  background-color: #fff8e6;
+  border-radius: 5px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+/* Lista post */
+.post-list {
+  gap: 20px;
+}
+
+.post-card {
+  border: 1px solid #0a0a0a;
+  padding: 10px;
+  background-color: #fff8e6;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+.post-card-wrapper{
+    margin-bottom: 500px;
+
+}
+.post-card:hover {
+  background-color: #e9ecef;
+}
+
+.post-card.editing {
+  background-color: #fff8e6;
+}
+
+/* Responsive: 2 colonne su large */
+@media (min-width: 992px) {
+  .post-card {
+    
+  }
+}

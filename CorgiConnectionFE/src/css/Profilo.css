@@ -183,9 +183,7 @@ background-color: #fff8f0 !important;
   box-shadow: 0 0 0 2px #ffd99755; 
 }
 
-/* .canecard{
-    background-color: #fffab7;
-} */
+
 
 .canecard{
 
@@ -193,4 +191,28 @@ background-color: #fff8f0 !important;
   border: 1px solid #d17b49;
   
 
+}
+
+@media (max-width: 576px) {
+  .card-flex {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+  }
+
+  .dati-utente {
+    flex: 2;
+    min-width: 0;
+  }
+
+  .foto-col {
+    flex: 1;
+    min-width: 100px;
+    align-items: flex-start;
+  }
+
+  .col-12.col-lg-6 {
+    width: 100%;
+    max-width: none;
+  }
 }

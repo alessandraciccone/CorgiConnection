@@ -120,6 +120,3 @@ public class MessageController {
         return ResponseEntity.ok(messageService.getAllConversations(userId));
     }
 }
-
-
-

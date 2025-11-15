@@ -1,7 +1,6 @@
 package alessandraciccone.CorgiConnection.entities;
-import jakarta.persistence.*;
-import alessandraciccone.CorgiConnection.entities.User;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -16,23 +15,20 @@ public class Post {
     @Column(nullable=false, length = 1000)
     private String content;
 
-private LocalDate datePost;
+    @Column(nullable=true, length = 255)  // Aggiungi un campo per il titolo
+    private String title;
 
-    public Post(){};
+    private LocalDate datePost;
 
-<<<<<<< Updated upstream
-    public Post(String content, LocalDate datePost, User author, Corgi corgi, List<PostPhoto> photos, List<Comment> comments) {
+    // Costruttore
+    public Post() {}
+
+    public Post(String content, String title, LocalDate datePost, User author, List<PostPhoto> photos, List<Comment> comments) {
         this.content = content;
-        this.datePost= datePost;
+        this.title = title;  // Impostiamo il titolo
+        this.datePost = datePost;
         this.author = author;
-        this.corgi = corgi;
         this.photos = photos;
-=======
-    public Post(String content, LocalDate datePost, User author, List<Comment> comments) {
-        this.content = content;
-        this.datePost= datePost;
-        this.author = author;
->>>>>>> Stashed changes
         this.comments = comments;
     }
 
@@ -40,20 +36,16 @@ private LocalDate datePost;
     @JoinColumn(name="author_id", nullable = false)
     private User author;
 
-   @ManyToOne
-    @JoinColumn(name="corgi_id")
-    private Corgi corgi;
+    @OneToMany(mappedBy = "post", cascade= CascadeType.ALL)
+    private List<PostPhoto> photos;
 
-
-
-   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    // Getter e setter per tutti i campi
     public UUID getId() {
         return id;
     }
-
-
 
     public String getContent() {
         return content;
@@ -79,17 +71,15 @@ private LocalDate datePost;
         this.author = author;
     }
 
-    public Corgi getCorgi() {
-        return corgi;
+    public List<PostPhoto> getPhotos() {
+        return photos;
     }
 
-    public void setCorgi(Corgi corgi) {
-        this.corgi = corgi;
+    public void setPhotos(List<PostPhoto> photos) {
+        this.photos = photos;
     }
 
-
-
-    public List <Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
@@ -97,13 +87,23 @@ private LocalDate datePost;
         this.comments = comments;
     }
 
-    @Override
+    // Nuovo getter per il titolo
+    public String getTitle() {
+        return title;
+    }
 
+    // Aggiungi un setter per il titolo
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
     public String toString() {
         return "Post{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", datePost=" + datePost +
+                ", title='" + title + '\'' +  // Includi anche il titolo nel toString
                 '}';
     }
 }

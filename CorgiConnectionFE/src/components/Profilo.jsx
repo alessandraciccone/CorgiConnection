@@ -19,6 +19,11 @@ const Profilo = () => {
   const [infoCane, setInfoCane] = useState("");
   const [modificaUtente, setModificaUtente] = useState(false);
 
+  const [messaggi, setMessaggi] = useState([]); // Lista dei messaggi
+  const [nuoviMessaggi, setNuoviMessaggi] = useState(0); // Contatore dei nuovi messaggi non letti
+  const [risposta, setRisposta] = useState(""); // Stato per la risposta al messaggio
+  const [messaggioSelezionato, setMessaggioSelezionato] = useState(null); // Stato per il messaggio aperto
+
   const fileInputProfiloRef = useRef(null);
 
   useEffect(() => {
@@ -47,8 +52,109 @@ const Profilo = () => {
       }
     };
 
+    // Recupero dei messaggi dell'utente
+    const fetchMessaggi = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8888/messages/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setMessaggi(data);
+          // Conta i messaggi non letti
+          setNuoviMessaggi(data.filter((msg) => !msg.read).length);
+        } else {
+          console.error("Errore nel recupero dei messaggi");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchUtente();
+    fetchMessaggi();
   }, []);
+
+  // Segna un messaggio come letto
+  const segnaComeLetto = async (messageId) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8888/messages/${messageId}/read`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setMessaggi((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId ? { ...msg, read: true } : msg
+          )
+        );
+        setNuoviMessaggi(nuoviMessaggi - 1); // Riduci il contatore dei messaggi non letti
+      } else {
+        console.error("Errore nel segnare il messaggio come letto");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Funzione per rispondere al messaggio
+  const inviaRisposta = async (messageId, risposta) => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    if (!token || !userId || !risposta.trim()) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8888/messages/${messageId}/reply`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId, content: risposta }),
+        }
+      );
+
+      if (response.ok) {
+        // Aggiungi la risposta ai messaggi (simulando la ricezione della risposta)
+        setMessaggi((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId
+              ? {
+                  ...msg,
+                  replies: [
+                    ...msg.replies,
+                    { content: risposta, sender: userId },
+                  ],
+                }
+              : msg
+          )
+        );
+        setRisposta(""); // Pulisce la risposta
+      } else {
+        console.error("Errore nell'invio della risposta");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleFotoProfilo = (e) => {
     const file = e.target.files[0];
@@ -140,11 +246,68 @@ const Profilo = () => {
           alt="Corgi e ragazza che corrono"
         />
         <p className="textCorgi">
-          Scrivi qualcosa sul tuo corgi: com’è, cosa ama fare… <br />e poi
-          pubblica un post per conoscere nuovi amici a quattro zampe!
+          Scrivi qualcosa su di te e sul tuo cagnolino… <br />e poi pubblica un
+          post per conoscere nuovi amici a quattro zampe!
         </p>
       </div>
 
+      {/* Badge di notifica per i nuovi messaggi */}
+      {nuoviMessaggi > 0 && (
+        <div className="notifica-messaggio">
+          <p>Hai {nuoviMessaggi} nuovi messaggi! 📩</p>
+        </div>
+      )}
+
+      {/* Lista dei messaggi */}
+      <div className="messaggi">
+        {messaggi.map((msg) => (
+          <div key={msg.id} className="messaggio">
+            <p>
+              <strong>{msg.senderName}</strong> ha inviato un messaggio:
+            </p>
+            <p>{msg.content}</p>
+
+            {/* Segna come letto */}
+            {!msg.read && (
+              <button onClick={() => segnaComeLetto(msg.id)}>
+                Segna come letto
+              </button>
+            )}
+
+            {/* Apri e rispondi al messaggio */}
+            <button onClick={() => setMessaggioSelezionato(msg)}>
+              Leggi / Rispondi
+            </button>
+
+            {/* Mostra risposte se esistono */}
+            <div className="risposte">
+              {msg.replies?.map((reply, index) => (
+                <div key={index} className="risposta">
+                  <p>
+                    <strong>Risposta:</strong> {reply.content}
+                  </p>
+                </div>
+              ))}
+
+              {/* Form per rispondere al messaggio selezionato */}
+              {messaggioSelezionato && messaggioSelezionato.id === msg.id && (
+                <div>
+                  <textarea
+                    value={risposta}
+                    onChange={(e) => setRisposta(e.target.value)}
+                    placeholder="Scrivi una risposta..."
+                  />
+                  <button onClick={() => inviaRisposta(msg.id, risposta)}>
+                    Invia Risposta
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Profilo e altre informazioni */}
       <div className="row">
         <div className="col-12 col-lg-6 mb-4">
           <div className="card mt-2">
