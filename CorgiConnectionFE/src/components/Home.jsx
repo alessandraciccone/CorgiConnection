@@ -6,7 +6,7 @@ import corgipost from "../assets/img/corgipost.png";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-  const [filters, setFilters] = useState({
+  const [filters] = useState({
     authorUsername: "",
     contentKeyword: "",
   });
@@ -70,7 +70,7 @@ const Home = () => {
 
       <div className="home-container">
         {/* Se vuoi creare nuovi post, possiamo gestirlo direttamente dentro PostList */}
-        <SearchBar filters={filters} setFilters={setFilters} />
+        {/* <SearchBar filters={filters} setFilters={setFilters} /> */}
         <PostList posts={posts} />
       </div>
     </>

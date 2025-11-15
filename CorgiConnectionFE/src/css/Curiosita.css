@@ -1,0 +1,90 @@
+/* Animazione */
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.yknow {
+  animation: bounceIn 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dyk {
+  width: 120px;
+  height: auto;
+  margin-bottom: 1rem;
+  border: none;
+}
+
+.textdyk {
+  font-size: 1rem;
+  color: #ff7f50 !important;
+  font-weight: bold;
+  max-width: 300px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+/* Contenitore collapse */
+.collapsibletx {
+  background-color: #fff8f0;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+
+.collapsibletx input[type="radio"] {
+  display: none;
+}
+
+
+.collapsibletx label {
+  display: block;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ff7f50;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.collapsibletx label:hover {
+  background-color: #ffe8d9;
+}
+
+
+.collapsible-body {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+
+.collapsibletx input[type="radio"]:checked ~ .collapsible-body {
+  max-height: 1500px; /* abbastanza grande per il contenuto */
+  padding: 12px 20px;
+}
+
+/* Testo punti */
+.collapsible-body p {
+  font-size: 1rem;
+  color: #333;
+  margin: 0 0 0.75rem 0;
+}
+
+/* Punti normali */
+.punto-normale {
+  font-weight: 400;
+  font-size: 1rem;
+  color: #333;
+}

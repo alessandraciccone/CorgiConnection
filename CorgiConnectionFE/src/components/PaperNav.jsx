@@ -25,7 +25,9 @@ const PaperNav = () => {
               </Link>
             </li>
             <li>
-              <a href="#">Lo sapevi?</a>
+              <Link to="/curiosita" className="curiosita-link-nav">
+                Lo sapevi?
+              </Link>
             </li>
             <li>
               <a href="#">Cosa facciamo oggi?</a>
@@ -36,7 +38,7 @@ const PaperNav = () => {
               </Link>
             </li>
             <li>
-              <Link to="/profilo" className="profile-link-nac">
+              <Link to="/profilo" className="profile-link-nav">
                 <img className="profilo" src={CorgiIcon} alt="Corgi Icon" />
               </Link>
             </li>
