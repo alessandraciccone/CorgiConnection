@@ -20,21 +20,20 @@ textarea.edit-textarea {
 
 /* Lista post */
 .post-list {
-  display: flex;
-  flex-wrap: wrap;
   gap: 20px;
 }
 
-/* Card post */
 .post-card {
   border: 1px solid #0a0a0a;
   padding: 10px;
   background-color: #fff8e6;
   border-radius: 5px;
   transition: background-color 0.3s;
-  flex: 1 1 100%; /* mobile: 1 colonna */
 }
+.post-card-wrapper{
+    margin-bottom: 500px;
 
+}
 .post-card:hover {
   background-color: #e9ecef;
 }
@@ -46,6 +45,6 @@ textarea.edit-textarea {
 /* Responsive: 2 colonne su large */
 @media (min-width: 992px) {
   .post-card {
-    flex: 0 0 calc(50% - 10px);
+    
   }
 }

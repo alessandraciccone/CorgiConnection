@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../css/CommentSection.css";
 
 const CommentSection = ({ postId }) => {
   const [comments, setComments] = useState([]);
@@ -37,16 +38,15 @@ const CommentSection = ({ postId }) => {
 
   return (
     <div className="comments">
+      <hr className="comment-divider" />
+
       <ul className="comment-list">
         {comments.map((c) => (
           <li key={c.id} className="comment-item">
-            {c.text}
-            <button
-              className="comment-delete"
-              onClick={() => handleDelete(c.id)}
-            >
+            <span className="comment-text">{c.text}</span>
+            <span className="comment-delete" onClick={() => handleDelete(c.id)}>
               ❌
-            </button>
+            </span>
           </li>
         ))}
       </ul>
@@ -57,6 +57,7 @@ const CommentSection = ({ postId }) => {
         onChange={(e) => setText(e.target.value)}
         placeholder="Scrivi un commento..."
       />
+
       <button className="small-button" onClick={handleSubmit}>
         Commenta
       </button>

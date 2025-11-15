@@ -1,64 +1,72 @@
-.comments {
-    width: 100%;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.comment-divider {
+  margin-bottom: 20px;
+  border-color: #ccc;
 }
 
-.comments ul {
-    list-style: none;
-    padding: 0;
-    width: 100%;
+.comment-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  max-height: 300px; 
+  overflow-y: auto; 
+  margin-bottom: 10px;
 }
 
-.comments li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f1f1f1;
-    padding: 4px 8px;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    font-size: 14px;
+.comment-list::-webkit-scrollbar {
+  width: 8px;
 }
 
-.comments li button {
-    background-color: #ff4d4d;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    padding: 2px 6px;
-    font-size: 12px;
-    cursor: pointer;
+.comment-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
 }
 
-.comments li button:hover {
-    background-color: #e60000;
+.comment-list::-webkit-scrollbar-thumb {
+  background: #d17b49;
+  border-radius: 10px;
 }
 
-.comments textarea {
-    width: 90%;
-    max-width: 350px;
-    height: 40px;  /* più piccolo */
-    padding: 6px;
-    font-size: 14px;
-    border-radius: 5px;
-    resize: vertical;
-    margin-bottom: 5px;
+.comment-list::-webkit-scrollbar-thumb:hover {
+  background: #b56539;
 }
 
-.comments button {
-     background-color: #ffd997;
-  padding: 6px 12px;
+.comment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffdce4ff;
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  font-size: 14px;
+}
+
+.comment-delete {
+  font-size: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #d17b49;
+}
+
+.small-button {
+  padding: 6px 12px; 
+  font-size: 12px; 
+  background-color: white;
+  color: rgb(8, 7, 7);
+  border: none; 
   border-radius: 5px;
   cursor: pointer;
-  font-size: 10px;
-  height:25px;
-  border:solid #d17b49 1px;
-  margin-top:1px
 }
 
-.comments button:hover {
-    background-color: #ffc022f8;
+.small-button:hover {
+  background-color: white;
+}
+
+.comment-textarea:focus {
+  outline: none;
+  border-color: #d17b49; 
 }

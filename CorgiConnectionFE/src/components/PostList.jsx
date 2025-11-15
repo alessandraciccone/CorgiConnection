@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PostCard from "./PostCard";
-
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [newPostContent, setNewPostContent] = useState("");
@@ -78,59 +77,58 @@ const PostList = () => {
   return (
     <>
       {/* Form per nuovo post */}
-      <form onSubmit={handleNewPostSubmit} style={{ marginBottom: "20px" }}>
-        <div className="form-group">
-          <label htmlFor="no-resize">Scrivi il tuo post</label>
-          <textarea
-            className="no-resize"
-            id="no-resize"
-            placeholder="Scrivi il tuo post..."
-            value={newPostContent}
-            onChange={(e) => setNewPostContent(e.target.value)}
-            rows="4"
+      <div className="row post-list">
+        <div className="col-12 col-lg-6 mb-4">
+          <form
+            onSubmit={handleNewPostSubmit}
+            className="post-card"
             style={{
               backgroundColor: "#fff8e6",
-              width: "100%",
               padding: "10px",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          />
-        </div>
-        <button
-          type="submit"
-          className="paper-btn btn-success"
-          style={{ marginTop: "10px" }}
-        >
-          Pubblica
-        </button>
-      </form>
-
-      {/* Lista dei post */}
-      <div
-        className="post-list"
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        {posts.length === 0 && <p>Nessun post disponibile</p>}
-        {posts.map((post) => (
-          <div
-            key={post.id}
-            style={{
-              flex: "1 1 100%",
-              maxWidth: "48%",
-              boxSizing: "border-box",
+              borderRadius: "6px",
             }}
           >
-            <PostCard
-              post={post}
-              onPostUpdated={handlePostUpdated}
-              onPostDeleted={handlePostDeleted}
-            />
+            <div className="form-group">
+              <label htmlFor="no-resize" className="lbl"></label>
+              <textarea
+                className="no-resize"
+                id="no-resize"
+                placeholder="Scrivi qui il tuo post 🐶"
+                value={newPostContent}
+                onChange={(e) => setNewPostContent(e.target.value)}
+                rows="4"
+                style={{
+                  backgroundColor: "#fff8e6",
+                  width: "100%",
+                  padding: "10px",
+                  border: "none",
+                  borderRadius: "4px",
+                }}
+              />
+            </div>
+            <button
+              type="submit"
+              className="paper-btn btn-sc"
+              style={{ marginTop: "10px" }}
+            >
+              Pubblica
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Lista dei post */}
+      <div className="row post-list">
+        {posts.length === 0 && <p>Nessun post disponibile</p>}
+        {posts.map((post) => (
+          <div key={post.id} className="col-12 col-lg-6 mb-4">
+            <div className="post-card">
+              <PostCard
+                post={post}
+                onPostUpdated={handlePostUpdated}
+                onPostDeleted={handlePostDeleted}
+              />
+            </div>
           </div>
         ))}
       </div>
