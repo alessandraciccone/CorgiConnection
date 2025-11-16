@@ -22,7 +22,7 @@
 }
 
 .comment-list::-webkit-scrollbar-thumb {
-  background: #d17b49;
+  background: #ffd3ba;
   border-radius: 10px;
 }
 
@@ -34,22 +34,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffdce4ff;
+  background-color: #fff8e6; /* aggiornato dal rosa */
   padding: 8px;
   border-radius: 5px;
   margin-bottom: 5px;
 }
 
 .comment-text {
-  font-size: 14px;
-}
-
-.comment-delete {
-  font-size: 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #d17b49;
+  font-size: 16px; /* leggermente più grande */
 }
 
 .small-button {
@@ -66,7 +58,19 @@
   background-color: white;
 }
 
-.comment-textarea:focus {
+.paper-field {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  width: 100%;
+}
+
+.paper-field:focus {
   outline: none;
-  border-color: #d17b49; 
+  border-color: var(--paper-accent, #ff7f50);
+  box-shadow: var(--shadow-elevation-2);
 }

@@ -3,6 +3,40 @@ import { useNavigate } from "react-router-dom";
 import "../css/Profilo.css";
 import correrecorgi from "../assets/img/correrecorgi.png";
 
+// --- FUNZIONI INDEXEDDB ---
+const openDB = () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("UserDB", 1);
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains("profileImages")) {
+        db.createObjectStore("profileImages", { keyPath: "userId" });
+      }
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+};
+
+const saveProfileImage = async (userId, blob) => {
+  const db = await openDB();
+  const tx = db.transaction("profileImages", "readwrite");
+  const store = tx.objectStore("profileImages");
+  store.put({ userId, image: blob });
+  return tx.complete;
+};
+
+const getProfileImage = async (userId) => {
+  const db = await openDB();
+  return new Promise((resolve) => {
+    const tx = db.transaction("profileImages", "readonly");
+    const store = tx.objectStore("profileImages");
+    const request = store.get(userId);
+    request.onsuccess = () => resolve(request.result?.image || null);
+  });
+};
+
+// --- COMPONENTE PROFILO ---
 const Profilo = () => {
   const navigate = useNavigate();
   const [utente, setUtente] = useState(null);
@@ -13,19 +47,19 @@ const Profilo = () => {
     lastName: "",
     city: "",
     province: "",
-    profileImage: "",
   });
   const [fotoProfilo, setFotoProfilo] = useState(null);
   const [infoCane, setInfoCane] = useState("");
   const [modificaUtente, setModificaUtente] = useState(false);
 
-  const [messaggi, setMessaggi] = useState([]); // Lista dei messaggi
-  const [nuoviMessaggi, setNuoviMessaggi] = useState(0); // Contatore dei nuovi messaggi non letti
-  const [risposta, setRisposta] = useState(""); // Stato per la risposta al messaggio
-  const [messaggioSelezionato, setMessaggioSelezionato] = useState(null); // Stato per il messaggio aperto
+  const [messaggi, setMessaggi] = useState([]);
+  const [nuoviMessaggi, setNuoviMessaggi] = useState(0);
+  const [risposta, setRisposta] = useState("");
+  const [messaggioSelezionato, setMessaggioSelezionato] = useState(null);
 
   const fileInputProfiloRef = useRef(null);
 
+  // --- FETCH DATI UTENTE E MESSAGGI ---
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
@@ -42,9 +76,11 @@ const Profilo = () => {
         setUtente(data);
         setProfiloUtente(data);
 
-        const fotoSalvata = localStorage.getItem(`fotoProfilo-${userId}`);
-        setFotoProfilo(fotoSalvata || null);
+        // Recupera immagine da IndexedDB
+        const blob = await getProfileImage(userId);
+        if (blob) setFotoProfilo(URL.createObjectURL(blob));
 
+        // Recupera info cane da localStorage (piccoli testi ok)
         const infoSalvata = localStorage.getItem(`infoCane-${userId}`);
         setInfoCane(infoSalvata || "");
       } catch (error) {
@@ -52,23 +88,16 @@ const Profilo = () => {
       }
     };
 
-    // Recupero dei messaggi dell'utente
     const fetchMessaggi = async () => {
       try {
         const response = await fetch(
           `http://localhost:8888/messages/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-
         if (response.ok) {
           const data = await response.json();
           setMessaggi(data);
-          // Conta i messaggi non letti
           setNuoviMessaggi(data.filter((msg) => !msg.read).length);
-        } else {
-          console.error("Errore nel recupero dei messaggi");
         }
       } catch (error) {
         console.error(error);
@@ -79,83 +108,7 @@ const Profilo = () => {
     fetchMessaggi();
   }, []);
 
-  // Segna un messaggio come letto
-  const segnaComeLetto = async (messageId) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) return;
-
-    try {
-      const response = await fetch(
-        `http://localhost:8888/messages/${messageId}/read`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        setMessaggi((prev) =>
-          prev.map((msg) =>
-            msg.id === messageId ? { ...msg, read: true } : msg
-          )
-        );
-        setNuoviMessaggi(nuoviMessaggi - 1); // Riduci il contatore dei messaggi non letti
-      } else {
-        console.error("Errore nel segnare il messaggio come letto");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // Funzione per rispondere al messaggio
-  const inviaRisposta = async (messageId, risposta) => {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-
-    if (!token || !userId || !risposta.trim()) return;
-
-    try {
-      const response = await fetch(
-        `http://localhost:8888/messages/${messageId}/reply`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ userId, content: risposta }),
-        }
-      );
-
-      if (response.ok) {
-        // Aggiungi la risposta ai messaggi (simulando la ricezione della risposta)
-        setMessaggi((prev) =>
-          prev.map((msg) =>
-            msg.id === messageId
-              ? {
-                  ...msg,
-                  replies: [
-                    ...msg.replies,
-                    { content: risposta, sender: userId },
-                  ],
-                }
-              : msg
-          )
-        );
-        setRisposta(""); // Pulisce la risposta
-      } else {
-        console.error("Errore nell'invio della risposta");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  // --- FUNZIONI FOTO PROFILO ---
   const handleFotoProfilo = (e) => {
     const file = e.target.files[0];
     const userId = localStorage.getItem("userId");
@@ -185,17 +138,22 @@ const Profilo = () => {
         canvas.height = height;
         canvas.getContext("2d").drawImage(img, 0, 0, width, height);
 
-        const base64 = canvas.toDataURL("image/png");
-        if (base64.length < 1024 * 1024) {
-          localStorage.setItem(`fotoProfilo-${userId}`, base64);
-          setFotoProfilo(base64);
-        } else alert("Immagine troppo grande, prova un file più leggero!");
+        canvas.toBlob(async (blob) => {
+          if (blob.size < 5 * 1024 * 1024) {
+            // 5MB limite
+            await saveProfileImage(userId, blob);
+            setFotoProfilo(URL.createObjectURL(blob));
+          } else {
+            alert("Immagine troppo grande, prova un file più leggero!");
+          }
+        }, "image/png");
       };
       img.src = event.target.result;
     };
     reader.readAsDataURL(file);
   };
 
+  // --- CAMBIO DATI UTENTE ---
   const handleChangeUtente = (e) => {
     const { name, value } = e.target;
     setProfiloUtente((prev) => ({ ...prev, [name]: value }));
@@ -228,6 +186,7 @@ const Profilo = () => {
     }
   };
 
+  // --- LOGOUT ---
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
@@ -235,6 +194,76 @@ const Profilo = () => {
     setFotoProfilo(null);
     setInfoCane("");
     navigate("/login");
+  };
+
+  // --- SEGNA COME LETTO ---
+  const segnaComeLetto = async (messageId) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8888/messages/${messageId}/read`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setMessaggi((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId ? { ...msg, read: true } : msg
+          )
+        );
+        setNuoviMessaggi(nuoviMessaggi - 1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // --- INVIO RISPOSTA ---
+  const inviaRisposta = async (messageId, risposta) => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    if (!token || !userId || !risposta.trim()) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8888/messages/${messageId}/reply`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId, content: risposta }),
+        }
+      );
+
+      if (response.ok) {
+        setMessaggi((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId
+              ? {
+                  ...msg,
+                  replies: [
+                    ...msg.replies,
+                    { content: risposta, sender: userId },
+                  ],
+                }
+              : msg
+          )
+        );
+        setRisposta("");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -251,14 +280,12 @@ const Profilo = () => {
         </p>
       </div>
 
-      {/* Badge di notifica per i nuovi messaggi */}
       {nuoviMessaggi > 0 && (
         <div className="notifica-messaggio">
           <p>Hai {nuoviMessaggi} nuovi messaggi! 📩</p>
         </div>
       )}
 
-      {/* Lista dei messaggi */}
       <div className="messaggi">
         {messaggi.map((msg) => (
           <div key={msg.id} className="messaggio">
@@ -266,20 +293,15 @@ const Profilo = () => {
               <strong>{msg.senderName}</strong> ha inviato un messaggio:
             </p>
             <p>{msg.content}</p>
-
-            {/* Segna come letto */}
             {!msg.read && (
               <button onClick={() => segnaComeLetto(msg.id)}>
                 Segna come letto
               </button>
             )}
-
-            {/* Apri e rispondi al messaggio */}
             <button onClick={() => setMessaggioSelezionato(msg)}>
               Leggi / Rispondi
             </button>
 
-            {/* Mostra risposte se esistono */}
             <div className="risposte">
               {msg.replies?.map((reply, index) => (
                 <div key={index} className="risposta">
@@ -289,7 +311,6 @@ const Profilo = () => {
                 </div>
               ))}
 
-              {/* Form per rispondere al messaggio selezionato */}
               {messaggioSelezionato && messaggioSelezionato.id === msg.id && (
                 <div>
                   <textarea
@@ -307,7 +328,6 @@ const Profilo = () => {
         ))}
       </div>
 
-      {/* Profilo e altre informazioni */}
       <div className="row">
         <div className="col-12 col-lg-6 mb-4">
           <div className="card mt-2">
