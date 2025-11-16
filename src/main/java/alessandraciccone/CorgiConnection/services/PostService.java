@@ -1,7 +1,6 @@
 package alessandraciccone.CorgiConnection.services;
 
 import alessandraciccone.CorgiConnection.entities.Post;
-import alessandraciccone.CorgiConnection.entities.PostPhoto;
 import alessandraciccone.CorgiConnection.entities.User;
 import alessandraciccone.CorgiConnection.exceptions.BadRequestException;
 import alessandraciccone.CorgiConnection.exceptions.NotFoundException;
@@ -171,9 +170,7 @@ public CloudinaryService cloudinaryService;
             spec = spec.and(PostSpecification.dateBetween(startDate, endDate));
         }
 
-        if (hasPhotos != null && hasPhotos) {
-            spec = spec.and(PostSpecification.hasPhotos());
-        }
+
         if (hasComments != null && hasComments) {
             spec = spec.and(PostSpecification.hasComment());
         }
@@ -194,13 +191,6 @@ public CloudinaryService cloudinaryService;
     }
 
 
-
-    public List<PostResponseDTO> getPostsWithPhotos() {
-        Specification<Post> spec = PostSpecification.hasPhotos();
-        return postRepository.findAll(spec).stream()
-                .map(this::mapToResponseDTO)
-                .collect(Collectors.toList());
-    }
 
 
     //trovo post ultimi 7 giorni
@@ -251,14 +241,7 @@ public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException 
     // Upload a Cloudinary
     String imageUrl = cloudinaryService.upload(file, "posts/photos");
 
-    // Creo una nuova entità PostPhoto
-    PostPhoto photo = new PostPhoto();
-    photo.setImageUrl(imageUrl);
-    photo.setCaptionPhoto(null); // puoi adattare se vuoi ricevere anche una caption
-    photo.setPost(post);
 
-    // Aggiungi la foto al post
-    post.getPhotos().add(photo);
 
     // Salva
     postRepository.save(post);
@@ -275,16 +258,6 @@ public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException 
                 post.getAuthor().getProfileImage()
         );
 
-        List<PhotoSummaryDTO> photoSummary = new ArrayList<>();
-        if (post.getPhotos() != null) {
-            photoSummary = post.getPhotos().stream()
-                    .map(photo -> new PhotoSummaryDTO(
-                            photo.getId(),
-                            photo.getImageUrl(),
-                            photo.getCaptionPhoto()
-                    ))
-                    .collect(Collectors.toList());
-        }
 
         int commentsCount = post.getComments() != null ? post.getComments().size() : 0;
 
@@ -293,7 +266,6 @@ public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException 
                 post.getContent(),
                 post.getDatePost(),
                 authorSummary,
-                photoSummary,
                 commentsCount
         );
     }

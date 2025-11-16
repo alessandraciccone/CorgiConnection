@@ -30,7 +30,9 @@ const PaperNav = () => {
               </Link>
             </li>
             <li>
-              <a href="#">Cosa facciamo oggi?</a>
+              <Link to="/cosafacciamo" className="cosfacciamo-link-nav">
+                Cosa facciamo?
+              </Link>
             </li>
             <li>
               <Link to="/login" className="login-link-nav">

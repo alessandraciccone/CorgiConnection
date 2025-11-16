@@ -141,10 +141,6 @@ public class PostController {
 
     // CERCO POST CON FOTO
     //GET http://localhost:8888/posts/photos
-    @GetMapping("/photos")
-    public ResponseEntity<List<PostResponseDTO>> getPostsWithPhotos(){
-        return ResponseEntity.ok(postService.getPostsWithPhotos());
-    }
 
 
     //CERCO POST PER CITTA

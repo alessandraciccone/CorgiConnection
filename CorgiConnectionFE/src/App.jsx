@@ -13,7 +13,7 @@ import Home from "./components/Home";
 import SearchBar from "./components/SearchBar";
 import ProfilePage from "./components/ProfilePage";
 import Curiosita from "./components/Curiosita";
-
+import Cosafacciamo from "./components/Cosafacciamo";
 const Admin = () => <h2>Admin Panel</h2>;
 
 const App = () => {
@@ -27,6 +27,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/curiosita" element={<Curiosita />} />
+          <Route path="/cosafacciamo" element={<Cosafacciamo />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home filters={filters} />} />{" "}

@@ -23,12 +23,11 @@ public class Post {
     // Costruttore
     public Post() {}
 
-    public Post(String content, String title, LocalDate datePost, User author, List<PostPhoto> photos, List<Comment> comments) {
+    public Post(String content, String title, LocalDate datePost, User author, List<Comment> comments) {
         this.content = content;
         this.title = title;  // Impostiamo il titolo
         this.datePost = datePost;
         this.author = author;
-        this.photos = photos;
         this.comments = comments;
     }
 
@@ -36,8 +35,6 @@ public class Post {
     @JoinColumn(name="author_id", nullable = false)
     private User author;
 
-    @OneToMany(mappedBy = "post", cascade= CascadeType.ALL)
-    private List<PostPhoto> photos;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -71,13 +68,7 @@ public class Post {
         this.author = author;
     }
 
-    public List<PostPhoto> getPhotos() {
-        return photos;
-    }
 
-    public void setPhotos(List<PostPhoto> photos) {
-        this.photos = photos;
-    }
 
     public List<Comment> getComments() {
         return comments;
