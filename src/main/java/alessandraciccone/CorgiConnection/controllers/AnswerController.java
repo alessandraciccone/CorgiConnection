@@ -56,7 +56,7 @@ public class AnswerController {
     }
 
     // OTTENGO TUTTE LE RISPOSTE
-    // GET http://localhost:3001/answers
+    // GET http://localhost:8888/answers
     @GetMapping
     public ResponseEntity<List<AnswerResponseDTO>> getAllAnswers() {
         return ResponseEntity.ok(answerService.getAllAnswers());

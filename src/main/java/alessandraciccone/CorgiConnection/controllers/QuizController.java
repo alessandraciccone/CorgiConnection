@@ -25,7 +25,7 @@ public class QuizController {
 
 
     // OTTENGO TUTTI I QUIZ
-    // GET http://localhost:3001/quizzes
+    // GET http://localhost:8888/quizzes
     @GetMapping
     public ResponseEntity<List<QuizResponseDTO>> getAllQuizzes() {
         return ResponseEntity.ok(quizService.getAllQuizzes());

@@ -23,9 +23,9 @@ public class QuestionController {
 
 
     //OOTTENGO TUTTE LE DOMANDE
-    //http://localhost:3001/questions
+    //http://localhost:8888/questions
     @GetMapping
-    public ResponseEntity<List<QuestionResponseDTO>>getAllQuestions(){
+    public ResponseEntity<List<QuestionResponseDTO>> getAllQuestions() {
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
 

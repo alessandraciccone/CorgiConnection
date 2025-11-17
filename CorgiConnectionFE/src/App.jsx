@@ -14,6 +14,7 @@ import SearchBar from "./components/SearchBar";
 import ProfilePage from "./components/ProfilePage";
 import Curiosita from "./components/Curiosita";
 import Cosafacciamo from "./components/Cosafacciamo";
+import Quiz from "./components/Quiz";
 const Admin = () => <h2>Admin Panel</h2>;
 
 const App = () => {
@@ -32,7 +33,6 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home filters={filters} />} />{" "}
           <Route path="/profile/:userId" element={<ProfilePage />} />
-          <Route path="/profilo" element={<Profilo />} />
           {/* <Route path="/admin" element={<Admin />} /> */}
         </Routes>
         <Footer />

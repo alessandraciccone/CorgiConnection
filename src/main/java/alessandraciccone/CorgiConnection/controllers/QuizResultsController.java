@@ -1,11 +1,13 @@
 package alessandraciccone.CorgiConnection.controllers;
 
-
+import alessandraciccone.CorgiConnection.entities.User;
 import alessandraciccone.CorgiConnection.payloads.QuizResultResponseDTO;
 import alessandraciccone.CorgiConnection.payloads.QuizResultUpdateDTO;
+import alessandraciccone.CorgiConnection.payloads.QuizSubmissionDTO;
 import alessandraciccone.CorgiConnection.services.QuizResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,45 +20,41 @@ public class QuizResultsController {
     @Autowired
     private QuizResultService quizResultService;
 
-    //PRENDO TUTTI RISULTATI
-    //http://localhost/8888/quiz-results
-
+    // GET all
     @GetMapping
-    public ResponseEntity<List<QuizResultResponseDTO>> getAllResults(){
+    public ResponseEntity<List<QuizResultResponseDTO>> getAllResults() {
         return ResponseEntity.ok(quizResultService.getAllResults());
     }
 
-    //PRENDO UN RISULTATO PER ID
-    //http://localhost:8888/quiz-resukt/{id}
-
+    // GET by ID
     @GetMapping("/{id}")
     public ResponseEntity<QuizResultResponseDTO> getResultById(@PathVariable UUID id) {
         return ResponseEntity.ok(quizResultService.getResultById(id));
     }
 
-    //CREO UN NUOVO RISULKTATO
-    //http://localhost:8888/quiz-results
-
+    // POST quiz submission
     @PostMapping
-    public ResponseEntity<QuizResultResponseDTO> createResult(@RequestBody alessandraciccone.CorgiConnection.payloads.QuizResultDTO dto){
-        return ResponseEntity.ok(quizResultService.createResult(dto));
+    public ResponseEntity<QuizResultResponseDTO> submitQuiz(
+            @RequestBody QuizSubmissionDTO submission,
+            @AuthenticationPrincipal User user) {
+
+        QuizResultResponseDTO result = quizResultService.evaluateQuiz(submission, user);
+        return ResponseEntity.ok(result);
     }
 
-    //AGGIORNO UN NRISULTATO
-    //http://localhost:8888/quiz-results/{id}
-
+    // PUT update quiz result
     @PutMapping("/{id}")
     public ResponseEntity<QuizResultResponseDTO> updateResult(
             @PathVariable UUID id,
-            @RequestBody QuizResultUpdateDTO dto){
+            @RequestBody QuizResultUpdateDTO dto) {
+
         return ResponseEntity.ok(quizResultService.updateResult(id, dto));
     }
 
-    //DELETE BY id
-    //htpp://localhost:8888/quiz-results/{id}
-
+    // DELETE result
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteResult(@PathVariable UUID id){
+    public ResponseEntity<Void> deleteResult(@PathVariable UUID id) {
         quizResultService.deleteResult(id);
-        return ResponseEntity.noContent().build();}
+        return ResponseEntity.noContent().build();
+    }
 }

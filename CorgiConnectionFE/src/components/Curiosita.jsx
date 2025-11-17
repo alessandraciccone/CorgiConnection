@@ -1,4 +1,5 @@
 import "../css/Curiosita.css";
+import Quiz from "./Quiz";
 import losapevi from "../assets/img/losapevi.png";
 
 const curiositaData = [
@@ -148,6 +149,12 @@ const Curiosita = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Sezione Quiz */}
+      <div className="curiosita-container">
+        <h2>Scopri quanto ne sai!</h2>
+        <Quiz />
       </div>
     </div>
   );
