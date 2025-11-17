@@ -6,13 +6,14 @@ const CommentSection = ({ postId }) => {
   const [text, setText] = useState("");
   const [username, setUsername] = useState("Anonimo");
 
-  // Recupera token dal localStorage
+  // Recupera token
   const getToken = () => localStorage.getItem("token");
 
-  // Decodifica token e ritorna sub
+  // Decodifica token
   const getUserIdFromToken = () => {
     const token = getToken();
     if (!token) return null;
+
     try {
       const decoded = JSON.parse(atob(token.split(".")[1]));
       return decoded.sub;
@@ -25,7 +26,16 @@ const CommentSection = ({ postId }) => {
   // Carica commenti salvati
   useEffect(() => {
     const saved = localStorage.getItem(`comments-${postId}`);
-    setComments(saved ? JSON.parse(saved) : []);
+    const parsed = saved ? JSON.parse(saved) : [];
+
+    // Assicura che ogni commento abbia il campo likes
+    const fixed = parsed.map((c) => ({
+      ...c,
+      likes: Number.isFinite(c.likes) ? c.likes : 0,
+    }));
+
+    setComments(fixed);
+    localStorage.setItem(`comments-${postId}`, JSON.stringify(fixed));
   }, [postId]);
 
   // Recupera username dal backend
@@ -44,11 +54,9 @@ const CommentSection = ({ postId }) => {
           const data = await res.json();
           setUsername(data.username || "Anonimo");
         } else {
-          console.warn("Utente non trovato, fallback a Anonimo");
           setUsername("Anonimo");
         }
-      } catch (err) {
-        console.error("Errore nel recupero utente:", err);
+      } catch {
         setUsername("Anonimo");
       }
     };
@@ -67,10 +75,11 @@ const CommentSection = ({ postId }) => {
     if (!text.trim()) return;
 
     const newComment = {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       text,
       date: new Date().toISOString(),
       author: username,
+      likes: 0, // SOLO COUNTER
     };
 
     const newComments = [...comments, newComment];
@@ -81,6 +90,21 @@ const CommentSection = ({ postId }) => {
   // Cancella commento
   const handleDelete = (id) => {
     const newComments = comments.filter((c) => c.id !== id);
+    saveComments(newComments);
+  };
+
+  // ❤️ Aumenta il numero di like (solo +1)
+  const handleLike = (id) => {
+    const newComments = comments.map((c) => {
+      if (c.id === id) {
+        return {
+          ...c,
+          likes: (c.likes || 0) + 1,
+        };
+      }
+      return c;
+    });
+
     saveComments(newComments);
   };
 
@@ -102,8 +126,32 @@ const CommentSection = ({ postId }) => {
               >
                 {c.author || "Anonimo"}
               </strong>
+
               <span className="comment-text">{c.text}</span>
+
+              {/* Like */}
+              <div className="like-row" style={{ marginTop: "6px" }}>
+                <span
+                  className="like-button"
+                  onClick={() => handleLike(c.id)}
+                  style={{
+                    cursor: "pointer",
+                    color: "red",
+                    fontSize: "18px",
+                    marginRight: "5px",
+                  }}
+                >
+                  ❤️
+                </span>
+                <span
+                  className="like-count"
+                  style={{ fontSize: "12px", color: "#444" }}
+                >
+                  {c.likes}
+                </span>
+              </div>
             </div>
+
             <span className="comment-delete" onClick={() => handleDelete(c.id)}>
               ❌
             </span>

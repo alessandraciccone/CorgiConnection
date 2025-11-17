@@ -29,62 +29,84 @@
   margin-bottom: 0;
 }
 
-/* Contenitore collapse */
+
+
 .collapsibletx {
-  background-color: #fff8f0;
+  background-color: rgb(255, 248, 230); /* come primo collapse */
   border-radius: 6px;
   margin-bottom: 1rem;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  padding: 0.5rem 0;
+  text-align: center; /
 }
 
-
+/* Nascondi radio */
 .collapsibletx input[type="radio"] {
   display: none;
 }
 
 
-.collapsibletx label {
-  display: block;
-  padding: 12px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #ff7f50;
-  cursor: pointer;
-  border-radius: 4px;
-  text-align: center;
-  transition: background-color 0.3s ease;
-}
 
-.collapsibletx label:hover {
-  background-color: #ffe8d9;
-}
+/* .collapsibletx label:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+} */
 
-
-.collapsible-body {
+/* .collapsible-body {
   max-height: 0;
   overflow: hidden;
-  padding: 0 20px;
+  background-color: rgb(255, 248, 230);
+  border: none !important; /* bordo trasparente */
+  /* border-radius: 6px;
+  padding: 0 1rem;
   transition: max-height 0.4s ease, padding 0.3s ease;
-}
+} */ 
 
-
+/* Apertura */
 .collapsibletx input[type="radio"]:checked ~ .collapsible-body {
-  max-height: 1500px; /* abbastanza grande per il contenuto */
-  padding: 12px 20px;
+  max-height: 1500px;
+  padding: 1rem;
 }
 
-/* Testo punti */
 .collapsible-body p {
   font-size: 1rem;
   color: #333;
   margin: 0 0 0.75rem 0;
+  text-align: center; /* ✔ centrato */
 }
 
-/* Punti normali */
 .punto-normale {
   font-weight: 400;
   font-size: 1rem;
   color: #333;
+  text-align: center; 
 }
+
+.collapsibletx {
+  background-color: transparent !important;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+.collapsibletx label {
+  background-color: transparent;
+  color: #2a2b28da;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5rem 0;     
+  border-radius: 6px;
+  margin-bottom: 0.3rem;
+  font-style: italic;
+}
+
+.collapsible-body {
+  background-color: rgb(255, 248, 230); /* colore del contenuto */
+  border: none !important;
+  padding: 0 1rem;
+max-height: 0;
+  overflow: hidden;
+  background-color: rgb(255, 248, 230);
+  border: none !important; /* bordo trasparente */
+  border-radius: 6px;
+  padding: 0 1rem;
+  transition: max-height 0.4s ease, padding 0.3s ease;}

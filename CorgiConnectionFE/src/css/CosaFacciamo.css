@@ -1,0 +1,77 @@
+
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.turisti {
+  animation: bounceIn 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.turistiImg {
+  width: 180px;
+  height: auto;
+  margin-bottom: 1rem;
+  border: none;
+}
+
+.turistitx {
+  font-size: 1rem;
+  color: #ff7f50 !important;
+  font-weight: bold;
+  max-width: 300px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.collapsiblecs input[type="checkbox"] {
+  display: none;
+}
+
+.collapsiblecs-label {
+  display: block;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: #2a2b28da;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.collapsiblecs-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background-color: rgb(255, 248, 230);
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0 1rem;
+}
+
+.collapsiblecs-body {
+  border: none;
+}
+
+
+.collapsiblecs input[type="checkbox"]:checked ~ .collapsiblecs-body {
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.collapsiblecs-body ul {
+  margin-left: 1rem;
+  padding-left: 0.5rem;
+}
+
+.collapsiblecs-body li strong {
+  color: #333;
+  font-weight: 600;
+}

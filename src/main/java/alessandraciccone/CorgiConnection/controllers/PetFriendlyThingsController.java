@@ -67,20 +67,7 @@ public  class PetFriendlyThingsController {
     }
 
 
-    //dasattivo un evento
-//http://localhost:8888/pet-friendly-things/{id}/deactivate
-    @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<PetFriendlyThingsResponseDTO> deactivatePetFriendlyThing(@PathVariable UUID id) {
-        PetFriendlyThingsResponseDTO deactivatedThing = petFriendlyThingsService.deactivatePetFriendlyThing(id);
-        return ResponseEntity.ok(deactivatedThing);
-    }
-    //riattivo un evento
-   //http://localhost:8888/pet-friendly-things/{id}/reactivate
-    @PatchMapping("/{id}/reactivate")
-    public ResponseEntity<PetFriendlyThingsResponseDTO> reactivatePetFriendlyThing(@PathVariable UUID id) {
-        PetFriendlyThingsResponseDTO reactivatedThing = petFriendlyThingsService.reactivatePetFriendlyThing(id);
-        return ResponseEntity.ok(reactivatedThing);
-    }
+
     //  ottengo tutti gli eventi con paginazione
     //http://localhost:8888/pet-friendly-things?page={page}&size={size}&sortBy={sortBy}
     @GetMapping
@@ -91,13 +78,7 @@ public  class PetFriendlyThingsController {
         return ResponseEntity.ok(petFriendlyThingsService.getAllPetFriendlyThings(page, size, sortBy).getContent());
     }
 
-    //ottengo solo eventi attivi
-//http://localhost:8888/pet-friendly-things/active
-    @GetMapping("/active")
-    public ResponseEntity<List<PetFriendlyThingsResponseDTO>> getActivePetFriendlyThings() {
-        List<PetFriendlyThingsResponseDTO> activeThings = petFriendlyThingsService.getActivePetFriendlyThings();
-        return ResponseEntity.ok(activeThings);
-    }
+
 
 //cerco eventi con filtri
 //http://localhost:8888/pet-friendly-things/search?name={name}&type={type}&city={city}&district={district}&region={region}&address={address}&descriptionKeyword={descriptionKeyword}&eventDateAfter={eventDateAfter}&eventDateBefore={eventDateBefore}&startDate={startDate}&endDate={endDate}&page={page}&size={size}&sortBy={sortBy}

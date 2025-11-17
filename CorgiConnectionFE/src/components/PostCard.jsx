@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import MessageButton from "./MessageButton";
 import CommentSection from "./CommentSection";
@@ -7,14 +7,22 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   const [editContent, setEditContent] = useState(post.content);
   const [isEditing, setIsEditing] = useState(false);
 
+  // Reactions state
+  const [reactions, setReactions] = useState({
+    "❤️": [],
+    "😂": [],
+    "😮": [],
+    "😢": [],
+  });
+
   const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
 
-  let userIdFromToken = null;
+  let userId = null;
   if (token) {
     try {
       const decodedToken = JSON.parse(atob(token.split(".")[1]));
-      userIdFromToken =
+      userId =
         decodedToken?.sub ||
         decodedToken?.userId ||
         decodedToken?.id ||
@@ -25,9 +33,43 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   }
 
   const isPostOwner =
-    post.author?.id &&
-    userIdFromToken &&
-    String(post.author.id) === String(userIdFromToken);
+    post.author?.id && userId && String(post.author.id) === String(userId);
+
+  // Carica reactions da localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(`post-${post.id}-reactions`);
+    if (saved) {
+      setReactions(JSON.parse(saved));
+    }
+  }, [post.id]);
+
+  // Salva reactions su localStorage
+  const saveReactions = (newReactions) => {
+    setReactions(newReactions);
+    localStorage.setItem(
+      `post-${post.id}-reactions`,
+      JSON.stringify(newReactions)
+    );
+  };
+
+  // Gestione reaction
+  const handleReaction = (emoji) => {
+    if (!userId) return;
+
+    const newReactions = { ...reactions };
+
+    // Rimuovi user da tutte le reactions
+    Object.keys(newReactions).forEach((key) => {
+      newReactions[key] = newReactions[key].filter((id) => id !== userId);
+    });
+
+    // Se non aveva già cliccato la reaction selezionata, aggiungila
+    if (!reactions[emoji].includes(userId)) {
+      newReactions[emoji].push(userId);
+    }
+
+    saveReactions(newReactions);
+  };
 
   const handleUpdate = async () => {
     try {
@@ -115,6 +157,27 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
             <strong>🐕 {post.corgi.name}</strong> ({post.corgi.age} anni)
           </div>
         )}
+
+        {/* REACTIONS */}
+        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+          {Object.keys(reactions).map((emoji) => (
+            <button
+              key={emoji}
+              onClick={() => handleReaction(emoji)}
+              style={{
+                cursor: "pointer",
+                fontSize: "18px",
+                background: "none",
+                border: "none",
+                padding: "5px 8px",
+                borderRadius: "4px",
+                color: reactions[emoji].includes(userId) ? "red" : "#555",
+              }}
+            >
+              {emoji} {reactions[emoji].length}
+            </button>
+          ))}
+        </div>
 
         {/* BOTTONI */}
         <div
