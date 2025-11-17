@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../css/CosaFacciamo.css";
 import turisti from "../assets/img/turisti.png";
-//
+
 const regioni = [
   "Abruzzo",
   "Basilicata",
@@ -97,7 +97,6 @@ const CosaFacciamo = () => {
           src={turisti}
           alt="ragazza e corgi turisti"
         />
-
         <p className="turistitx">
           🧡 "Zaino in spalla, zampette pronte:
           <br />
@@ -105,57 +104,61 @@ const CosaFacciamo = () => {
         </p>
       </div>
 
-      <div className="row">
-        {regioni.map((regione, index) => (
-          <div className="collapsiblecs" key={regione}>
-            <input type="checkbox" id={`toggle-${index}`} />
+      {/* Wrapper con sfondo giallo */}
+      <div className="collapsiblescs-wrapper">
+        <div className="row">
+          {regioni.map((regione, index) => (
+            <div className="collapsiblecs" key={regione}>
+              <input type="checkbox" id={`toggle-${index}`} />
+              <label
+                htmlFor={`toggle-${index}`}
+                className="collapsiblecs-label"
+              >
+                {regione}
+              </label>
 
-            <label htmlFor={`toggle-${index}`} className="collapsiblecs-label">
-              {regione}
-            </label>
-
-            <div className="collapsiblecs-body">
-              {datiPerRegione[regione]?.length > 0 ? (
-                <ul>
-                  {datiPerRegione[regione].map((item, i) => (
-                    <li key={i}>
-                      <span>
-                        {emojiPerTipo(item.type)}{" "}
-                        <strong>{item.petFriendlyName}</strong>
-                      </span>
-
-                      <ul>
-                        {item.cityThing && (
-                          <li>
-                            <strong>Città:</strong> {item.cityThing.trim()}
-                          </li>
-                        )}
-                        {item.districtThing && (
-                          <li>
-                            <strong>Provincia:</strong> {item.districtThing}
-                          </li>
-                        )}
-                        {item.descriptionThing && (
-                          <li>
-                            <strong>Descrizione:</strong>{" "}
-                            {item.descriptionThing}
-                          </li>
-                        )}
-                        {item.address && (
-                          <li>
-                            <strong>Indirizzo:</strong> {item.address}
-                          </li>
-                        )}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <span>Nessun risultato per questa regione.</span>
-              )}
+              <div className="collapsiblecs-body">
+                {datiPerRegione[regione]?.length > 0 ? (
+                  <ul>
+                    {datiPerRegione[regione].map((item, i) => (
+                      <li key={i}>
+                        <span>
+                          {emojiPerTipo(item.type)}{" "}
+                          <strong>{item.petFriendlyName}</strong>
+                        </span>
+                        <ul>
+                          {item.cityThing && (
+                            <li>
+                              <strong>Città:</strong> {item.cityThing.trim()}
+                            </li>
+                          )}
+                          {item.districtThing && (
+                            <li>
+                              <strong>Provincia:</strong> {item.districtThing}
+                            </li>
+                          )}
+                          {item.descriptionThing && (
+                            <li>
+                              <strong>Descrizione:</strong>{" "}
+                              {item.descriptionThing}
+                            </li>
+                          )}
+                          {item.address && (
+                            <li>
+                              <strong>Indirizzo:</strong> {item.address}
+                            </li>
+                          )}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span>Nessun risultato per questa regione.</span>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

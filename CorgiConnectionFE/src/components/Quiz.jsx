@@ -6,13 +6,12 @@ const Quiz = () => {
   const [allAnswers, setAllAnswers] = useState([]);
   const [result, setResult] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const [showQuiz, setShowQuiz] = useState(false); // 👈 NUOVO
+  const [showQuiz, setShowQuiz] = useState(false);
 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!showQuiz) return; // Carica solo quando si apre il quiz
+    if (!showQuiz) return;
 
     const fetchData = async () => {
       try {
@@ -76,111 +75,112 @@ const Quiz = () => {
     }
   };
 
-  // ---------------------------------------------------------------------------
-  // SE IL QUIZ NON È APERTO, MOSTRA SOLO IL BOTTONE
-  // ---------------------------------------------------------------------------
+  // --- PAGINA INIZIALE ---
   if (!showQuiz) {
     return (
-      <div style={{ textAlign: "center", marginTop: "30px" }}>
-        <button
-          className="btn btn-primary"
-          onClick={() => setShowQuiz(true)}
-          style={{
-            padding: "15px 25px",
-            fontSize: "18px",
-            borderRadius: "12px",
-            cursor: "pointer",
-          }}
-        >
+      <div className="quiz-page-wrapper">
+        <button className="quiz-start-btn" onClick={() => setShowQuiz(true)}>
           🐾 Inizia il Quiz Pet-Friendly
         </button>
       </div>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // QUIZ ATTIVO
-  // ---------------------------------------------------------------------------
   if (questions.length === 0) return <p>Caricamento quiz...</p>;
 
   const currentQuestion = questions[currentIndex];
   const questionAnswers = getAnswersForQuestion(currentQuestion.id);
 
   return (
-    <div className="quiz-container">
-      <h3>Quiz Pet-Friendly 🐾</h3>
+    <div className="quiz-page-wrapper">
+      <div className="quiz-container">
+        <h3>Quiz Pet-Friendly 🐾</h3>
 
-      {/* DOMANDA */}
-      <div className="quiz-question">
-        <p>
-          <strong>
-            Domanda {currentIndex + 1}/{questions.length}:
-          </strong>
-        </p>
+        {/* DOMANDA */}
+        <div className="quiz-question">
+          <p>
+            <strong>
+              Domanda {currentIndex + 1}/{questions.length}:
+            </strong>
+          </p>
+          <h4>{currentQuestion.questionText}</h4>
 
-        <h4>{currentQuestion.questionText}</h4>
-
-        <div className="quiz-answers">
-          {questionAnswers.map((a) => (
-            <button
-              key={a.id}
-              className={`quiz-answer-btn ${
-                answers[currentQuestion.id] === a.id ? "selected" : ""
-              }`}
-              onClick={() => handleAnswerChange(currentQuestion.id, a.id)}
-            >
-              {a.answerText}
-            </button>
-          ))}
+          <div className="quiz-answers">
+            {questionAnswers.map((a) => (
+              <label
+                key={a.id}
+                className={`quiz-radio-label ${
+                  answers[currentQuestion.id] === a.id ? "selected" : ""
+                }`}
+              >
+                <input
+                  type="radio"
+                  name={`question-${currentQuestion.id}`}
+                  value={a.id}
+                  checked={answers[currentQuestion.id] === a.id}
+                  onChange={() => handleAnswerChange(currentQuestion.id, a.id)}
+                />
+                {a.answerText}
+              </label>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* BOTTONI */}
-      <div className="quiz-nav">
-        <button
-          disabled={currentIndex === 0}
-          onClick={() => setCurrentIndex(currentIndex - 1)}
-        >
-          ⬅️ Indietro
-        </button>
+        {/* BOTTONI */}
+        <div className="quiz-nav">
+          <button
+            disabled={currentIndex === 0}
+            onClick={() => setCurrentIndex(currentIndex - 1)}
+          >
+            😎 Indietro
+          </button>
 
-        {currentIndex < questions.length - 1 ? (
-          <button
-            disabled={!answers[currentQuestion.id]}
-            onClick={() => setCurrentIndex(currentIndex + 1)}
-          >
-            Avanti ➡️
-          </button>
-        ) : (
-          <button
-            onClick={handleSubmit}
-            disabled={Object.keys(answers).length !== questions.length}
-          >
-            ✔️ Invia Risposte
-          </button>
+          {currentIndex < questions.length - 1 ? (
+            <button
+              disabled={!answers[currentQuestion.id]}
+              onClick={() => setCurrentIndex(currentIndex + 1)}
+            >
+              Avanti 😎
+            </button>
+          ) : (
+            <button
+              onClick={handleSubmit}
+              disabled={Object.keys(answers).length !== questions.length}
+            >
+              ✔️ Invia Risposte
+            </button>
+          )}
+        </div>
+
+        {/* RISULTATO */}
+        {result && (
+          <div className="quiz-result">
+            <h4>Risultato Quiz</h4>
+            <p>
+              <strong>Punteggio:</strong> {result.score} /{" "}
+              {result.totalQuestions}
+            </p>
+            <p>
+              <strong>Percentuale:</strong>{" "}
+              {result.percentage === 100 || result.percentage === 0
+                ? result.percentage + "%"
+                : result.percentage.toFixed(1) + "%"}
+            </p>
+
+            <button
+              className="quiz-start-btn"
+              onClick={() => {
+                setShowQuiz(false);
+                setResult(null);
+                setAnswers({});
+                setCurrentIndex(0);
+              }}
+            >
+              🐣 Ricomincia
+            </button>
+          </div>
         )}
       </div>
-
-      {/* RISULTATO */}
-      {result && (
-        <div
-          className="quiz-result"
-          style={{
-            marginTop: "20px",
-            padding: "20px",
-            background: "#f0f8ff",
-            borderRadius: "8px",
-          }}
-        >
-          <h4>Risultato Quiz 🎉</h4>
-          <p>
-            <strong>Punteggio:</strong> {result.score} / {result.totalQuestions}
-          </p>
-          <p>
-            <strong>Percentuale:</strong> {result.percentage.toFixed(1)}%
-          </p>
-        </div>
-      )}
     </div>
   );
 };

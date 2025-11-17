@@ -29,14 +29,19 @@
   margin-bottom: 0;
 }
 
+.collapsibles-wrapper {
+  background-color: transparent; /* giallo dei collapse */
+  padding: 1rem;
+  border-radius: 12px;
+}
 
 
 .collapsibletx {
-  background-color: rgb(255, 248, 230); /* come primo collapse */
+  background-color: rgb(255, 248, 230); /* ora è il wrapper che ha il giallo */
   border-radius: 6px;
   margin-bottom: 1rem;
   padding: 0.5rem 0;
-  text-align: center; /
+  text-align: center;
 }
 
 /* Nascondi radio */
@@ -89,7 +94,7 @@
 }
 
 .collapsibletx label {
-  background-color: transparent;
+  background-color: rgb(255, 248, 230);
   color: #2a2b28da;
   font-weight: bold;
   cursor: pointer;
@@ -97,6 +102,7 @@
   border-radius: 6px;
   margin-bottom: 0.3rem;
   font-style: italic;
+  border:0.5px solid black
 }
 
 .collapsible-body {
@@ -105,7 +111,6 @@
   padding: 0 1rem;
 max-height: 0;
   overflow: hidden;
-  background-color: rgb(255, 248, 230);
   border: none !important; /* bordo trasparente */
   border-radius: 6px;
   padding: 0 1rem;

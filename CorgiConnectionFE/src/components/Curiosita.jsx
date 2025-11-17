@@ -1,4 +1,6 @@
 import "../css/Curiosita.css";
+import "../css/Quiz.css";
+
 import Quiz from "./Quiz";
 import losapevi from "../assets/img/losapevi.png";
 
@@ -126,9 +128,9 @@ const Curiosita = () => {
           entra nel mondo delle zampette più famose!"
         </p>
       </div>
-
       {/* Sezione collapsible */}
-      <div className="row">
+      {/* Sezione collapsible */}
+      <div className="collapsibles-wrapper">
         {curiositaData.map((section) => (
           <div className="collapsibletx" key={section.id}>
             <input id={section.id} type="radio" name="collapsible" />
@@ -150,11 +152,9 @@ const Curiosita = () => {
           </div>
         ))}
       </div>
-
-      {/* Sezione Quiz */}
+      <hr /> {/* Sezione Quiz */}
       <div className="curiosita-container">
-        <h2>Scopri quanto ne sai!</h2>
-        <Quiz />
+        <h2 style={{ textAlign: "center" }}>Scopri quanto ne sai!</h2> <Quiz />
       </div>
     </div>
   );

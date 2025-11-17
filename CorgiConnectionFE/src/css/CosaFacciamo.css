@@ -29,6 +29,30 @@
   margin-bottom: 0;
 }
 
+.collapsiblescs-wrapper {
+  background-color: transparent; /* giallo */
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+
+.collapsiblecs {
+  background-color: rgb(255, 248, 230); /* evita conflitti di colore */
+  margin-bottom: 1rem;
+  border-radius: 6px;
+    border: solid,0.3px, black
+
+}
+
+.collapsiblecs-label {
+  cursor: pointer;
+  display: block;
+  padding: 0.5rem 1rem;
+  background-color:rgb(255, 248, 230) ; /* leggero giallo per label */
+  border-radius: 6px;
+}
+
+
 .collapsiblecs input[type="checkbox"] {
   display: none;
 }

@@ -20,7 +20,7 @@ public class AnswerController {
     private AnswerService answerService;
 
     // CREA NUOVA RISPOSTA
-    //POST http://localhost:3001/answers
+    //POST http://localhost:8888/answers
     @PostMapping
     public ResponseEntity<List<AnswerResponseDTO>> createAnswers(@Valid @RequestBody List<AnswerDTO> answers) {
         List<AnswerResponseDTO> saved = answers.stream()
