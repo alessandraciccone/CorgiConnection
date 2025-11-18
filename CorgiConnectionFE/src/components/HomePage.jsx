@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ResultSection from "./ResultSection";
+import scoperta from "../assets/img/scoperta.png";
+import "../css/HomePage.css";
 
 const Homepage = ({ filters }) => {
   const [results, setResults] = useState([]);
@@ -37,7 +39,14 @@ const Homepage = ({ filters }) => {
         const data = await res.json();
 
         const newResults = data.content || data;
-        setResults((prev) => [...prev, ...newResults]);
+        setResults((prev) => {
+          const combined = [...prev, ...newResults];
+          // crea una mappa per rimuovere duplicati basati su id
+          const uniqueResults = Array.from(
+            new Map(combined.map((item) => [item.id, item])).values()
+          );
+          return uniqueResults;
+        });
 
         if (!data.content || data.content.length < size) setHasMore(false); // fine dei risultati
       } catch (err) {
@@ -67,14 +76,27 @@ const Homepage = ({ filters }) => {
   }, [hasMore]);
 
   return (
-    <>
+    <div className="container">
+      {/* Sezione introduttiva */}
+      <div className="scoperta">
+        <img
+          className="scoprirecose"
+          src={scoperta}
+          alt="ragazza e corgi che scoprono"
+        />
+        <p className="textscoperta">
+          "Non sappiamo cosa sia, ma se ci fa sorridere… <br />
+          vale la pena cercarlo!"
+        </p>
+      </div>
+
       <ResultSection results={results} searchType={filters.searchType} />
       {hasMore && (
         <div ref={loader} style={{ height: "50px", textAlign: "center" }}>
           Caricamento...
         </div>
       )}
-    </>
+    </div>
   );
 };
 

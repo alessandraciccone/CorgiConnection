@@ -19,7 +19,6 @@ const ResultSection = ({ results, searchType }) => {
 
   return (
     <div className="results-container">
-      <h3>Risultati:</h3>
       <div className="cards-grid">
         {results.map((item, index) => (
           <div
