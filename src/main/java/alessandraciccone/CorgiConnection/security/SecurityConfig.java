@@ -36,8 +36,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // login, registrazione pubblici
-                        .anyRequest().authenticated()           // tutto il resto protetto
+                        .requestMatchers("/auth/**").permitAll()     // login, registrazione pubblici
+                        .requestMatchers("/ws/**").permitAll()       // ✅ WebSocket endpoint
+                        .requestMatchers("/app/**").permitAll()      // ✅ STOMP destinations
+                        .requestMatchers("/topic/**").permitAll()    // ✅ Broker topics
+                        .requestMatchers("/user/**").permitAll()     // ✅ User-specific destinations
+                        .anyRequest().authenticated()                // tutto il resto protetto
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
@@ -60,8 +64,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",    // React in sviluppo
-                "https://www.miodominio.com" // Frontend in produzione poi cambialo con netlify o verce
+                "http://localhost:5173",        // React in sviluppo
+                "https://www.miodominio.com"    // Frontend in produzione
         ));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
@@ -74,5 +78,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }

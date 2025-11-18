@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import MessageButton from "./MessageButton";
 import CommentSection from "./CommentSection";
 
 const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   const [editContent, setEditContent] = useState(post.content);
   const [isEditing, setIsEditing] = useState(false);
-
-  // Reactions state
   const [reactions, setReactions] = useState({
     "❤️": [],
     "😂": [],
@@ -35,7 +32,6 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   const isPostOwner =
     post.author?.id && userId && String(post.author.id) === String(userId);
 
-  // Carica reactions da localStorage
   useEffect(() => {
     const saved = localStorage.getItem(`post-${post.id}-reactions`);
     if (saved) {
@@ -43,7 +39,6 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
     }
   }, [post.id]);
 
-  // Salva reactions su localStorage
   const saveReactions = (newReactions) => {
     setReactions(newReactions);
     localStorage.setItem(
@@ -52,18 +47,14 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
     );
   };
 
-  // Gestione reaction
   const handleReaction = (emoji) => {
     if (!userId) return;
 
     const newReactions = { ...reactions };
-
-    // Rimuovi user da tutte le reactions
     Object.keys(newReactions).forEach((key) => {
       newReactions[key] = newReactions[key].filter((id) => id !== userId);
     });
 
-    // Se non aveva già cliccato la reaction selezionata, aggiungila
     if (!reactions[emoji].includes(userId)) {
       newReactions[emoji].push(userId);
     }
@@ -189,47 +180,39 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
           }}
         >
           {isLoggedIn &&
-            (isPostOwner ? (
-              isEditing ? (
-                <>
-                  <button
-                    onClick={handleUpdate}
-                    className="btn btn-light btn-sm"
-                  >
-                    ✔️ Salva
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsEditing(false);
-                      setEditContent(post.content);
-                    }}
-                    className="btn btn-light btn-sm"
-                  >
-                    ❌ Annulla
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="btn btn-light btn-sm"
-                  >
-                    ✏️ Modifica
-                  </button>
-                  <button
-                    onClick={handleDelete}
-                    className="btn btn-light btn-sm"
-                  >
-                    🗑️ Elimina
-                  </button>
-                </>
-              )
+            isPostOwner &&
+            (isEditing ? (
+              <>
+                <button onClick={handleUpdate} className="btn btn-light btn-sm">
+                  ✔️ Salva
+                </button>
+                <button
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditContent(post.content);
+                  }}
+                  className="btn btn-light btn-sm"
+                >
+                  ❌ Annulla
+                </button>
+              </>
             ) : (
-              <MessageButton recipientId={post.author?.id} />
+              <>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="btn btn-light btn-sm"
+                >
+                  ✏️ Modifica
+                </button>
+                <button onClick={handleDelete} className="btn btn-light btn-sm">
+                  🗑️ Elimina
+                </button>
+              </>
             ))}
         </div>
 
-        <CommentSection postId={post.id} />
+        {/* COMMENTI */}
+        {isLoggedIn && !isPostOwner && <CommentSection postId={post.id} />}
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 import "../css/Profilo.css";
 import correrecorgi from "../assets/img/correrecorgi.png";
 
@@ -39,6 +41,8 @@ const getProfileImage = async (userId) => {
 // --- COMPONENTE PROFILO ---
 const Profilo = () => {
   const navigate = useNavigate();
+  const { userId: profileUserId } = useParams(); // ✅ ID dal URL
+
   const [utente, setUtente] = useState(null);
   const [profiloUtente, setProfiloUtente] = useState({
     username: "",
@@ -57,31 +61,44 @@ const Profilo = () => {
   const [risposta, setRisposta] = useState("");
   const [messaggioSelezionato, setMessaggioSelezionato] = useState(null);
 
+  // --- STATI CHAT WEBSOCKET ---
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState("");
+  const [connected, setConnected] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const clientRef = useRef(null);
+  const chatEndRef = useRef(null);
+
   const fileInputProfiloRef = useRef(null);
+
+  // ✅ Determina se è il proprio profilo
+  const myUserId = localStorage.getItem("userId");
+  const isMyProfile = !profileUserId || profileUserId === myUserId;
+  const targetUserId = profileUserId || myUserId;
 
   // --- FETCH DATI UTENTE E MESSAGGI ---
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    if (!token || !userId) return;
+    if (!token || !targetUserId) return;
 
     const fetchUtente = async () => {
       try {
-        const response = await fetch(`http://localhost:8888/users/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await fetch(
+          `http://localhost:8888/users/${targetUserId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (!response.ok) throw new Error("Errore nel recupero utente");
 
         const data = await response.json();
         setUtente(data);
         setProfiloUtente(data);
 
-        // Recupera immagine da IndexedDB
-        const blob = await getProfileImage(userId);
+        const blob = await getProfileImage(targetUserId);
         if (blob) setFotoProfilo(URL.createObjectURL(blob));
 
-        // Recupera info cane da localStorage (piccoli testi ok)
-        const infoSalvata = localStorage.getItem(`infoCane-${userId}`);
+        const infoSalvata = localStorage.getItem(`infoCane-${targetUserId}`);
         setInfoCane(infoSalvata || "");
       } catch (error) {
         console.error(error);
@@ -89,9 +106,11 @@ const Profilo = () => {
     };
 
     const fetchMessaggi = async () => {
+      if (!isMyProfile) return; // ✅ Solo per il proprio profilo
+
       try {
         const response = await fetch(
-          `http://localhost:8888/messages/${userId}`,
+          `http://localhost:8888/messages/${myUserId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (response.ok) {
@@ -106,7 +125,67 @@ const Profilo = () => {
 
     fetchUtente();
     fetchMessaggi();
-  }, []);
+  }, [targetUserId, isMyProfile, myUserId]);
+
+  // --- WEBSOCKET CONNECTION (SOLO PER PROFILI ALTRUI) ---
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token || isMyProfile) return; // ✅ Non connettere se è il proprio profilo
+
+    const socket = new SockJS("http://localhost:8888/ws");
+    const stompClient = new Client({
+      webSocketFactory: () => socket,
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+      onConnect: () => {
+        console.log("✅ Connesso a WebSocket");
+        setConnected(true);
+
+        stompClient.subscribe(
+          `/user/${targetUserId}/queue/messages`,
+          (message) => {
+            const msg = JSON.parse(message.body);
+            setChatMessages((prev) => [...prev, msg]);
+
+            setTimeout(() => {
+              chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            }, 100);
+          }
+        );
+      },
+      onStompError: (error) => {
+        console.error("❌ Errore STOMP:", error);
+        setConnected(false);
+      },
+      onDisconnect: () => {
+        console.log("🔴 Disconnesso da WebSocket");
+        setConnected(false);
+      },
+    });
+
+    stompClient.activate();
+    clientRef.current = stompClient;
+
+    return () => {
+      stompClient.deactivate();
+    };
+  }, [isMyProfile, targetUserId]);
+
+  // --- INVIO MESSAGGIO CHAT ---
+  const sendChatMessage = () => {
+    if (chatInput.trim() && connected && clientRef.current) {
+      clientRef.current.publish({
+        destination: "/app/chat.private",
+        body: JSON.stringify({
+          recipient: targetUserId,
+          content: chatInput,
+          type: "CHAT",
+        }),
+      });
+      setChatInput("");
+    }
+  };
 
   // --- FUNZIONI FOTO PROFILO ---
   const handleFotoProfilo = (e) => {
@@ -140,7 +219,6 @@ const Profilo = () => {
 
         canvas.toBlob(async (blob) => {
           if (blob.size < 5 * 1024 * 1024) {
-            // 5MB limite
             await saveProfileImage(userId, blob);
             setFotoProfilo(URL.createObjectURL(blob));
           } else {
@@ -188,6 +266,9 @@ const Profilo = () => {
 
   // --- LOGOUT ---
   const handleLogout = () => {
+    if (clientRef.current) {
+      clientRef.current.deactivate();
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     setUtente(null);
@@ -280,60 +361,67 @@ const Profilo = () => {
         </p>
       </div>
 
-      {nuoviMessaggi > 0 && (
-        <div className="notifica-messaggio">
-          <p>Hai {nuoviMessaggi} nuovi messaggi! 📩</p>
-        </div>
-      )}
-
-      <div className="messaggi">
-        {messaggi.map((msg) => (
-          <div key={msg.id} className="messaggio">
-            <p>
-              <strong>{msg.senderName}</strong> ha inviato un messaggio:
-            </p>
-            <p>{msg.content}</p>
-            {!msg.read && (
-              <button onClick={() => segnaComeLetto(msg.id)}>
-                Segna come letto
-              </button>
-            )}
-            <button onClick={() => setMessaggioSelezionato(msg)}>
-              Leggi / Rispondi
-            </button>
-
-            <div className="risposte">
-              {msg.replies?.map((reply, index) => (
-                <div key={index} className="risposta">
-                  <p>
-                    <strong>Risposta:</strong> {reply.content}
-                  </p>
-                </div>
-              ))}
-
-              {messaggioSelezionato && messaggioSelezionato.id === msg.id && (
-                <div>
-                  <textarea
-                    value={risposta}
-                    onChange={(e) => setRisposta(e.target.value)}
-                    placeholder="Scrivi una risposta..."
-                  />
-                  <button onClick={() => inviaRisposta(msg.id, risposta)}>
-                    Invia Risposta
-                  </button>
-                </div>
-              )}
+      {/* ✅ Mostra messaggi SOLO nel proprio profilo */}
+      {isMyProfile && (
+        <>
+          {nuoviMessaggi > 0 && (
+            <div className="notifica-messaggio">
+              <p>Hai {nuoviMessaggi} nuovi messaggi! 📩</p>
             </div>
+          )}
+
+          <div className="messaggi">
+            {messaggi.map((msg) => (
+              <div key={msg.id} className="messaggio">
+                <p>
+                  <strong>{msg.senderName}</strong> ha inviato un messaggio:
+                </p>
+                <p>{msg.content}</p>
+                {!msg.read && (
+                  <button onClick={() => segnaComeLetto(msg.id)}>
+                    Segna come letto
+                  </button>
+                )}
+                <button onClick={() => setMessaggioSelezionato(msg)}>
+                  Leggi / Rispondi
+                </button>
+
+                <div className="risposte">
+                  {msg.replies?.map((reply, index) => (
+                    <div key={index} className="risposta">
+                      <p>
+                        <strong>Risposta:</strong> {reply.content}
+                      </p>
+                    </div>
+                  ))}
+
+                  {messaggioSelezionato &&
+                    messaggioSelezionato.id === msg.id && (
+                      <div>
+                        <textarea
+                          value={risposta}
+                          onChange={(e) => setRisposta(e.target.value)}
+                          placeholder="Scrivi una risposta..."
+                        />
+                        <button onClick={() => inviaRisposta(msg.id, risposta)}>
+                          Invia Risposta
+                        </button>
+                      </div>
+                    )}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
       <div className="row">
         <div className="col-12 col-lg-6 mb-4">
           <div className="card mt-2">
             <div className="card-body card-flex">
               <div className="dati-utente">
-                {modificaUtente ? (
+                {/* ✅ Modifica SOLO nel proprio profilo */}
+                {isMyProfile && modificaUtente ? (
                   <>
                     {[
                       "username",
@@ -392,14 +480,17 @@ const Profilo = () => {
                         </div>
                       </div>
                     )}
-                    <div className="bottoni-profilo">
-                      <span
-                        className="emoji-click"
-                        onClick={() => setModificaUtente(true)}
-                      >
-                        🖊️
-                      </span>
-                    </div>
+                    {/* ✅ Pulsante modifica SOLO nel proprio profilo */}
+                    {isMyProfile && (
+                      <div className="bottoni-profilo">
+                        <span
+                          className="emoji-click"
+                          onClick={() => setModificaUtente(true)}
+                        >
+                          🖊️
+                        </span>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <p>Caricamento dati utente...</p>
@@ -410,34 +501,197 @@ const Profilo = () => {
                 {fotoProfilo && (
                   <img src={fotoProfilo} className="foto" alt="Foto profilo" />
                 )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputProfiloRef}
-                  onChange={handleFotoProfilo}
-                  style={{ display: "none" }}
-                />
-                <button
-                  className="btn-small-profilo mt-2"
-                  onClick={() => fileInputProfiloRef.current.click()}
-                >
-                  <p className="prof">Carica foto profilo 📷</p>
-                </button>
+                {/* ✅ Carica foto SOLO nel proprio profilo */}
+                {isMyProfile && (
+                  <>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputProfiloRef}
+                      onChange={handleFotoProfilo}
+                      style={{ display: "none" }}
+                    />
+                    <button
+                      className="btn-small-profilo mt-2"
+                      onClick={() => fileInputProfiloRef.current.click()}
+                    >
+                      <p className="prof">Carica foto profilo 📷</p>
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="xlogout">
-        <p>
-          Vuoi uscire dal tuo profilo?{" "}
-          <span className="logout-link" onClick={handleLogout}>
-            clicca qui
-          </span>{" "}
-          e torna presto a trovarci! 🐶
-        </p>
-      </div>
+      {/* ✅ CHAT - SOLO NEI PROFILI ALTRUI */}
+      {!isMyProfile && (
+        <>
+          {!isMyProfile && (
+            <>
+              <button
+                onClick={() => setShowChat(!showChat)}
+                style={{
+                  position: "fixed",
+                  bottom: "20px",
+                  right: "20px",
+                  width: "60px",
+                  height: "60px",
+                  borderRadius: "50%",
+                  background: "#d17b49",
+                  color: "white",
+                  border: "none",
+                  fontSize: "24px",
+                  cursor: "pointer",
+                  boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+                  zIndex: 1000,
+                }}
+              >
+                💬
+              </button>
+            </>
+          )}
+
+          {showChat && (
+            <div
+              style={{
+                position: "fixed",
+                bottom: "90px",
+                right: "20px",
+                width: "350px",
+                height: "500px",
+                background: "white",
+                borderRadius: "10px",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+                zIndex: 1000,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  background: "#d17b49",
+                  color: "white",
+                  padding: "15px",
+                  borderRadius: "10px 10px 0 0",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <strong>Chat con {utente?.username} 🐶</strong>
+                  <div style={{ fontSize: "12px" }}>
+                    {connected ? "🟢 Online" : "🔴 Offline"}
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowChat(false)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "white",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              console.log(isMyProfile);
+              <div
+                style={{
+                  flex: 1,
+                  overflowY: "auto",
+                  padding: "15px",
+                  background: "#f9f9f9",
+                }}
+              >
+                {chatMessages.length === 0 ? (
+                  <p style={{ textAlign: "center", color: "#999" }}>
+                    Inizia una conversazione...
+                  </p>
+                ) : (
+                  chatMessages.map((msg, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        marginBottom: "10px",
+                        padding: "8px 12px",
+                        background:
+                          msg.sender === myUserId ? "#d17b49" : "white",
+                        color: msg.sender === myUserId ? "white" : "black",
+                        borderRadius: "8px",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                      }}
+                    >
+                      <p style={{ margin: "0", fontSize: "14px" }}>
+                        {msg.content}
+                      </p>
+                    </div>
+                  ))
+                )}
+                <div ref={chatEndRef} />
+              </div>
+              <div
+                style={{
+                  padding: "15px",
+                  borderTop: "1px solid #ddd",
+                  background: "white",
+                  borderRadius: "0 0 10px 10px",
+                }}
+              >
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && sendChatMessage()}
+                    placeholder="Scrivi un messaggio..."
+                    disabled={!connected}
+                    style={{
+                      flex: 1,
+                      padding: "10px",
+                      border: "1px solid #ddd",
+                      borderRadius: "5px",
+                      fontSize: "14px",
+                    }}
+                  />
+                  <button
+                    onClick={sendChatMessage}
+                    disabled={!connected || !chatInput.trim()}
+                    style={{
+                      padding: "10px 15px",
+                      background: connected ? "#d17b49" : "#ccc",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: connected ? "pointer" : "not-allowed",
+                      fontSize: "18px",
+                    }}
+                  >
+                    ➤
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ✅ Logout SOLO nel proprio profilo */}
+      {isMyProfile && (
+        <div className="xlogout">
+          <p>
+            Vuoi uscire dal tuo profilo?{" "}
+            <span className="logout-link" onClick={handleLogout}>
+              clicca qui
+            </span>{" "}
+            e torna presto a trovarci! 🐶
+          </p>
+        </div>
+      )}
     </div>
   );
 };
