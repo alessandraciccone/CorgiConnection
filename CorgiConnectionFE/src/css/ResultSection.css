@@ -1,0 +1,35 @@
+.results-container {
+  margin-top: 20px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.result-card {
+  background-color: #fff8e6;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  padding: 15px;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.2s;
+  border:1px solid  #e07b00
+  
+
+}
+
+.result-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.result-card h4 {
+  margin: 0 0 8px;
+}
+
+.result-card p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+}

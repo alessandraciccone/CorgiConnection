@@ -122,13 +122,11 @@ const PostList = () => {
         {posts.length === 0 && <p>Nessun post disponibile</p>}
         {posts.map((post) => (
           <div key={post.id} className="col-12 col-lg-6 mb-4">
-            <div className="post-card">
-              <PostCard
-                post={post}
-                onPostUpdated={handlePostUpdated}
-                onPostDeleted={handlePostDeleted}
-              />
-            </div>
+            <PostCard
+              post={post}
+              onPostUpdated={handlePostUpdated}
+              onPostDeleted={handlePostDeleted}
+            />
           </div>
         ))}
       </div>

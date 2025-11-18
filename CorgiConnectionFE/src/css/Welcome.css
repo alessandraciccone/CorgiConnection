@@ -143,3 +143,34 @@ animation-fill-mode: both;
   filter: drop-shadow(1px 2px 0 #d17b49);
 }
 }
+/* Tablet (fino a 768px) */
+/* Tablet (fino a 768px) */
+@media (max-width: 768px) and (min-width: 577px) {
+  .cartoon-corgi {
+    width: 350px; /* più piccolo per tablet */
+    height: auto;
+  }
+
+  .speech-bubble.main {
+    top: 1%;
+    left: 60%;
+    width: 200px;  /* scalata proporzionale all'immagine */
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    transform: translateX(-50%);
+  }
+
+  .speech-bubble.dog {
+    top: 20%;
+    left: 70%;
+    width: 220px;
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    transform: translateX(-50%);
+  }
+
+  .speech-bubble.main::after,
+  .speech-bubble.dog::after {
+    border-width: 6px; /* proporzionale alla nuova size */
+  }
+}

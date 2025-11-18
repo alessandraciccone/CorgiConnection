@@ -136,7 +136,11 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
             onChange={(e) => setEditContent(e.target.value)}
             rows={4}
             className="input-block"
-            style={{ width: "100%", marginBottom: "10px" }}
+            style={{
+              width: "100%",
+              marginBottom: "10px",
+              border: " 1px solid #ff7f50",
+            }}
           />
         ) : (
           <p className="card-text">{post.content}</p>

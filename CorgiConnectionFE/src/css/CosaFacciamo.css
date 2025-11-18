@@ -40,7 +40,7 @@
   background-color: rgb(255, 248, 230); /* evita conflitti di colore */
   margin-bottom: 1rem;
   border-radius: 6px;
-    border: solid,0.3px, black
+  border: 0.1px solid #ff7f50
 
 }
 

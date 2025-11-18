@@ -5,9 +5,8 @@
   margin-bottom: 20px; 
 }
 
-/* Card post */
 .post-card {
-  border: 1px solid #0a0a0a;
+  border: 1px solid #ff7f50;
   padding: 10px;
   background-color: #fff8e6;
   border-radius: 5px;
@@ -35,7 +34,7 @@ textarea.post-create {
   border-radius: 5px;
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #ff7f50;
   resize: vertical;
 }
 
@@ -43,3 +42,4 @@ textarea.post-create {
 .btn-s{
     border:none !important;
 }
+
