@@ -12,7 +12,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Profilo from "./components/Profilo";
 import Home from "./components/Home";
-import Homepage from "./components/Homepage";
+import Homepage from "./components/HomePage";
 import ProfilePage from "./components/ProfilePage";
 import Curiosita from "./components/Curiosita";
 import Cosafacciamo from "./components/Cosafacciamo";
