@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Answer {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 
     private UUID id;
 
@@ -18,12 +18,15 @@ public class Answer {
     @Column(nullable = false)
 
     private String answerText;
-    private Boolean isCorrect=true;
+    private Boolean isCorrect = true;
 
 
-    public Answer(){};
+    public Answer() {
+    }
 
-    public Answer( String answerText, Boolean isCorrect, Question question) {
+    ;
+
+    public Answer(String answerText, Boolean isCorrect, Question question) {
 
         this.answerText = answerText;
         this.isCorrect = isCorrect;
@@ -31,13 +34,12 @@ public class Answer {
     }
 
     @ManyToOne
-    @JoinColumn(name="question_id", nullable = false)
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     public UUID getId() {
         return id;
     }
-
 
 
     public String getAnswerText() {
@@ -73,3 +75,5 @@ public class Answer {
                 '}';
     }
 }
+
+

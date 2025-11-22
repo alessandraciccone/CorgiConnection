@@ -3,26 +3,26 @@ import "../css/CosaFacciamo.css";
 import turisti from "../assets/img/turisti.png";
 
 const regioni = [
-  " 🐻 Abruzzo",
-  "Basilicata 🍞 ",
-  " 🌶️ Calabria",
-  "Campania 🌋",
-  " 🥟 Emilia-Romagna",
-  "Friuli Venezia Giulia 🌼 ",
-  " 🏛️  Lazio",
-  "Liguria 🌿 ",
-  " 🛕 Lombardia",
-  "Marche 🎭 ",
-  "🌾 Molise",
-  "Piemonte 🍫 ",
-  "🌳 Puglia",
-  "Sardegna 🏝️",
-  "🍊 Sicilia",
-  "Toscana 🌻",
-  "🍎 Trentino-Alto Adige",
-  "Umbria🫒 ",
-  "🏔️ Valle d'Aosta",
-  "Veneto🍷 ",
+  { display: "🐻 Abruzzo", name: "Abruzzo" },
+  { display: "Basilicata 🍞", name: "Basilicata" },
+  { display: "🌶️ Calabria", name: "Calabria" },
+  { display: "Campania 🌋", name: "Campania" },
+  { display: "🥟 Emilia-Romagna", name: "Emilia-Romagna" },
+  { display: "Friuli Venezia Giulia 🌼", name: "Friuli Venezia Giulia" },
+  { display: "🏛️ Lazio", name: "Lazio" },
+  { display: "Liguria 🌿", name: "Liguria" },
+  { display: "🛕 Lombardia", name: "Lombardia" },
+  { display: "Marche 🎭", name: "Marche" },
+  { display: "🌾 Molise", name: "Molise" },
+  { display: "Piemonte 🍫", name: "Piemonte" },
+  { display: "🌳 Puglia", name: "Puglia" },
+  { display: "Sardegna 🏝️", name: "Sardegna" },
+  { display: "🍊 Sicilia", name: "Sicilia" },
+  { display: "Toscana 🌻", name: "Toscana" },
+  { display: "🍎 Trentino-Alto Adige", name: "Trentino-Alto Adige" },
+  { display: "Umbria🫒", name: "Umbria" },
+  { display: "🏔️ Valle d'Aosta", name: "Valle d'Aosta" },
+  { display: "Veneto🍷", name: "Veneto" },
 ];
 
 const emojiPerTipo = (tipo) => {
@@ -48,6 +48,7 @@ const emojiPerTipo = (tipo) => {
 
 const CosaFacciamo = () => {
   const [datiPerRegione, setDatiPerRegione] = useState({});
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -60,37 +61,47 @@ const CosaFacciamo = () => {
       while (hasMore) {
         try {
           const res = await fetch(
-            `http://localhost:8888/pet-friendly-things/search?region=${regione}&page=${page}&size=${size}`,
+            `http://localhost:8888/pet-friendly-things/search?region=${encodeURIComponent(
+              regione.name
+            )}&page=${page}&size=${size}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
 
           if (res.ok) {
             const data = await res.json();
-            tuttiIDati = [...tuttiIDati, ...(data.content || [])];
-            hasMore = !data.last;
+            const nuovi = data.content || data;
+            tuttiIDati = [...tuttiIDati, ...nuovi];
+            hasMore = data.content ? !data.last : false;
             page++;
           } else {
-            console.error(`Errore per ${regione}:`, res.status);
+            console.error(`Errore per ${regione.name}:`, res.status);
             hasMore = false;
           }
         } catch (err) {
-          console.error(`Errore fetch ${regione}:`, err);
+          console.error(`Errore fetch ${regione.name}:`, err);
           hasMore = false;
         }
       }
 
       setDatiPerRegione((prev) => ({
         ...prev,
-        [regione]: tuttiIDati,
+        [regione.display]: tuttiIDati,
       }));
     };
 
-    regioni.forEach((regione) => fetchDatiPerRegione(regione));
-  }, []);
+    const fetchAll = async () => {
+      setLoading(true);
+      await Promise.all(regioni.map((reg) => fetchDatiPerRegione(reg)));
+      setLoading(false);
+    };
+
+    fetchAll();
+  }, [token]);
+
+  if (loading) return <p>Caricamento dati per tutte le regioni...</p>;
 
   return (
     <div className="container t">
-      {/* Sezione introduttiva */}
       <div className="turisti">
         <img
           className="turistiImg"
@@ -104,23 +115,22 @@ const CosaFacciamo = () => {
         </p>
       </div>
 
-      {/* Wrapper con sfondo giallo */}
       <div className="collapsiblescs-wrapper">
         <div className="row">
           {regioni.map((regione, index) => (
-            <div className="collapsiblecs" key={regione}>
+            <div className="collapsiblecs" key={regione.display}>
               <input type="checkbox" id={`toggle-${index}`} />
               <label
                 htmlFor={`toggle-${index}`}
                 className="collapsiblecs-label"
               >
-                {regione}
+                {regione.display}
               </label>
 
               <div className="collapsiblecs-body">
-                {datiPerRegione[regione]?.length > 0 ? (
+                {datiPerRegione[regione.display]?.length > 0 ? (
                   <ul>
-                    {datiPerRegione[regione].map((item, i) => (
+                    {datiPerRegione[regione.display].map((item, i) => (
                       <li key={i}>
                         <span>
                           {emojiPerTipo(item.type)}{" "}

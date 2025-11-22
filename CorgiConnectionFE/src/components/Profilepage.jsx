@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import correrecorgi from "../assets/img/correrecorgi.png";
 import "../css/Profilo.css";
-import ChatPopup from "./ChatPopup";
 
 const ProfilePage = () => {
   const { userId } = useParams();
