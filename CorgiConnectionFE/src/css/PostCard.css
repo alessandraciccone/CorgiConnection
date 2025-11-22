@@ -26,7 +26,7 @@
   .post-card {
     flex: 0 0 calc(40% - 10px); /* più stretta del 50% */
     max-width: calc(40% - 10px);
-  }
+  }              
 }
 
 textarea.post-create {

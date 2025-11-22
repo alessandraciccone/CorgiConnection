@@ -7,6 +7,7 @@ const ResultSection = ({ results, searchType }) => {
 
   const handleClick = (item) => {
     if (searchType === "users") {
+      // porta al profilo corretto di quell'utente
       navigate(`/profilo/${item.id}`);
     } else if (searchType === "posts") {
       navigate(`/post/${item.id}`);
@@ -22,13 +23,13 @@ const ResultSection = ({ results, searchType }) => {
       <div className="cards-grid">
         {results.map((item, index) => (
           <div
-            key={`${item.id}-${index}`} // chiave unica per evitare duplicati
+            key={`${item.id}-${index}`}
             className={`result-card ${searchType}`}
             onClick={() => handleClick(item)}
           >
             {searchType === "users" && (
               <>
-                👤 <h4>{item.username}</h4>
+                👤 <h4>@{item.username}</h4>
               </>
             )}
             {searchType === "posts" && (

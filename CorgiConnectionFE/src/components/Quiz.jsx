@@ -49,6 +49,7 @@ const Quiz = () => {
   };
 
   const handleSubmit = async () => {
+    // Prepara DTO per backend
     const dto = {
       answers: Object.entries(answers).map(([questionId, answerId]) => ({
         questionId,
@@ -56,8 +57,11 @@ const Quiz = () => {
       })),
     };
 
+    console.log("📤 DTO inviato:", dto);
+    console.log("📤 JSON:", JSON.stringify(dto));
+
     try {
-      const res = await fetch("http://localhost:8888/quiz-results", {
+      const res = await fetch("http://localhost:8888/quiz-results/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,12 +70,21 @@ const Quiz = () => {
         body: JSON.stringify(dto),
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      console.log("📥 Response status:", res.status);
 
-      setResult(await res.json());
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error(" Errore backend:", errorText);
+        alert(`Errore ${res.status}: ${errorText}`);
+        return;
+      }
+
+      const resultData = await res.json();
+      console.log("✅ Risultato ricevuto:", resultData);
+      setResult(resultData);
     } catch (error) {
-      console.error("Errore submit:", error);
-      alert("Errore durante l'invio del quiz");
+      console.error("❌ Errore submit:", error);
+      alert("Errore durante l'invio del quiz: " + error.message);
     }
   };
 
@@ -155,7 +168,7 @@ const Quiz = () => {
         {/* RISULTATO */}
         {result && (
           <div className="quiz-result">
-            <h4>Risultato Quiz</h4>
+            <h4>🎉 Risultato Quiz</h4>
             <p>
               <strong>Punteggio:</strong> {result.score} /{" "}
               {result.totalQuestions}
@@ -166,6 +179,22 @@ const Quiz = () => {
                 ? result.percentage + "%"
                 : result.percentage.toFixed(1) + "%"}
             </p>
+
+            {result.percentage === 100 && (
+              <p style={{ color: "green", fontWeight: "bold" }}>
+                🏆 Perfetto! Sei un esperto di animali!
+              </p>
+            )}
+            {result.percentage >= 70 && result.percentage < 100 && (
+              <p style={{ color: "orange", fontWeight: "bold" }}>
+                👍 Ottimo lavoro!
+              </p>
+            )}
+            {result.percentage < 70 && (
+              <p style={{ color: "red", fontWeight: "bold" }}>
+                💪 Continua a studiare!
+              </p>
+            )}
 
             <button
               className="quiz-start-btn"

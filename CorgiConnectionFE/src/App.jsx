@@ -13,7 +13,7 @@ import Login from "./components/Login";
 import Profilo from "./components/Profilo";
 import Home from "./components/Home";
 import Homepage from "./components/HomePage";
-import ProfilePage from "./components/ProfilePage";
+import ProfilePage from "./components/Profilepage";
 import Curiosita from "./components/Curiosita";
 import Cosafacciamo from "./components/Cosafacciamo";
 
@@ -32,7 +32,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/home" element={<Home />} />
-
           {/* Homepage con filtro di default */}
           <Route
             path="/homepage"
@@ -42,16 +41,15 @@ const App = () => {
               />
             }
           />
-
           <Route path="/curiosita" element={<Curiosita />} />
           <Route path="/cosafacciamo" element={<Cosafacciamo />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-
           {/* PROFILO ROUTES */}
           <Route path="/profilo" element={<Profilo />} />
-          <Route path="/profilo/:userId" element={<Profilo />} />
-          <Route path="/profile/:userId" element={<ProfilePage />} />
+          <Route path="/profilo" element={<Profilo />} />{" "}
+          {/* profilo loggato */}
+          <Route path="/profilo/:userId" element={<ProfilePage />} />
         </Routes>
 
         <Footer />

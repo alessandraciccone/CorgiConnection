@@ -1,7 +1,15 @@
 @keyframes bounceIn {
-  0% { transform: scale(0.5); opacity: 0; }
-  60% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .scoperta {
@@ -12,8 +20,7 @@
   margin-bottom: 2rem;
 }
 
-.scoprirecose
- {
+.scoprirecose {
   width: 120px;
   height: auto;
   margin-bottom: 1rem;

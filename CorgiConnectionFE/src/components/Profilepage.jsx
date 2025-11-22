@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import correrecorgi from "../assets/img/correrecorgi.png";
 import "../css/Profilo.css";
-import ChatPopup from "./ChatPopup";
 
 const ProfilePage = () => {
   const { userId } = useParams();
@@ -11,8 +10,8 @@ const ProfilePage = () => {
   const [infoCane, setInfoCane] = useState("");
   const token = localStorage.getItem("token");
 
-  const loggedUserId = String(localStorage.getItem("userId"));
-  const visitingId = String(userId);
+  // const loggedUserId = String(localStorage.getItem("userId"));
+  // const visitingId = String(userId);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,7 +46,7 @@ const ProfilePage = () => {
     <div className="container">
       <div className="row">
         {/* Bottone chat solo se visiti un altro utente */}
-        {loggedUserId !== visitingId && <ChatPopup recipient={userId} />}
+        {/* {loggedUserId !== visitingId && <ChatPopup recipient={userId} />} */}
 
         <div className="col-12 col-lg-6 mb-4">
           <div className="card mt-2">

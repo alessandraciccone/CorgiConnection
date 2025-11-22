@@ -171,6 +171,6 @@ animation-fill-mode: both;
 
   .speech-bubble.main::after,
   .speech-bubble.dog::after {
-    border-width: 6px; /* proporzionale alla nuova size */
+    border-width: 6px;   
   }
 }
