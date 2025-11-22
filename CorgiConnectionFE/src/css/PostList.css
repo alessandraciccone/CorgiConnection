@@ -14,7 +14,7 @@ textarea.edit-textarea {
   border-radius: 5px;
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #ff7f50;
   resize: vertical;
 }
 
@@ -24,12 +24,13 @@ textarea.edit-textarea {
 }
 
 .post-card {
-  border: 1px solid #0a0a0a;
+  border: 2px solid #ff7f50; 
   padding: 10px;
   background-color: #fff8e6;
   border-radius: 5px;
   transition: background-color 0.3s;
 }
+
 .post-card-wrapper{
     margin-bottom: 500px;
 
@@ -40,11 +41,4 @@ textarea.edit-textarea {
 
 .post-card.editing {
   background-color: #fff8e6;
-}
-
-/* Responsive: 2 colonne su large */
-@media (min-width: 992px) {
-  .post-card {
-    
-  }
 }

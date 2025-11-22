@@ -104,4 +104,4 @@ public class QuizResultsController {
         quizResultService.deleteResult(id);
         return ResponseEntity.noContent().build();
     }
-}
+}                                                           

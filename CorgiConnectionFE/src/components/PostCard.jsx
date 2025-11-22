@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import MessageButton from "./MessageButton";
 import CommentSection from "./CommentSection";
 
 const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   const [editContent, setEditContent] = useState(post.content);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Reactions state
   const [reactions, setReactions] = useState({
     "❤️": [],
     "😂": [],
@@ -28,22 +26,19 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
         decodedToken?.id ||
         decodedToken?.user_id;
     } catch (e) {
-      console.error("Errore nel parsing del token:", e);
+      console.error("Errore parsing token:", e);
     }
   }
 
   const isPostOwner =
     post.author?.id && userId && String(post.author.id) === String(userId);
 
-  // Carica reactions da localStorage
+  // Carica reactions
   useEffect(() => {
     const saved = localStorage.getItem(`post-${post.id}-reactions`);
-    if (saved) {
-      setReactions(JSON.parse(saved));
-    }
+    if (saved) setReactions(JSON.parse(saved));
   }, [post.id]);
 
-  // Salva reactions su localStorage
   const saveReactions = (newReactions) => {
     setReactions(newReactions);
     localStorage.setItem(
@@ -52,18 +47,17 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
     );
   };
 
-  // Gestione reaction
   const handleReaction = (emoji) => {
     if (!userId) return;
 
     const newReactions = { ...reactions };
 
-    // Rimuovi user da tutte le reactions
-    Object.keys(newReactions).forEach((key) => {
+    // rimuovo l'utente da tutte
+    for (const key of Object.keys(newReactions)) {
       newReactions[key] = newReactions[key].filter((id) => id !== userId);
-    });
+    }
 
-    // Se non aveva già cliccato la reaction selezionata, aggiungila
+    // aggiungo la nuova se non selezionata
     if (!reactions[emoji].includes(userId)) {
       newReactions[emoji].push(userId);
     }
@@ -82,120 +76,108 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
         body: JSON.stringify({ content: editContent }),
       });
 
-      if (res.ok) {
-        onPostUpdated(post.id, editContent);
-        setIsEditing(false);
-      } else {
-        console.error("Errore nell'aggiornamento del post:", res.status);
+      if (!res.ok) {
+        console.error("Errore update:", res.status);
+        return;
       }
+
+      onPostUpdated(post.id, editContent);
+      setIsEditing(false);
     } catch (err) {
-      console.error("Errore nell'aggiornamento:", err);
+      console.error("Errore update:", err);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Sei sicuro di voler eliminare questo post?")) return;
+    if (!window.confirm("Vuoi eliminare questo post?")) return;
 
     try {
       const res = await fetch(`http://localhost:8888/posts/${post.id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (res.ok) {
-        onPostDeleted(post.id);
-      } else {
-        console.error("Errore nell'eliminazione del post:", res.status);
+      if (!res.ok) {
+        console.error("Errore delete:", res.status);
+        return;
       }
+
+      onPostDeleted(post.id);
     } catch (err) {
-      console.error("Errore nell'eliminazione:", err);
+      console.error("Errore delete:", err);
     }
   };
 
   return (
     <div className={`card post-card ${isEditing ? "editing" : ""}`}>
       <div className="card-body">
-        {/* INFO AUTORE */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "15px",
-          }}
-        >
-          <div>
-            <Link to={`/profile/${post.author?.id}`} className="username-link">
-              <strong>@{post.author?.username || "Sconosciuto"}</strong>
-            </Link>
-            <br />
-            <small style={{ color: "#666" }}>
-              {post.datePost
-                ? new Date(post.datePost).toLocaleDateString("it-IT")
-                : post.date}
-            </small>
-          </div>
+        {/* AUTORE */}
+        <div style={{ marginBottom: "15px" }}>
+          <Link to={`/profilo/${post.author?.id}`} className="username-link">
+            <strong>@{post.author?.username || "Utente"}</strong>
+          </Link>
+          <br />
+          <small style={{ color: "#666" }}>
+            {post.datePost
+              ? new Date(post.datePost).toLocaleDateString("it-IT")
+              : ""}
+          </small>
         </div>
 
-        {/* CONTENUTO */}
+        {/* TESTO POST */}
         {isEditing ? (
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             rows={4}
-            className="input-block"
-            style={{ width: "100%", marginBottom: "10px" }}
+            className="form-control"
+            style={{ marginBottom: "10px" }}
           />
         ) : (
-          <p className="card-text">{post.content}</p>
+          <p>{post.content}</p>
         )}
 
-        {/* CORGI INFO */}
+        {/* INFO CORGI */}
         {post.corgi && (
-          <div className="alert alert-primary" style={{ marginTop: "10px" }}>
-            <strong>🐕 {post.corgi.name}</strong> ({post.corgi.age} anni)
+          <div className="alert alert-primary mt-2">
+            <strong>🐕 {post.corgi.name}</strong> — {post.corgi.age} anni
           </div>
         )}
 
         {/* REACTIONS */}
-        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+        {/* REACTIONS */}
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            marginTop: "10px",
+            fontSize: "20px",
+            cursor: "pointer",
+          }}
+        >
           {Object.keys(reactions).map((emoji) => (
-            <button
+            <span
               key={emoji}
               onClick={() => handleReaction(emoji)}
               style={{
-                cursor: "pointer",
-                fontSize: "18px",
-                background: "none",
-                border: "none",
-                padding: "5px 8px",
-                borderRadius: "4px",
                 color: reactions[emoji].includes(userId) ? "red" : "#555",
+                userSelect: "none",
               }}
+              title={`${reactions[emoji].length} reazioni`}
             >
-              {emoji} {reactions[emoji].length}
-            </button>
+              {emoji}{" "}
+              {reactions[emoji].length > 0 ? reactions[emoji].length : ""}
+            </span>
           ))}
         </div>
 
         {/* BOTTONI */}
-        <div
-          style={{
-            marginTop: "15px",
-            display: "flex",
-            gap: "10px",
-            alignItems: "center",
-          }}
-        >
-          {isLoggedIn &&
-            (isPostOwner ? (
+        {isLoggedIn && (
+          <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
+            {isPostOwner ? (
               isEditing ? (
                 <>
-                  <button
-                    onClick={handleUpdate}
-                    className="btn btn-light btn-sm"
-                  >
+                  <button onClick={handleUpdate} className="btn btn btn-sm">
                     ✔️ Salva
                   </button>
                   <button
@@ -203,31 +185,27 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
                       setIsEditing(false);
                       setEditContent(post.content);
                     }}
-                    className="btn btn-light btn-sm"
+                    className="btn btn btn-sm"
                   >
-                    ❌ Annulla
+                    Annulla
                   </button>
                 </>
               ) : (
                 <>
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="btn btn-light btn-sm"
+                    className="btn btn- btn-sm"
                   >
                     ✏️ Modifica
                   </button>
-                  <button
-                    onClick={handleDelete}
-                    className="btn btn-light btn-sm"
-                  >
+                  <button onClick={handleDelete} className="btn  btn-sm">
                     🗑️ Elimina
                   </button>
                 </>
               )
-            ) : (
-              <MessageButton recipientId={post.author?.id} />
-            ))}
-        </div>
+            ) : null}
+          </div>
+        )}
 
         <CommentSection postId={post.id} />
       </div>

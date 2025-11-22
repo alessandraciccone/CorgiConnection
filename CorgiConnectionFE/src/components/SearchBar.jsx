@@ -11,7 +11,7 @@ const SearchBar = ({ setFilters }) => {
     if (query.trim() === "") return;
 
     setFilters({ query, searchType: type }); // invia query + tipo
-    navigate("/home");
+    navigate("/homepage");
   };
 
   return (
