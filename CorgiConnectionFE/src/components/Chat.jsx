@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import SockJS from "sockjs-client";
-import { over } from "@stomp/stompjs";
+import * as StompJs from "@stomp/stompjs";
 
-const Chat = () => {
+const Chat = ({ recipient }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [connected, setConnected] = useState(false);
@@ -11,51 +11,58 @@ const Chat = () => {
 
   useEffect(() => {
     const socket = new SockJS("http://localhost:8888/ws");
-    const stompClient = over(socket);
 
-    stompClient.connect(
-      { Authorization: `Bearer ${token}` },
-      () => {
-        console.log("✅ Connesso a WebSocket");
-        setConnected(true);
-
-        // Chat pubblica
-        stompClient.subscribe("/topic/public", (message) => {
-          const msg = JSON.parse(message.body);
-          setMessages((prev) => [...prev, msg]);
-        });
-
-        // Chat privata (ricezione)
-        stompClient.subscribe("/user/queue/messages", (message) => {
-          const msg = JSON.parse(message.body);
-          setMessages((prev) => [...prev, msg]);
-        });
+    const stompClient = new StompJs.Client({
+      webSocketFactory: () => socket,
+      reconnectDelay: 5000,
+      debug: (str) => console.log(str),
+      connectHeaders: {
+        Authorization: `Bearer ${token}`,
       },
-      (error) => {
-        console.error("❌ Errore STOMP:", error);
-      }
-    );
+    });
 
+    stompClient.onConnect = () => {
+      console.log("🟢 Connesso a WebSocket");
+      setConnected(true);
+
+      // Chat pubblica
+      stompClient.subscribe("/topic/public", (message) => {
+        const msg = JSON.parse(message.body);
+        setMessages((prev) => [...prev, msg]);
+      });
+
+      // Chat privata
+      stompClient.subscribe("/user/queue/messages", (message) => {
+        const msg = JSON.parse(message.body);
+        setMessages((prev) => [...prev, msg]);
+      });
+    };
+
+    stompClient.onStompError = (err) => {
+      console.error("Errore STOMP:", err);
+    };
+
+    stompClient.activate();
     stompClientRef.current = stompClient;
 
     return () => {
-      stompClient.disconnect(() => console.log("🔴 Disconnesso"));
+      stompClient.deactivate();
     };
   }, [token]);
 
-  const sendMessage = (recipient = null) => {
+  const sendMessage = () => {
     if (input.trim() && connected) {
       const messagePayload = {
         content: input,
         type: "CHAT",
+        recipient: recipient || null,
       };
-      if (recipient) messagePayload.recipient = recipient;
 
-      stompClientRef.current.send(
-        recipient ? "/app/chat.private" : "/app/chat.send",
-        {},
-        JSON.stringify(messagePayload)
-      );
+      stompClientRef.current.publish({
+        destination: recipient ? "/app/chat.private" : "/app/chat.send",
+        body: JSON.stringify(messagePayload),
+      });
+
       setInput("");
     }
   };
@@ -63,6 +70,7 @@ const Chat = () => {
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
       <h2>Chat in Tempo Reale 💬</h2>
+
       <div
         style={{
           border: "1px solid #ddd",
@@ -87,7 +95,7 @@ const Chat = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           placeholder="Scrivi un messaggio..."
           style={{
             flex: 1,
@@ -97,7 +105,7 @@ const Chat = () => {
           }}
         />
         <button
-          onClick={() => sendMessage()}
+          onClick={sendMessage}
           disabled={!connected}
           style={{
             padding: "10px 20px",
