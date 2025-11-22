@@ -10,6 +10,12 @@ const ProfilePage = () => {
   const [infoCane, setInfoCane] = useState("");
   const token = localStorage.getItem("token");
 
+<<<<<<< Updated upstream
+=======
+  const loggedUserId = String(localStorage.getItem("userId"));
+  const visitingId = String(userId);
+
+>>>>>>> Stashed changes
   useEffect(() => {
     const fetchUser = async () => {
       try {

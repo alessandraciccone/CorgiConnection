@@ -32,11 +32,22 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/homepage" element={<Homepage filters={filters} />} />
+
+          {/* Homepage con filtro di default */}
+          <Route
+            path="/homepage"
+            element={
+              <Homepage
+                filters={filters || { query: "", searchType: "posts" }}
+              />
+            }
+          />
+
           <Route path="/curiosita" element={<Curiosita />} />
           <Route path="/cosafacciamo" element={<Cosafacciamo />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+
           {/* PROFILO ROUTES */}
           <Route path="/profilo" element={<Profilo />} />
           <Route path="/profilo/:userId" element={<Profilo />} />
