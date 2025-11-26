@@ -139,8 +139,12 @@ public class PostController {
         return  ResponseEntity.ok(postService.getRecentPosts());
     }
 
+<<<<<<< Updated upstream
     // CERCO POST CON FOTO
     //GET http://localhost:8888/posts/photos
+=======
+
+>>>>>>> Stashed changes
 
 
     //CERCO POST PER CITTA

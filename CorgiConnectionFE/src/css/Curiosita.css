@@ -29,7 +29,6 @@
   margin-bottom: 0;
 }
 
-/* Contenitore collapse */
 .collapsibletx {
   background-color: #fff8f0;
   border-radius: 6px;
@@ -54,8 +53,8 @@
   cursor: pointer;
   border-radius: 4px;
   text-align: center;
-  transition: background-color 0.3s ease;
-}
+background-color:  transparent !important;}
+
 
 .collapsibletx label:hover {
   background-color: #ffe8d9;
@@ -71,20 +70,7 @@
 
 
 .collapsibletx input[type="radio"]:checked ~ .collapsible-body {
-  max-height: 1500px; /* abbastanza grande per il contenuto */
+  max-height: 1500px; 
   padding: 12px 20px;
 }
 
-/* Testo punti */
-.collapsible-body p {
-  font-size: 1rem;
-  color: #333;
-  margin: 0 0 0.75rem 0;
-}
-
-/* Punti normali */
-.punto-normale {
-  font-weight: 400;
-  font-size: 1rem;
-  color: #333;
-}
