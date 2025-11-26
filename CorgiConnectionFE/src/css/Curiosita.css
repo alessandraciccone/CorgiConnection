@@ -29,90 +29,48 @@
   margin-bottom: 0;
 }
 
-.collapsibles-wrapper {
-  background-color: transparent; /* giallo dei collapse */
-  padding: 1rem;
-  border-radius: 12px;
-}
-
-
 .collapsibletx {
-  background-color: rgb(255, 248, 230); /* ora è il wrapper che ha il giallo */
+  background-color: #fff8f0;
   border-radius: 6px;
   margin-bottom: 1rem;
-  padding: 0.5rem 0;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-/* Nascondi radio */
+
 .collapsibletx input[type="radio"] {
   display: none;
 }
 
 
-
-/* .collapsibletx label:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-} */
-
-/* .collapsible-body {
-  max-height: 0;
-  overflow: hidden;
-  background-color: rgb(255, 248, 230);
-  border: none !important; /* bordo trasparente */
-  /* border-radius: 6px;
-  padding: 0 1rem;
-  transition: max-height 0.4s ease, padding 0.3s ease;
-} */ 
-
-/* Apertura */
-.collapsibletx input[type="radio"]:checked ~ .collapsible-body {
-  max-height: 1500px;
-  padding: 1rem;
-}
-
-.collapsible-body p {
-  font-size: 1rem;
-  color: #333;
-  margin: 0 0 0.75rem 0;
-  text-align: center; /* ✔ centrato */
-}
-
-.punto-normale {
-  font-weight: 400;
-  font-size: 1rem;
-  color: #333;
-  text-align: center; 
-}
-
-.collapsibletx {
-  background-color: transparent !important;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  padding: 0.5rem 0;
-  text-align: center;
-}
-
 .collapsibletx label {
-  background-color: rgb(255, 248, 230);
-  color: #2a2b28da;
-  font-weight: bold;
+  display: block;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ff7f50;
   cursor: pointer;
-  padding: 0.5rem 0;     
-  border-radius: 6px;
-  margin-bottom: 0.3rem;
-  font-style: italic;
-    border: 0.1px solid #ff7f50
+  border-radius: 4px;
+  text-align: center;
+background-color:  transparent !important;}
 
+
+.collapsibletx label:hover {
+  background-color: #ffe8d9;
 }
+
 
 .collapsible-body {
-  background-color: rgb(255, 248, 230); /* colore del contenuto */
-  border: none !important;
-  padding: 0 1rem;
-max-height: 0;
+  max-height: 0;
   overflow: hidden;
-  border: none !important; /* bordo trasparente */
-  border-radius: 6px;
-  padding: 0 1rem;
-  transition: max-height 0.4s ease, padding 0.3s ease;}
+  padding: 0 20px;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+
+.collapsibletx input[type="radio"]:checked ~ .collapsible-body {
+  max-height: 1500px; 
+  padding: 12px 20px;
+}
+
