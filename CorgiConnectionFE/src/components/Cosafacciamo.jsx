@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import "../css/CosaFacciamo.css";
 import turisti from "../assets/img/turisti.png";
 
-const regioni = [
+// Regione pulita (per la fetch)
+const regioniPure = [
   "Abruzzo",
   "Basilicata",
   "Calabria",
@@ -23,6 +24,30 @@ const regioni = [
   "Umbria",
   "Valle d'Aosta",
   "Veneto",
+];
+
+// Regione con emoji (per il label)
+const regioniConEmoji = [
+  "🐺 Abruzzo",
+  "Basilicata 🗿",
+  "🌶️ Calabria",
+  "Campania 🍕",
+  "🍝 Emilia-Romagna",
+  "Friuli Venezia Giulia 🍇",
+  "🏛️ Lazio",
+  "Liguria 🌊",
+  "🏙️ Lombardia",
+  "Marche 🌀",
+  "🌾 Molise",
+  "Piemonte 🍫",
+  "🌵 Puglia",
+  "Sardegna 🐑",
+  "🌋 Sicilia",
+  "Toscana 🍷",
+  "🏔️ Trentino-Alto Adige",
+  "Umbria 🍃",
+  "⛷️ Valle d'Aosta",
+  "Veneto 🛶",
 ];
 
 const emojiPerTipo = (tipo) => {
@@ -85,8 +110,9 @@ const CosaFacciamo = () => {
       }));
     };
 
-    regioni.forEach((regione) => fetchDatiPerRegione(regione));
-  }, []);
+    // Usa i nomi puliti per le fetch
+    regioniPure.forEach((regione) => fetchDatiPerRegione(regione));
+  }, [token]);
 
   return (
     <div className="container t">
@@ -107,20 +133,20 @@ const CosaFacciamo = () => {
       {/* Wrapper con sfondo giallo */}
       <div className="collapsiblescs-wrapper">
         <div className="row">
-          {regioni.map((regione, index) => (
-            <div className="collapsiblecs" key={regione}>
+          {regioniConEmoji.map((regioneEmoji, index) => (
+            <div className="collapsiblecs" key={regioneEmoji}>
               <input type="checkbox" id={`toggle-${index}`} />
               <label
                 htmlFor={`toggle-${index}`}
                 className="collapsiblecs-label"
               >
-                {regione}
+                {regioneEmoji}
               </label>
 
               <div className="collapsiblecs-body">
-                {datiPerRegione[regione]?.length > 0 ? (
+                {datiPerRegione[regioniPure[index]]?.length > 0 ? (
                   <ul>
-                    {datiPerRegione[regione].map((item, i) => (
+                    {datiPerRegione[regioniPure[index]].map((item, i) => (
                       <li key={i}>
                         <span>
                           {emojiPerTipo(item.type)}{" "}

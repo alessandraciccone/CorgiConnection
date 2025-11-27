@@ -129,7 +129,6 @@ const Curiosita = () => {
         </p>
       </div>
       {/* Sezione collapsible */}
-      {/* Sezione collapsible */}
       <div className="collapsibles-wrapper">
         {curiositaData.map((section) => (
           <div className="collapsibletx" key={section.id}>
@@ -154,7 +153,10 @@ const Curiosita = () => {
       </div>
       <hr /> {/* Sezione Quiz */}
       <div className="curiosita-container">
-        <h2 style={{ textAlign: "center" }}>Scopri quanto ne sai!</h2> <Quiz />
+        <h2 style={{ textAlign: "center", marginBottom: "0px" }}>
+          Scopri quanto ne sai!
+        </h2>{" "}
+        <Quiz />
       </div>
     </div>
   );

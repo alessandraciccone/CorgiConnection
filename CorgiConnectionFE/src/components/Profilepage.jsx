@@ -46,7 +46,6 @@ const ProfilePage = () => {
   return (
     <div className="container">
       <div className="row">
-        {/* Mostriamo solo il ChatPopup con il pulsante a fumetto */}
         {loggedUserId !== visitingId && <ChatPopup recipient={userId} />}
 
         <div className="col-12 col-lg-6 mb-4">

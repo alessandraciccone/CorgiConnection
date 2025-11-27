@@ -21,10 +21,14 @@ textarea.edit-textarea {
 /* Lista post */
 .post-list {
   gap: 20px;
+    border: 2px solid #ff7f50!important;
+
 }
 
+
+
 .post-card {
-  border: 2px solid #ff7f50; 
+  border: 2px solid #ff7f50 !important;
   padding: 10px;
   background-color: #fff8e6;
   border-radius: 5px;
