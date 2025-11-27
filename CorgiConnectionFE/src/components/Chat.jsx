@@ -69,22 +69,20 @@ const Chat = ({ recipient }) => {
 
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-      <h2>Chat in Tempo Reale 💬</h2>
-
       <div
         style={{
-          border: "1px solid #ddd",
+          border: "1px solid #ff9900",
           borderRadius: "8px",
           padding: "10px",
           height: "400px",
           overflowY: "auto",
           marginBottom: "10px",
-          background: "#f9f9f9",
+          background: "#fff8e6",
         }}
       >
         {messages.map((msg, idx) => (
           <div key={idx} style={{ marginBottom: "8px" }}>
-            <strong style={{ color: "#d17b49" }}>{msg.sender}:</strong>{" "}
+            <strong style={{ color: "#f5c1a3ff" }}>{msg.sender}:</strong>{" "}
             {msg.content}
           </div>
         ))}
@@ -100,8 +98,9 @@ const Chat = ({ recipient }) => {
           style={{
             flex: 1,
             padding: "10px",
-            border: "1px solid #ddd",
+            border: "1px solid #ff9900",
             borderRadius: "5px",
+            background: "#fff8e6",
           }}
         />
         <button

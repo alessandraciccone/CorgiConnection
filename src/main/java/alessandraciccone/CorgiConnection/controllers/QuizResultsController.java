@@ -21,10 +21,8 @@ public class QuizResultsController {
     @Autowired
     private QuizResultService quizResultService;
 
-    // ========================================
     // NUOVO ENDPOINT: SOTTOMISSIONE QUIZ
     // POST http://localhost:8888/quiz-results/submit
-    // ========================================
     @PostMapping("/submit")
     public ResponseEntity<QuizResultResponseDTO> submitQuiz(
             @RequestBody QuizSubmissionDTO dto,
@@ -32,62 +30,56 @@ public class QuizResultsController {
     ) {
         try {
             System.out.println("===========================================");
-            System.out.println("📥 SUBMIT QUIZ - Inizio");
-            System.out.println("📥 DTO ricevuto: " + dto);
-            System.out.println("📥 Numero risposte: " + (dto != null && dto.answers() != null ? dto.answers().size() : "NULL"));
+            System.out.println(" SUBMIT QUIZ - Inizio");
+            System.out.println(" DTO ricevuto: " + dto);
+            System.out.println(" Numero risposte: " + (dto != null && dto.answers() != null ? dto.answers().size() : "NULL"));
 
             if (user == null) {
-                System.err.println("❌ USER È NULL - Utente non autenticato!");
+                System.err.println(" USER È NULL - Utente non autenticato!");
                 return ResponseEntity.status(401).build();
             }
 
-            System.out.println("✅ User autenticato: " + user.getId() + " - " + user.getUsername());
+            System.out.println(" User autenticato: " + user.getId() + " - " + user.getUsername());
 
-            QuizResultResponseDTO result = quizResultService.submitQuiz(dto, user.getId());
+            QuizResultResponseDTO result = quizResultService.evaluateQuiz(dto, user);
 
-            System.out.println("✅ Risultato calcolato e salvato: " + result);
+            System.out.println(" Risultato calcolato e salvato: " + result);
             System.out.println("===========================================");
 
             return ResponseEntity.ok(result);
 
         } catch (Exception e) {
-            System.err.println("❌ ERRORE NEL CONTROLLER: " + e.getMessage());
+            System.err.println(" ERRORE NEL CONTROLLER: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
     }
 
-    // ========================================
+
     // PRENDO TUTTI I RISULTATI
     // GET http://localhost:8888/quiz-results
-    // ========================================
     @GetMapping
     public ResponseEntity<List<QuizResultResponseDTO>> getAllResults() {
         return ResponseEntity.ok(quizResultService.getAllResults());
     }
 
-    // ========================================
     // PRENDO UN RISULTATO PER ID
     // GET http://localhost:8888/quiz-results/{id}
-    // ========================================
     @GetMapping("/{id}")
     public ResponseEntity<QuizResultResponseDTO> getResultById(@PathVariable UUID id) {
         return ResponseEntity.ok(quizResultService.getResultById(id));
     }
 
-    // ========================================
-    // CREO UN NUOVO RISULTATO (metodo originale)
+
     // POST http://localhost:8888/quiz-results
-    // ========================================
     @PostMapping
     public ResponseEntity<QuizResultResponseDTO> createResult(@RequestBody QuizResultDTO dto) {
         return ResponseEntity.ok(quizResultService.createResult(dto));
     }
 
-    // ========================================
-    // AGGIORNO UN RISULTATO
+
     // PUT http://localhost:8888/quiz-results/{id}
-    // ========================================
+
     @PutMapping("/{id}")
     public ResponseEntity<QuizResultResponseDTO> updateResult(
             @PathVariable UUID id,
@@ -95,13 +87,12 @@ public class QuizResultsController {
         return ResponseEntity.ok(quizResultService.updateResult(id, dto));
     }
 
-    // ========================================
+
     // DELETE BY ID
     // DELETE http://localhost:8888/quiz-results/{id}
-    // ========================================
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResult(@PathVariable UUID id) {
         quizResultService.deleteResult(id);
         return ResponseEntity.noContent().build();
     }
-}                                                           
+}

@@ -109,7 +109,15 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   };
 
   return (
-    <div className={`card post-card ${isEditing ? "editing" : ""}`}>
+    <div
+      className={`card post-card ${isEditing ? "editing" : ""}`}
+      style={{
+        border: "1px solid #ff7f50",
+        borderRadius: "5px",
+        backgroundColor: "#fff8e6",
+      }}
+    >
+      {" "}
       <div className="card-body">
         {/* AUTORE */}
         <div style={{ marginBottom: "15px" }}>

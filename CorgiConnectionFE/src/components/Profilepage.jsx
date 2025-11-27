@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import correrecorgi from "../assets/img/correrecorgi.png";
 import "../css/Profilo.css";
+import ChatPopup from "./ChatPopup";
 
 const ProfilePage = () => {
   const { userId } = useParams();
@@ -10,8 +11,9 @@ const ProfilePage = () => {
   const [infoCane, setInfoCane] = useState("");
   const token = localStorage.getItem("token");
 
-  // const loggedUserId = String(localStorage.getItem("userId"));
-  // const visitingId = String(userId);
+  // 🔥 FIX: convertiamo entrambi a stringa
+  const loggedUserId = String(localStorage.getItem("userId"));
+  const visitingId = String(userId);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,7 +25,6 @@ const ProfilePage = () => {
           const data = await res.json();
           setUser(data);
 
-          // Recupera immagine e info cane da localStorage se disponibili
           const fotoSalvata = localStorage.getItem(`fotoProfilo-${userId}`);
           setFotoProfilo(fotoSalvata || data.profileImage || null);
 
@@ -45,8 +46,7 @@ const ProfilePage = () => {
   return (
     <div className="container">
       <div className="row">
-        {/* Bottone chat solo se visiti un altro utente */}
-        {/* {loggedUserId !== visitingId && <ChatPopup recipient={userId} />} */}
+        {loggedUserId !== visitingId && <ChatPopup recipient={userId} />}
 
         <div className="col-12 col-lg-6 mb-4">
           <div className="card mt-2">

@@ -16,10 +16,7 @@ const ChatPopup = ({ recipient }) => {
           width: "60px",
           height: "60px",
           borderRadius: "50%",
-          background: "#d17b49",
-          color: "white",
-          border: "none",
-          boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
+          border: "solid 1px #ff9900",
           fontSize: "26px",
           cursor: "pointer",
           zIndex: 9999,
@@ -33,42 +30,34 @@ const ChatPopup = ({ recipient }) => {
         <div
           style={{
             position: "fixed",
+            border: "1px solid #ff9900",
+
             bottom: "100px",
             right: "25px",
             width: "350px",
             height: "500px",
             background: "white",
             borderRadius: "10px",
-            boxShadow: "0 8px 25px rgba(0,0,0,0.25)",
             zIndex: 9998,
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
           }}
         >
-          {/* HEADER */}
-          <div
-            style={{
-              background: "#d17b49",
-              color: "white",
-              padding: "10px",
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Chat
-          </div>
-
           {/* CONTENUTO CHAT */}
           <div style={{ flex: 1, overflow: "auto" }}>
             <Chat recipient={recipient} />
           </div>
 
           {/* TASTO CHIUSURA */}
-          <div style={{ padding: "10px", textAlign: "center" }}>
+          <div
+            className="chat-popup-content"
+            style={{ padding: "5px", textAlign: "center" }}
+          >
             <button
               onClick={() => setOpen(false)}
-              className="btn btn-sm btn-secondary"
+              className="btn btn-sm"
+              style={{ border: "1px solid #ff9900" }}
             >
               Chiudi
             </button>
