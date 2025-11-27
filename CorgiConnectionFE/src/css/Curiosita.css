@@ -30,12 +30,14 @@
 }
 
 .collapsibletx {
-  background-color: #fff8f0;
+background-color:rgb(255, 248, 230);
   border-radius: 6px;
   margin-bottom: 1rem;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
+      border: 0.1px solid #ff7f50;
+
 }
 
 
@@ -49,9 +51,10 @@
   padding: 12px 20px;
   font-size: 1rem;
   font-weight: 600;
-  color: #ff7f50;
+  color: #0f0e0e;
   cursor: pointer;
   border-radius: 4px;
+
   text-align: center;
 background-color:  transparent !important;}
 

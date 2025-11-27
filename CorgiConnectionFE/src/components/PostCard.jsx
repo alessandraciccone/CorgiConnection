@@ -5,6 +5,7 @@ import CommentSection from "./CommentSection";
 const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   const [editContent, setEditContent] = useState(post.content);
   const [isEditing, setIsEditing] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const [reactions, setReactions] = useState({
     "❤️": [],
@@ -52,12 +53,10 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
 
     const newReactions = { ...reactions };
 
-    // rimuovo l'utente da tutte
     for (const key of Object.keys(newReactions)) {
       newReactions[key] = newReactions[key].filter((id) => id !== userId);
     }
 
-    // aggiungo la nuova se non selezionata
     if (!reactions[emoji].includes(userId)) {
       newReactions[emoji].push(userId);
     }
@@ -89,8 +88,6 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Vuoi eliminare questo post?")) return;
-
     try {
       const res = await fetch(`http://localhost:8888/posts/${post.id}`, {
         method: "DELETE",
@@ -117,7 +114,6 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
         backgroundColor: "#fff8e6",
       }}
     >
-      {" "}
       <div className="card-body">
         {/* AUTORE */}
         <div style={{ marginBottom: "15px" }}>
@@ -153,7 +149,6 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
         )}
 
         {/* REACTIONS */}
-        {/* REACTIONS */}
         <div
           style={{
             display: "flex",
@@ -180,40 +175,67 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
         </div>
 
         {/* BOTTONI */}
-        {isLoggedIn && (
-          <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
-            {isPostOwner ? (
-              isEditing ? (
-                <>
-                  <button onClick={handleUpdate} className="btn btn btn-sm">
-                    ✔️ Salva
-                  </button>
+        {isLoggedIn & isPostOwner ? (
+          isEditing ? (
+            <>
+              <button onClick={handleUpdate} className="btn btn btn-sm">
+                ✔️ Salva
+              </button>
+              <button
+                onClick={() => {
+                  setIsEditing(false);
+                  setEditContent(post.content);
+                }}
+                className="btn btn btn-sm"
+              >
+                Annulla
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="btn btn btn-sm"
+              >
+                ✏️ Modifica
+              </button>
+
+              <button
+                onClick={() => setShowConfirm(true)}
+                className="btn btn btn-sm"
+                style={{ border: "none", backgroundColor: "transparent" }}
+              >
+                🗑️ Elimina
+              </button>
+
+              {showConfirm && (
+                <div className="custom-alert">
+                  <p>Vuoi davvero eliminare questo post?</p>
                   <button
                     onClick={() => {
-                      setIsEditing(false);
-                      setEditContent(post.content);
+                      handleDelete();
+                      setShowConfirm(false);
                     }}
-                    className="btn btn btn-sm"
+                    className="alert-btn"
+                    style={{ border: "none", backgroundColor: "transparent" }}
                   >
-                    Annulla
+                    Sì
                   </button>
-                </>
-              ) : (
-                <>
                   <button
-                    onClick={() => setIsEditing(true)}
-                    className="btn btn- btn-sm"
+                    onClick={() => setShowConfirm(false)}
+                    className="alert-btn"
+                    style={{
+                      border: "none",
+                      backgroundColor: "transparent",
+                    }}
                   >
-                    ✏️ Modifica
+                    No
                   </button>
-                  <button onClick={handleDelete} className="btn  btn-sm">
-                    🗑️ Elimina
-                  </button>
-                </>
-              )
-            ) : null}
-          </div>
-        )}
+                </div>
+              )}
+            </>
+          )
+        ) : null}
 
         <CommentSection postId={post.id} />
       </div>
