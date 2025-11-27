@@ -1,16 +1,23 @@
-# React + Vite
+# 🐾 Corgi Connection
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Corgi Connection è una piattaforma social pensata per condividere post, interagire con altri utenti e celebrare i nostri amici a quattro zampe 🐕.  
+Il progetto unisce **Java/Spring Boot** per il backend e **React** per il frontend, con un design giocoso e accessibile.
 
-Currently, two official plugins are available:
+## 🚀 Funzionalità principali
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✍️ Creazione, modifica ed eliminazione di post
+- 💬 Commenti e interazioni tra utenti
+- 😍 Reazioni con emoji (❤️ 😂 😮 😢)
+- 🐶 Sezione dedicata ai corgi (nome, età, info)
+- 🔐 Autenticazione con JWT
+- 🎨 UI personalizzata con colori caldi e dettagli cartoon
 
-## React Compiler
+---
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Backend:** Java 21,Spring Boot, Spring Security, JPA/Hibernate
+- **Frontend:** React, Bootstrap, CSS custom, Paper CSS
+- **Database:**
+- **Build Tools:** Maven
+- **API:** RESTful con JSON
