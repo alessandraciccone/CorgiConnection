@@ -41,7 +41,7 @@ public class QuizResultsController {
 
             System.out.println(" User autenticato: " + user.getId() + " - " + user.getUsername());
 
-            QuizResultResponseDTO result = quizResultService.evaluateQuiz(dto, user);
+            QuizResultResponseDTO result = quizResultService.submitQuiz(dto, user.getId());
 
             System.out.println(" Risultato calcolato e salvato: " + result);
             System.out.println("===========================================");

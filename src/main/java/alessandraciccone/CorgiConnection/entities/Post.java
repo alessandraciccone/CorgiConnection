@@ -23,11 +23,8 @@ public class Post {
     // Costruttore
     public Post() {}
 
-<<<<<<< Updated upstream
     public Post(String content, String title, LocalDate datePost, User author, List<Comment> comments) {
-=======
-    public Post(String content, String title, LocalDate datePost, User author,  List<Comment> comments) {
->>>>>>> Stashed changes
+
         this.content = content;
         this.title = title;  // Impostiamo il titolo
         this.datePost = datePost;
@@ -72,10 +69,7 @@ public class Post {
         this.author = author;
     }
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 
     public List<Comment> getComments() {
         return comments;
@@ -101,7 +95,7 @@ public class Post {
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", datePost=" + datePost +
-                ", title='" + title + '\'' +  // Includi anche il titolo nel toString
+                ", title='" + title + '\'' +
                 '}';
     }
 }

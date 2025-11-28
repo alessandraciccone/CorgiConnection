@@ -192,10 +192,7 @@ public CloudinaryService cloudinaryService;
 
 
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 
     //trovo post ultimi 7 giorni
 
@@ -245,10 +242,7 @@ public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException 
     // Upload a Cloudinary
     String imageUrl = cloudinaryService.upload(file, "posts/photos");
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 
     // Salva
     postRepository.save(post);
@@ -265,10 +259,7 @@ public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException 
                 post.getAuthor().getProfileImage()
         );
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
         int commentsCount = post.getComments() != null ? post.getComments().size() : 0;
 
         return new PostResponseDTO(
