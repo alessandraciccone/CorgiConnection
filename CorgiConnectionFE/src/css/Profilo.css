@@ -216,3 +216,8 @@ background-color: #fff8f0 !important;
     max-width: none;
   }
 }
+@media (max-width: 768px) and (min-width: 577px) {
+  .card-flex {
+    flex-wrap: nowrap;
+  }
+}

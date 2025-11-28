@@ -26,7 +26,7 @@
 .speech-bubble {
   position: absolute;
   z-index: 2;
-  background: white;
+  background: #fff8f0;
   border: 2px solid #d17b49;
   box-shadow: 3px 3px 5px rgba(209, 123, 73, 0.3);
   font-family: 'Comic Sans MS', cursive, sans-serif;

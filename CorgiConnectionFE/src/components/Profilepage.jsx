@@ -49,7 +49,7 @@ const ProfilePage = () => {
         {loggedUserId !== visitingId && <ChatPopup recipient={userId} />}
 
         <div className="col-12 col-lg-6 mb-4">
-          <div className="card mt-2">
+          <div className="card mt-2" style={{ border: "1px solid #ff7f50" }}>
             <div className="card-body card-flex">
               <div className="dati-utente">
                 <h4 className="card-title">
@@ -71,12 +71,18 @@ const ProfilePage = () => {
 
               <div className="foto-col">
                 {fotoProfilo ? (
-                  <img src={fotoProfilo} className="foto" alt="Foto profilo" />
+                  <img
+                    src={fotoProfilo}
+                    className="foto"
+                    alt="Foto profilo"
+                    style={{ border: "1px solid #ff7f50" }}
+                  />
                 ) : (
                   <img
                     src={correrecorgi}
                     className="foto"
                     alt="Corgi di default"
+                    style={{ border: "1px solid #ff7f50" }}
                   />
                 )}
               </div>
