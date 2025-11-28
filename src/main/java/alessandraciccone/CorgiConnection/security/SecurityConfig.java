@@ -64,10 +64,10 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",        // React in sviluppo
-                "https://www.miodominio.com"    // Frontend in produzione
+                "http://localhost:5173",                     // sviluppo
+                "https://corgi-connection.vercel.app",       // dominio Vercel
+                "https://www.miodominio.com"
         ));
-
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
 
         configuration.setAllowedHeaders(List.of("*"));

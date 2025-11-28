@@ -15,12 +15,14 @@ const Quiz = () => {
 
     const fetchData = async () => {
       try {
-        const questionsRes = await fetch("http://localhost:8888/questions", {
+        const baseUrl = import.meta.env.VITE_API_URL;
+
+        const questionsRes = await fetch(`${baseUrl}/questions`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const questionsData = await questionsRes.json();
 
-        const answersRes = await fetch("http://localhost:8888/answers", {
+        const answersRes = await fetch(`${baseUrl}/answers`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const answersData = await answersRes.json();
@@ -61,7 +63,9 @@ const Quiz = () => {
     console.log("📤 JSON:", JSON.stringify(dto));
 
     try {
-      const res = await fetch("http://localhost:8888/quiz-results/submit", {
+      const baseUrl = import.meta.env.VITE_API_URL;
+
+      const res = await fetch(`${baseUrl}/quiz-results/submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

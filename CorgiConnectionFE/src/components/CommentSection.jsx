@@ -37,7 +37,7 @@ const CommentSection = ({ postId }) => {
     localStorage.setItem(`comments-${postId}`, JSON.stringify(fixed));
   }, [postId]);
 
-  // 🔵 Recupera username dal backend usando il token
+  //  Recupera username dal backend usando il token
   useEffect(() => {
     const fetchUsername = async () => {
       const userId = getUserIdFromToken();
@@ -48,7 +48,8 @@ const CommentSection = ({ postId }) => {
 
       try {
         const token = getToken();
-        const res = await fetch(`http://localhost:8888/users/${userId}`, {
+        const baseUrl = import.meta.env.VITE_API_URL;
+        const res = await fetch(`${baseUrl}/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

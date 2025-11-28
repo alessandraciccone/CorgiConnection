@@ -66,7 +66,8 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
 
   const handleUpdate = async () => {
     try {
-      const res = await fetch(`http://localhost:8888/posts/${post.id}`, {
+      const baseUrl = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${baseUrl}/posts/${post.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +75,6 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
         },
         body: JSON.stringify({ content: editContent }),
       });
-
       if (!res.ok) {
         console.error("Errore update:", res.status);
         return;
@@ -89,7 +89,8 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`http://localhost:8888/posts/${post.id}`, {
+      const baseUrl = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${baseUrl}/posts/${post.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

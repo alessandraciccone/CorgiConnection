@@ -68,12 +68,10 @@ const Profilo = () => {
 
     const fetchUtente = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8888/users/${targetUserId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const baseUrl = import.meta.env.VITE_API_URL;
+        const response = await fetch(`${baseUrl}/users/${targetUserId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         if (!response.ok) throw new Error("Errore nel recupero utente");
 
         const data = await response.json();
@@ -156,7 +154,8 @@ const Profilo = () => {
     if (!token || !userId) return;
 
     try {
-      const response = await fetch(`http://localhost:8888/users/${userId}`, {
+      const baseUrl = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${baseUrl}/users/${userId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

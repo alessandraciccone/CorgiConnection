@@ -14,7 +14,8 @@ const Home = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:8888/posts`, {
+      const baseUrl = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${baseUrl}/posts`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

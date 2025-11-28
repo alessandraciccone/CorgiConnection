@@ -84,8 +84,9 @@ const CosaFacciamo = () => {
 
       while (hasMore) {
         try {
+          const baseUrl = import.meta.env.VITE_API_URL;
           const res = await fetch(
-            `http://localhost:8888/pet-friendly-things/search?region=${regione}&page=${page}&size=${size}`,
+            `${baseUrl}/pet-friendly-things/search?region=${regione}&page=${page}&size=${size}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
 

@@ -10,7 +10,7 @@ const Chat = ({ recipient }) => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const socket = new SockJS("http://localhost:8888/ws");
+    const socket = new SockJS(import.meta.env.VITE_WS_URL);
 
     const stompClient = new StompJs.Client({
       webSocketFactory: () => socket,

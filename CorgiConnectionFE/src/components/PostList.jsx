@@ -9,7 +9,8 @@ const PostList = () => {
   // Fetch dei post
   const fetchPosts = async () => {
     try {
-      const res = await fetch("http://localhost:8888/posts", {
+      const baseUrl = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${baseUrl}/posts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -53,7 +54,8 @@ const PostList = () => {
 
     try {
       const today = new Date().toISOString();
-      const res = await fetch("http://localhost:8888/posts", {
+      const baseUrl = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${baseUrl}/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

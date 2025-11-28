@@ -25,12 +25,15 @@ const Homepage = ({ filters }) => {
 
       let url = "";
       const size = 20; // fetch 20 alla volta
+
+      const baseUrl = import.meta.env.VITE_API_URL;
+
       if (filters.searchType === "users")
-        url = `http://localhost:8888/users/search?username=${filters.query}&page=${page}&size=${size}`;
+        url = `${baseUrl}/users/search?username=${filters.query}&page=${page}&size=${size}`;
       if (filters.searchType === "posts")
-        url = `http://localhost:8888/posts/search?contentKeyword=${filters.query}&page=${page}&size=${size}&sortBy=datePost`;
+        url = `${baseUrl}/posts/search?contentKeyword=${filters.query}&page=${page}&size=${size}&sortBy=datePost`;
       if (filters.searchType === "pet-friendly-things")
-        url = `http://localhost:8888/pet-friendly-things/search?descriptionKeyword=${filters.query}&page=${page}&size=${size}`;
+        url = `${baseUrl}/pet-friendly-things/search?descriptionKeyword=${filters.query}&page=${page}&size=${size}`;
 
       try {
         const res = await fetch(url, {

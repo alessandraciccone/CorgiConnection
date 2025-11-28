@@ -26,7 +26,8 @@ const Login = () => {
     setSuccess(false);
 
     try {
-      const response = await fetch("http://localhost:8888/auth/login", {
+      const baseUrl = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${baseUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
