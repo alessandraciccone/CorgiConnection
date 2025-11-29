@@ -43,6 +43,7 @@ background-color:rgb(255, 248, 230);
 
 .collapsibletx input[type="radio"] {
   display: none;
+
 }
 
 
@@ -75,5 +76,6 @@ background-color:  transparent !important;}
 .collapsibletx input[type="radio"]:checked ~ .collapsible-body {
   max-height: 1500px; 
   padding: 12px 20px;
+  overflow-y: auto;
 }
 
