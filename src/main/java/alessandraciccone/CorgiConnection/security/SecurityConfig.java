@@ -64,9 +64,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",                     // sviluppo locale
-                "https://artificial-sarah-epicode1-af088468.koyeb.app", // backend stesso (per websocket)
-                "https://*.vercel.app"                       // tutti i domini Vercel (anteprima + produzione)
+                "http://localhost:5173",                          // sviluppo locale
+                "https://corgi-connection.vercel.app",            // ✅ URL ESATTO di Vercel
+                "https://artificial-sarah-epicode1-af088468.koyeb.app"  // backend stesso
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
@@ -75,4 +75,4 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }}
+    }
