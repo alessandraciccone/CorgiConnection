@@ -82,7 +82,7 @@ const CommentSection = ({ postId }) => {
       id: crypto.randomUUID(),
       text,
       date: new Date().toISOString(),
-      author: username, // ✔ usa lo username autenticato
+      author: username,
       likes: 0,
     };
 

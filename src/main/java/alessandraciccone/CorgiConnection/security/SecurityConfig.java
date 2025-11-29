@@ -64,18 +64,15 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",                     // sviluppo
-                "https://corgi-connection.vercel.app",       // dominio Vercel
-                "https://www.miodominio.com"
+                "http://localhost:5173",                     // sviluppo locale
+                "https://artificial-sarah-epicode1-af088468.koyeb.app", // backend stesso (per websocket)
+                "https://*.vercel.app"                       // tutti i domini Vercel (anteprima + produzione)
         ));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
-
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-}
+    }}
