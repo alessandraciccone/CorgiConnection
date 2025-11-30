@@ -59,7 +59,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    
+
 
     public CorsConfigurationSource corsConfigurationSource() {
         return request -> {

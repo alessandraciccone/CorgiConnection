@@ -1,5 +1,5 @@
 import "../css/PaperNav.css";
-import CorgiIcon from "../assets/img/corgi-icon.png";
+import queen from "../assets/img/queen.png";
 import { Link } from "react-router-dom";
 
 const PaperNav = () => {
@@ -41,7 +41,7 @@ const PaperNav = () => {
             </li>
             <li>
               <Link to="/profilo" className="profile-link-nav">
-                <img className="profilo" src={CorgiIcon} alt="Corgi Icon" />
+                <img className="profilo" src={queen} alt="queen" />
               </Link>
             </li>
           </ul>
