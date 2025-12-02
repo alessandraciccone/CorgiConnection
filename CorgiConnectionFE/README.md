@@ -61,7 +61,7 @@ Animazioni CSS / keyframes
 
 Backend:
 
-Java (Spring Boot o Jakarta EE – specifica se vuoi)
+Java Spring Boot
 
 JWT Authentication
 
