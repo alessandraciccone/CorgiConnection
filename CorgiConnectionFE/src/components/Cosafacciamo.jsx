@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../css/CosaFacciamo.css";
 import turisti from "../assets/img/turisti.png";
 
-// Regione pulita (per la fetch)
+// Regione
 const regioniPure = [
   "Abruzzo",
   "Basilicata",

@@ -60,22 +60,22 @@ public class SecurityConfig {
     }
 
 
-
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        return request -> {
-            CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration config = new CorsConfiguration();
 
-            String origin = request.getHeader("Origin");
-            if (origin != null && (origin.startsWith("https://corgi-connection") || origin.equals("http://localhost:5173"))) {
-                // accetta tutti i deployment Vercel che iniziano con "corgi-connection"
-                configuration.setAllowedOrigins(List.of(origin));
-            }
+        config.setAllowedOriginPatterns(List.of(
+                "https://corgi-connection*.vercel.app",
+                "http://localhost:5173"
+        ));
 
-            configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-            configuration.setAllowedHeaders(List.of("*"));
-            configuration.setAllowCredentials(true);
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
 
-            return configuration;
-        };
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
-}
+
+} 
