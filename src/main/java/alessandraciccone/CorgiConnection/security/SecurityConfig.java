@@ -64,10 +64,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOriginPatterns(List.of(
-                "https://corgi-connection*.vercel.app",
+        config.setAllowedOrigins(List.of(
+                "https://corgi-connection-ifr39rqjm-alessandraciccones-projects.vercel.app",
                 "http://localhost:5173"
         ));
+        config.setAllowCredentials(true);
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
