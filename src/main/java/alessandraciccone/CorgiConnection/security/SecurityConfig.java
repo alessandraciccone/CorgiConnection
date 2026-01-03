@@ -37,10 +37,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()     // login, registrazione pubblici
-                        .requestMatchers("/ws/**").permitAll()       // ✅ WebSocket endpoint
-                        .requestMatchers("/app/**").permitAll()      // ✅ STOMP destinations
-                        .requestMatchers("/topic/**").permitAll()    // ✅ Broker topics
-                        .requestMatchers("/user/**").permitAll()     // ✅ User-specific destinations
+                        .requestMatchers("/ws/**").permitAll()       //  WebSocket endpoint
+                        .requestMatchers("/app/**").permitAll()      // STOMP destinations
+                        .requestMatchers("/topic/**").permitAll()    // Broker topics
+                        .requestMatchers("/user/**").permitAll()     //  User-specific destinations
                         .anyRequest().authenticated()                // tutto il resto protetto
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
