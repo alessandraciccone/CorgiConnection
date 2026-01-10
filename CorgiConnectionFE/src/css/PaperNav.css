@@ -14,10 +14,22 @@
   z-index: 1100;
 }
 
+/* Hamburger bars */
+.bar1, .bar2, .bar3 {
+  width: 25px;
+  height: 3px;
+  background-color: #5c3d2e;
+  margin: 4px 0;
+  transition: 0.4s;
+  border-radius: 2px;
+}
+
+/* MOBILE STYLES */
 @media (max-width: 900px) {
   .hamburger {
     display: block;
   }
+  
   .collapsible-body {
     position: fixed;
     top: 60px;
@@ -27,17 +39,19 @@
     width: 100vw;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     max-height: 0;
-    overflow-y: auto;
+    overflow: hidden;
     transition: max-height 0.3s ease;
     z-index: 2000;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
   }
+  
   .collapsible-body.open {
     max-height: 350px;
     transition: max-height 0.4s cubic-bezier(.4,2,.6,1);
     box-shadow: 0 6px 24px rgba(0,0,0,0.18);
   }
+  
   ul.inline {
     flex-direction: column;
     gap: 0.5rem;
@@ -45,8 +59,9 @@
     align-items: flex-start;
     width: 100%;
   }
+  
   ul.inline li a {
-    width: 100vw;
+    width: 100%;
     display: block;
     padding: 1.2rem 2rem;
     font-size: 1.15rem;
@@ -58,18 +73,12 @@
   }
 }
 
-/* Hide collapsible-body by default on mobile */
-@media (max-width: 900px) {
-  .collapsible-body {
-    display: block;
-  }
-}
-
-/* Always show menu on desktop */
+/* DESKTOP STYLES */
 @media (min-width: 901px) {
   .hamburger {
     display: none;
   }
+  
   .collapsible-body {
     display: block !important;
     position: static;
@@ -79,20 +88,36 @@
     width: auto;
     overflow: visible;
   }
+  
   ul.inline {
     flex-direction: row;
     gap: 1rem;
     align-items: center;
     width: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-left: 0.3em;
   }
+  
   ul.inline li a {
     width: auto;
     padding: 0.3rem 0.7rem;
     font-size: 1rem;
     border-radius: 4px;
     border-bottom: none;
+    color: #5c3d2e;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  ul.inline li a:hover {
+    color: #ff914d;
   }
 }
+
+/* NAV BASE STYLES */
 nav.split-nav {
   background-color: #fde4c8 !important;
   border-bottom: 2px solid #0c0b0a !important;
@@ -102,6 +127,11 @@ nav.split-nav {
   position: sticky;
   top: 0;
   z-index: 1000;
+  margin: 0 !important;
+  left: 0;
+  right: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .nav-brand h3 {
@@ -110,62 +140,17 @@ nav.split-nav {
   color: #ff914d;
 }
 
-ul.inline {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-  padding: 0;
-  margin-left:0.3em;
-    
-
+.cosfacciamo-link-nav {
+  text-decoration: none !important;
 }
 
-ul.inline li a {
-  color: #5c3d2e;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  
+.profilo {
+  border-radius: 50%;
+  width: 1.3em;
+  height: 1.6em;
 }
 
-ul.inline li a:hover {
-  color: #ff914d;
-  
-
-}
-
-.cosfacciamo-link-nav{
-  text-decoration: none!important;
-}
-
-.profilo
-
-{
-  border-radius:50%;
-    width:1.3em;
-  height:1.6em
-}
-
-/* Hamburger bars */
-.bar1, .bar2, .bar3 {
-  width: 25px;
-  height: 3px;
-  background-color: #5c3d2e;
-  margin: 4px 0;
-  transition: 0.4s;
-  border-radius: 2px;
-}
-nav.split-nav {
-  margin: 0 !important; /* elimina margini della classe .border */
-  left: 0;
-  right: 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.welcome-link{
-  text-decoration:none !important;
+.welcome-link {
+  text-decoration: none !important;
   background-image: none !important;
 }
-
-
