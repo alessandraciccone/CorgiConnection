@@ -17,11 +17,14 @@
   font-size: 1.3rem;
   color: #ff914d;
   font-weight: bold;
+  text-decoration: none !important;
+  border: none !important;
 }
 
 .welcome-link {
   text-decoration: none !important;
   background-image: none !important;
+  border: none !important;
 }
 
 .welcome-link:hover .brand-title {
@@ -31,13 +34,14 @@
 /* Nav Links */
 .navbar-nav .nav-link {
   color: #5c3d2e !important;
-  font-weight: 500;
+  font-weight: 600 !important;
   padding: 0.3rem 0.5rem !important;
   transition: color 0.3s ease;
   text-decoration: none !important;
+  background-image: none !important;
+  border: none !important;
   font-size: 1rem;
   white-space: nowrap;
-  text-decoration:none !important;
 }
 
 .navbar-nav .nav-link:hover {
