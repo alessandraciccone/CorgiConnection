@@ -37,6 +37,7 @@
   text-decoration: none !important;
   font-size: 1rem;
   white-space: nowrap;
+  text-decoration:none !important;
 }
 
 .navbar-nav .nav-link:hover {
