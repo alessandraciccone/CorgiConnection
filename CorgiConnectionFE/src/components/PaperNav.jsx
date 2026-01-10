@@ -37,7 +37,7 @@ const PaperNav = () => {
           className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}
           id="navbarNav"
         >
-          <ul className="navbar-nav ms-auto">
+          <ul className="navbar-nav ms-auto list">
             <li className="nav-item">
               <Link to="/home" className="nav-link" onClick={handleNavClick}>
                 Home

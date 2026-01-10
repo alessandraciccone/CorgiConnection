@@ -21,6 +21,9 @@
   border: none !important;
 }
 
+.list{
+  text-decoration:none !important;
+}
 .welcome-link {
   text-decoration: none !important;
   background-image: none !important;
@@ -72,7 +75,7 @@
 
 /* Navbar Toggler (Hamburger) */
 .navbar-toggler {
-  border-color: #5c3d2e !important;
+  border-color: white !important;
   padding: 0.5rem;
 }
 
