@@ -6,80 +6,73 @@ import { Link } from "react-router-dom";
 const PaperNav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Close menu on navigation (for mobile)
   const handleNavClick = () => setMenuOpen(false);
 
   return (
-    <nav
-      className="border fixed split-nav"
-      role="navigation"
-      aria-label="Main Navigation"
-    >
-      <div className="nav-brand">
-        <Link to="/" className="welcome-link" onClick={handleNavClick}>
-          <h3>Corgi Connection 🐾</h3>
+    <nav className="navbar navbar-expand-lg custom-nav sticky-top">
+      <div className="container-fluid">
+        {/* Brand */}
+        <Link
+          to="/"
+          className="navbar-brand welcome-link"
+          onClick={handleNavClick}
+        >
+          <h3 className="brand-title">Corgi Connection 🐾</h3>
         </Link>
-      </div>
-      <div className="collapsible">
+
+        {/* Hamburger Button */}
         <button
-          className="hamburger"
-          aria-label={menuOpen ? "Chiudi menu" : "Apri menu"}
+          className="navbar-toggler"
+          type="button"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-controls="navbarNav"
           aria-expanded={menuOpen}
-          aria-controls="main-menu"
-          onClick={() => setMenuOpen((open) => !open)}
+          aria-label="Toggle navigation"
         >
-          <div className="bar1"></div>
-          <div className="bar2"></div>
-          <div className="bar3"></div>
+          <span className="navbar-toggler-icon"></span>
         </button>
+
+        {/* Menu Items */}
         <div
-          className={`collapsible-body${menuOpen ? " open" : ""}`}
-          id="main-menu"
+          className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}
+          id="navbarNav"
         >
-          <ul className="inline">
-            <li>
-              <Link
-                to="/home"
-                className="login-link-nav"
-                onClick={handleNavClick}
-              >
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link to="/home" className="nav-link" onClick={handleNavClick}>
                 Home
               </Link>
             </li>
-            <li>
+            <li className="nav-item">
               <Link
                 to="/curiosita"
-                className="curiosita-link-nav"
+                className="nav-link"
                 onClick={handleNavClick}
               >
                 Lo sapevi?
               </Link>
             </li>
-            <li>
+            <li className="nav-item">
               <Link
                 to="/cosafacciamo"
-                className="cosfacciamo-link-nav"
+                className="nav-link"
                 onClick={handleNavClick}
               >
                 Cosa facciamo?
               </Link>
             </li>
-            <li>
-              <Link
-                to="/login"
-                className="login-link-nav"
-                onClick={handleNavClick}
-              >
+            <li className="nav-item">
+              <Link to="/login" className="nav-link" onClick={handleNavClick}>
                 Log in
               </Link>
             </li>
-            <li>
+            <li className="nav-item">
               <Link
                 to="/profilo"
-                className="profile-link-nav"
+                className="nav-link profile-link"
                 onClick={handleNavClick}
               >
-                <img className="profilo" src={queen} alt="queen" />
+                <img className="profilo-img" src={queen} alt="Profilo" />
               </Link>
             </li>
           </ul>
