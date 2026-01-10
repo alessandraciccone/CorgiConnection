@@ -65,10 +65,16 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "https://corgi-connection-ifr39rqjm-alessandraciccones-projects.vercel.app",
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "https://corgi-connection-5yycfjwqa-alessandraciccones-projects.vercel.app", // URL attuale
+                "https://corgi-connection-ifr39rqjm-alessandraciccones-projects.vercel.app"  // URL vecchio
         ));
-        config.setAllowCredentials(true);
+
+        // Aggiungi pattern per tutti i deploy Vercel
+        config.setAllowedOriginPatterns(List.of(
+                "https://corgi-connection-*.vercel.app",
+                "https://*.vercel.app"
+        ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
