@@ -76,6 +76,7 @@
 /* Navbar Toggler (Hamburger) */
 .navbar-toggler {
   border-color: white !important;
+  background-color: white !important;
   padding: 0.5rem;
 }
 
