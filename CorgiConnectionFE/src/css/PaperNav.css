@@ -19,21 +19,24 @@
     display: block;
   }
   .collapsible-body {
-    position: absolute;
-    top: 100%;
-    right: 0;
+    position: fixed;
+    top: 60px;
     left: 0;
+    right: 0;
     background: #fde4c8;
     width: 100vw;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     max-height: 0;
-    overflow: hidden;
+    overflow-y: auto;
     transition: max-height 0.3s ease;
-    z-index: 1000;
+    z-index: 2000;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
   }
   .collapsible-body.open {
-    max-height: 400px;
+    max-height: 350px;
     transition: max-height 0.4s cubic-bezier(.4,2,.6,1);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
   }
   ul.inline {
     flex-direction: column;
@@ -45,10 +48,13 @@
   ul.inline li a {
     width: 100vw;
     display: block;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
+    padding: 1.2rem 2rem;
+    font-size: 1.15rem;
     border-radius: 0;
     border-bottom: 1px solid #ff914d22;
+    background: none;
+    color: #5c3d2e;
+    text-align: left;
   }
 }
 
