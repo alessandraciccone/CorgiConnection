@@ -51,11 +51,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Comment> commenti;
 
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
-    private List<Message> sentMessages;
 
-    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
-    private List<Message> receivedMessages;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuizResult> quizResult;
@@ -66,7 +62,7 @@ public class User implements UserDetails {
     public User(String username, String email, String password, String firstName, String lastName,
                 String city, String province, Date registrationDate, String profileImage, Roles roles
             , List<Post> posts, List<Comment> commenti,
-                List<Message> sentMessages, List<Message> receivedMessages, List<QuizResult> quizResult) {
+                 List<QuizResult> quizResult) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -79,8 +75,7 @@ public class User implements UserDetails {
         this.roles=roles;
         this.posts = posts;
         this.commenti = commenti;
-        this.sentMessages = sentMessages;
-        this.receivedMessages = receivedMessages;
+
         this.quizResult = quizResult;
 
 
@@ -194,21 +189,7 @@ public class User implements UserDetails {
         this.commenti = commenti;
     }
 
-    public List<Message> getSentMessages() {
-        return sentMessages;
-    }
 
-    public void setSentMessages(List<Message> sentMessages) {
-        this.sentMessages = sentMessages;
-    }
-
-    public List<Message> getReceivedMessages() {
-        return receivedMessages;
-    }
-
-    public void setReceivedMessages(List<Message> receivedMessages) {
-        this.receivedMessages = receivedMessages;
-    }
 
     public List<QuizResult> getQuizResult() {
         return quizResult;
