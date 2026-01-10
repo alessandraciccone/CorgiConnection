@@ -1,3 +1,38 @@
+/* Responsive styles */
+@media (max-width: 768px) {
+  .dyk {
+    width: 80px;
+  }
+  .textdyk {
+    font-size: 0.9rem;
+    max-width: 90vw;
+  }
+  .collapsibletx label {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+  .collapsible-body {
+    font-size: 0.95rem;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dyk {
+    width: 60px;
+  }
+  .textdyk {
+    font-size: 0.8rem;
+    max-width: 98vw;
+  }
+  .collapsibletx label {
+    font-size: 0.9rem;
+    padding: 8px 8px;
+  }
+  .collapsible-body {
+    font-size: 0.9rem;
+  }
+}
 /* Animazione */
 @keyframes bounceIn {
   0% { transform: scale(0.5); opacity: 0; }

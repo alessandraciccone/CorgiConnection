@@ -1,3 +1,38 @@
+/* Responsive styles */
+@media (max-width: 768px) {
+  .quiz-container {
+    width: 95vw;
+    padding: 12px;
+    font-size: 0.98rem;
+  }
+  .quiz-radio-label {
+    font-size: 0.95rem;
+    padding: 8px 10px;
+  }
+  .quiz-nav button,
+  .quiz-start-btn,
+  .quiz-restart-btn {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+}
+@media (max-width: 480px) {
+  .quiz-container {
+    width: 99vw;
+    padding: 6px;
+    font-size: 0.93rem;
+  }
+  .quiz-radio-label {
+    font-size: 0.9rem;
+    padding: 6px 6px;
+  }
+  .quiz-nav button,
+  .quiz-start-btn,
+  .quiz-restart-btn {
+    font-size: 0.95rem;
+    padding: 6px 8px;
+  }
+}
 
 /* Assicuriamoci che body e html occupino tutto lo spazio */
 html, body {

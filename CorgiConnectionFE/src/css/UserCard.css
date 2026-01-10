@@ -1,3 +1,23 @@
+/* Responsive styles */
+@media (max-width: 768px) {
+  .cards-grid {
+    flex-direction: column;
+    max-width: 98vw;
+    gap: 10px;
+  }
+  .result-card {
+    width: 95vw;
+    height: auto;
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 480px) {
+  .result-card {
+    width: 99vw;
+    font-size: 0.9rem;
+    padding: 6px 2px;
+  }
+}
 .results-container {
   display: flex;
   justify-content: center; /* centra il contenitore */

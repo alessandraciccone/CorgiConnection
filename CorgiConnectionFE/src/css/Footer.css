@@ -1,3 +1,26 @@
+@media (max-width: 480px) {
+  .footer-content {
+    padding: 0 4px;
+  }
+  .footer-logo h3 {
+    font-size: 1rem;
+  }
+  .footer-links a,
+  .footer-social a {
+    font-size: 0.85rem;
+    padding: 2px 0;
+  }
+  .footer-logo img,
+  .facebookIcon,
+  .istagramIcon,
+  .phoneIcon,
+  .chisiamoicon,
+  .adoptIcon,
+  .faqIcon {
+    width: 18px;
+    height: 18px;
+  }
+}
 body {
   display: flex;
   flex-direction: column;

@@ -1,3 +1,29 @@
+/* Responsive styles */
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+    gap: 6px;
+    max-width: 98vw;
+    padding: 0 4px;
+  }
+  .search-bar input,
+  .search-bar select,
+  .search-bar button {
+    width: 100%;
+    font-size: 0.97rem;
+    height: 38px;
+    margin: 0;
+  }
+}
+@media (max-width: 480px) {
+  .search-bar input,
+  .search-bar select,
+  .search-bar button {
+    font-size: 0.92rem;
+    height: 34px;
+    padding: 6px 8px;
+  }
+}
 .search-bar {
   display: flex;
   align-items: center;

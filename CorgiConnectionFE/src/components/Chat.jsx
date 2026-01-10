@@ -25,7 +25,6 @@ const Chat = ({ recipient }) => {
       console.log("🟢 Connesso a WebSocket");
       setConnected(true);
 
-      // Chat pubblica
       stompClient.subscribe("/topic/public", (message) => {
         const msg = JSON.parse(message.body);
         setMessages((prev) => [...prev, msg]);

@@ -1,3 +1,22 @@
+/* Responsive styles */
+@media (max-width: 768px) {
+  .scoprirecose {
+    width: 80px;
+  }
+  .textscoperta {
+    font-size: 0.9rem;
+    max-width: 90vw;
+  }
+}
+@media (max-width: 480px) {
+  .scoprirecose {
+    width: 60px;
+  }
+  .textscoperta {
+    font-size: 0.8rem;
+    max-width: 98vw;
+  }
+}
 @keyframes bounceIn {
   0% {
     transform: scale(0.5);

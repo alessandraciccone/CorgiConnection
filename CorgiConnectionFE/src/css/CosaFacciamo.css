@@ -1,3 +1,44 @@
+/* Responsive styles */
+@media (max-width: 768px) {
+  .turistiImg {
+    width: 100px;
+  }
+  .turistitx {
+    font-size: 0.9rem;
+    max-width: 90vw;
+  }
+  .collapsiblescs-wrapper {
+    padding: 0.5rem 0.5rem;
+  }
+  .collapsiblecs-label {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.7rem;
+  }
+  .collapsiblecs-body {
+    padding: 0 0.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .turistiImg {
+    width: 70px;
+  }
+  .turistitx {
+    font-size: 0.8rem;
+    max-width: 98vw;
+  }
+  .collapsiblescs-wrapper {
+    padding: 0.2rem 0.2rem;
+  }
+  .collapsiblecs-label {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.5rem;
+  }
+  .collapsiblecs-body {
+    font-size: 0.9rem;
+  }
+}
 @keyframes bounceIn {
   0% { transform: scale(0.5); opacity: 0; }
   60% { transform: scale(1.2); opacity: 1; }
