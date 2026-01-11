@@ -16,5 +16,5 @@ public record UserResponseDTO (
         Date registrationDate,
         String profileImage
 
-
+//è diverso da UserDTO che uso per creare o aggiornare un utente user response restituisce i dati (get)
 ){}

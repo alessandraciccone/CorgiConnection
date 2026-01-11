@@ -15,16 +15,18 @@ public interface AnswerRepository extends JpaRepository<Answer, UUID> {
 
 List<Answer> findByIsCorrect(boolean isCorrect);
 
-List<Answer> findByQuestion(Question question);
+//List<Answer> findByQuestion(Question question);
 
-List <Answer> findByQuestion_Id(UUID id);
-
-
-@Query("SELECT a FROM Answer a WHERE a.question.id = :questionId AND a.isCorrect = true")
-Optional<Answer> findCorrectAnswerByQuestionId(@Param("questionId") UUID questionId);
-
-long countByQuestion_Id(UUID questionId);
+//List <Answer> findByQuestion_Id(UUID id);
 
 
-@Query("SELECT COUNT(a) > 0 FROM Answer a WHERE a.question.id = :questionId AND a.isCorrect = true")
-boolean hasCorrectAnswer(@Param("questionId") UUID questionId);}
+    //@Query("SELECT a FROM Answer a WHERE a.question.id = :questionId AND a.isCorrect = true")
+//Optional<Answer> findCorrectAnswerByQuestionId(@Param("questionId") UUID questionId);
+
+//long countByQuestion_Id(UUID questionId);
+
+
+    //@Query("SELECT COUNT(a) > 0 FROM Answer a WHERE a.question.id = :questionId AND a.isCorrect = true")
+//boolean hasCorrectAnswer(@Param("questionId") UUID questionId);
+//
+}

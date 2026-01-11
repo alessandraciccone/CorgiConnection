@@ -40,9 +40,7 @@ public class QuizResultService {
     @Autowired
     private AnswerRepository answerRepository;
 
-    // ========================================
-    // NUOVO METODO: SOTTOMISSIONE QUIZ
-    // ========================================
+  // sottomissione quiz serve a valutare le risposte e salvare il risultato
     public QuizResultResponseDTO submitQuiz(QuizSubmissionDTO dto, UUID userId) {
         System.out.println("🔍 Service - submitQuiz chiamato");
         System.out.println("🔍 UserId: " + userId);
@@ -53,19 +51,19 @@ public class QuizResultService {
                 .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + userId));
 
         int correctAnswers = 0;
-        int totalQuestions = dto.answers().size();
+        int totalQuestions = dto.answers().size(); // Numero totale di domande inviate secondo le risposte date dall'utente
         UUID quizId = null;
 
         // Valuta risposte
         for (AnswerSubmissionDTO answerDto : dto.answers()) {
             try {
                 if (answerDto.questionId() == null || answerDto.answerId() == null) {
-                    System.err.println("❌ ID null trovato: " + answerDto);
+                    System.err.println(" ID null trovato: " + answerDto);
                     continue;
                 }
 
-                System.out.println("🔍 Cerco Question ID: " + answerDto.questionId());
-                System.out.println("🔍 Cerco Answer ID: " + answerDto.answerId());
+                System.out.println(" Cerco Question ID: " + answerDto.questionId());
+                System.out.println(" Cerco Answer ID: " + answerDto.answerId());
 
                 // Trova question
                 Question question = questionRepository.findById(answerDto.questionId())
@@ -74,16 +72,16 @@ public class QuizResultService {
                 // Prendi quizId dalla prima domanda
                 if (quizId == null && question.getQuiz() != null) {
                     quizId = question.getQuiz().getId();
-                    System.out.println("✅ Quiz ID trovato: " + quizId);
+                    System.out.println(" Quiz ID trovato: " + quizId);
                 }
 
                 // Trova answer
                 Answer userAnswer = answerRepository.findById(answerDto.answerId())
                         .orElseThrow(() -> new RuntimeException("Risposta non trovata: " + answerDto.answerId()));
 
-                System.out.println("✅ Question: " + question.getQuestionText());
-                System.out.println("✅ Answer: " + userAnswer.getAnswerText());
-                System.out.println("✅ Is correct? " + userAnswer.getCorrect());
+                System.out.println(" Question: " + question.getQuestionText());
+                System.out.println(" Answer: " + userAnswer.getAnswerText());
+                System.out.println(" Is correct? " + userAnswer.getCorrect());
 
                 // Controlla se corretta
                 if (Boolean.TRUE.equals(userAnswer.getCorrect())) {
@@ -91,7 +89,7 @@ public class QuizResultService {
                 }
 
             } catch (Exception e) {
-                System.err.println("❌ Errore elaborazione risposta: " + e.getMessage());
+                System.err.println(" Errore elaborazione risposta: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -105,21 +103,19 @@ public class QuizResultService {
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new RuntimeException("Quiz non trovato con ID: " + finalQuizId));
 
-        System.out.println("✅ Quiz trovato: " + quiz.getTitleQuiz());
-        System.out.println("✅ Punteggio: " + correctAnswers + "/" + totalQuestions);
+        System.out.println(" Quiz trovato: " + quiz.getTitleQuiz());
+        System.out.println(" Punteggio: " + correctAnswers + "/" + totalQuestions);
 
         // Salva risultato
         QuizResult result = new QuizResult(user, quiz, correctAnswers, totalQuestions);
         QuizResult saved = quizResultRepository.save(result);
 
-        System.out.println("✅ Risultato salvato con ID: " + saved.getId());
+        System.out.println("Risultato salvato con ID: " + saved.getId());
 
         return mapToResponseDTO(saved);
     }
 
-    // ========================================
-    // CREA NUOVO QUIZ RESULT (metodo originale)
-    // ========================================
+    // creo nuovo risultato
     public QuizResultResponseDTO createResult(QuizResultDTO dto) {
         User user = userRepository.findById(dto.userId())
                 .orElseThrow(() -> new RuntimeException("Utente non trovato con ID: " + dto.userId()));
@@ -138,18 +134,14 @@ public class QuizResultService {
         return mapToResponseDTO(saved);
     }
 
-    // ========================================
-    // RESTITUISCO TUTTI I RISULTATI
-    // ========================================
+   //tutti i risultati
     public List<QuizResultResponseDTO> getAllResults() {
         return quizResultRepository.findAll().stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    // ========================================
-    // RISULTATO PER ID
-    // ========================================
+    //risultato x id
     public QuizResultResponseDTO getResultById(UUID id) {
         QuizResult result = quizResultRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Risultato del quiz non trovato con ID: " + id));
@@ -157,9 +149,7 @@ public class QuizResultService {
         return mapToResponseDTO(result);
     }
 
-    // ========================================
-    // AGGIORNO PUNTEGGIO E DOMANDE
-    // ========================================
+ //aggiorno risultato
     public QuizResultResponseDTO updateResult(UUID id, QuizResultUpdateDTO dto) {
         QuizResult result = quizResultRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("QuizResult non trovato con ID: " + id));
@@ -171,9 +161,7 @@ public class QuizResultService {
         return mapToResponseDTO(updated);
     }
 
-    // ========================================
-    // ELIMINO RISULTATO
-    // ========================================
+    /// delete risultato
     public void deleteResult(UUID id) {
         if (!quizResultRepository.existsById(id)) {
             throw new RuntimeException("QuizResult non trovato con ID: " + id);

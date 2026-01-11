@@ -8,9 +8,8 @@ import java.util.UUID;
 
 public record PostDTO(
 
-
-                @NotBlank(message = "Il contenuto del post è obbligatorio!")
-                @Size(max = 1000, message = "Il contenuto non può superare i 1000 caratteri")
-                        String content
+        @NotBlank(message = "Il contenuto del post è obbligatorio!")
+        @Size(max = 1000, message = "Il contenuto non può superare i 1000 caratteri")
+        String content
 ) {}
 

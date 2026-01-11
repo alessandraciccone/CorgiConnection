@@ -39,13 +39,13 @@ public class QuestionService {
         return mapToResponseDTO(question);
     }
 
-    public List<QuestionResponseDTO> getQuestionsByQuiz(UUID quizId) {
-        List<Question> questions = questionRepository.findByQuiz_Id(quizId);
-        if (questions.isEmpty()) {
-            throw new NotFoundException("Nessuna domanda trovata per il quiz con id: " + quizId);
-        }
-        return questions.stream().map(this::mapToResponseDTO).toList();
-    }
+//    public List<QuestionResponseDTO> getQuestionsByQuiz(UUID quizId) {
+//        List<Question> questions = questionRepository.findByQuiz_Id(quizId);
+//        if (questions.isEmpty()) {
+//            throw new NotFoundException("Nessuna domanda trovata per il quiz con id: " + quizId);
+//        }
+//        return questions.stream().map(this::mapToResponseDTO).toList();
+//    }
 
     public QuestionResponseDTO createQuestion(QuestionDTO dto) {
         Quiz quiz = quizRepository.findById(dto.quizId())

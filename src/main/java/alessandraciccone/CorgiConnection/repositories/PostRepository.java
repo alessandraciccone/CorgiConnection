@@ -17,31 +17,28 @@ public interface PostRepository extends JpaRepository<Post, UUID>, JpaSpecificat
 
 List<Post> findByAuthor(User author);
 
-List <Post> findByAuthor_Id(UUID author_Id);
+
 
 List<Post> findByDatePost(LocalDate date);
 
 long countByAuthor(User author);
 
-List <Post> findByDatePostAfter(LocalDate date);
-List <Post> findByDatePostBefore(LocalDate date);
-List <Post> findByDatePostBetween(LocalDate startDate, LocalDate endDate);
 
-@Query("SELECT p FROM Post p WHERE p.author.city = :city")
-List<Post> findPostsByAuthorCity(@Param("city") String city);
-@Query
-        ("SELECT p FROM Post p WHERE p.datePost>= :date ORDER BY p.datePost DESC")
-    List<Post> findRecentPosts(@Param("date")LocalDate date);
+//@Query("SELECT p FROM Post p WHERE p.author.city = :city")
+//List<Post> findPostsByAuthorCity(@Param("city") String city);
+//@Query
+        //("SELECT p FROM Post p WHERE p.datePost>= :date ORDER BY p.datePost DESC")
+    //List<Post> findRecentPosts(@Param("date")LocalDate date);
 
 
 
-@Query
-        ("SELECT p FROM Post p WHERE SIZE(p.comments) >0")
-    List<Post> findPostsWithComments();
+//@Query
+        //("SELECT p FROM Post p WHERE SIZE(p.comments) >0")
+    //List<Post> findPostsWithComments();
 
-@Query
-        ("SELECT COUNT(p) FROM Post p WHERE p.author.city= :city")
-    long countPostsByCity(@Param("city")String city);
+    //@Query
+    //    ("SELECT COUNT(p) FROM Post p WHERE p.author.city= :city")
+    //long countPostsByCity(@Param("city")String city);
 
 
 

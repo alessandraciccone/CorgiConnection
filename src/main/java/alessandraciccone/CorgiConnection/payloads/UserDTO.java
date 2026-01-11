@@ -3,10 +3,10 @@ package alessandraciccone.CorgiConnection.payloads;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
+//DTO--> DATA TRANSFER OBJECT
 //uso userDto x ricevere dati in imput, ad esempio duramnte la registrazione
 public record UserDTO (
-        @NotBlank(message="L'username è obbligatorio!")
+        @NotBlank(message="L'username è obbligatorio!")//registraziomne utente username non blank
         @Size(min = 3, max=50, message="L'username deve avere tra i 3 e i 50 caratteri!")
         String username,
 
@@ -23,5 +23,5 @@ public record UserDTO (
         String province,
         String profileImage
 
-
+//non si usa entity User perche cosi si evita di esporre dati sensibili come la password
 ){}

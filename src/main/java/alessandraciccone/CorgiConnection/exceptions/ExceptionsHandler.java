@@ -13,44 +13,48 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice
+@RestControllerAdvice //gestisce le eccezioni a livello globale ogni volta che un controller lancia un eccezione passa prima da li
+
+
+
+
 public class ExceptionsHandler {
 
   @ExceptionHandler({BadRequestException.class, DataIntegrityViolationException.class, BadCredentialsException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)//gestisce le eccezioni come errori neldb o credenziali sbagliatte
     public ErrorsDTO handleBadRequest(Exception ex) {
         return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
-    }
+    } //
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorsDTO halderNotFound(NotFoundException ex) {
-        return new ErrorsDTO("Elemento non trovato in db o id incorretto", LocalDateTime.now());
+    public ErrorsDTO handleNotFound(NotFoundException ex) {
+        return new ErrorsDTO("Elemento non trovato in db o id incorretto", LocalDateTime.now());//gestisce le eccezioni di tipo not found
     }
 
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsListDTO handleValidationErrors(ValidationException ex) {
-        return new ErrorsListDTO(ex.getMessage(), LocalDateTime.now(), ex.getErrors());
+        return new ErrorsListDTO(ex.getMessage(), LocalDateTime.now(), ex.getErrors()); //rimanda un oggetto con la lista degli errori di validazione
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorsDTO handleValidationErrors(AuthorizationDeniedException ex) {
-        return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
+        return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());//gestisce le eccezioni di autorizzazione negata
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorsDTO handleUnhautorizedError(UnauthorizedException ex) {
-        return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
+    public ErrorsDTO handleUnahautorizedError(UnauthorizedException ex) {
+        return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());//gestisce le eccezioni di tipo non autorizzato
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorsDTO handleServerError(Exception ex) {
         ex.printStackTrace();
-        return new ErrorsDTO("Errore nel server", LocalDateTime.now());
+        return new ErrorsDTO("Errore nel server", LocalDateTime.now());//gestisce tutte le eccezioni generiche
     }
 }
 

@@ -27,10 +27,10 @@ public class AnswerService {
 
 
     @Autowired
-    private AnswerRepository answerRepository;
+    private AnswerRepository answerRepository; // inietto repository risposte
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionRepository questionRepository; // inietto repository domande
 
     //creo nuova risposta
     public AnswerResponseDTO createAnswer(AnswerDTO answerDTO) {
@@ -49,10 +49,10 @@ public class AnswerService {
                     "Una domanda può avere massimo 4 risposte");
         }
 
-        Answer newAnswer = new Answer();
+        Answer newAnswer = new Answer();// creo nuova risposta
         newAnswer.setAnswerText(answerDTO.answerText());
         newAnswer.setCorrect(answerDTO.isCorrect());
-        newAnswer.setQuestion(question);
+        newAnswer.setQuestion(question);// associo la domanda alla rispostaù
 
         Answer savedAnswer = answerRepository.save(newAnswer);
         return mapToResponseDTO(savedAnswer);
@@ -92,13 +92,8 @@ public class AnswerService {
     }
 
 
-    //trovo tutte le risposte con paginazione e senza
-    public Page<AnswerResponseDTO> getAllAnswers(int page, int size, String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        return answerRepository.findAll(pageable).map(this::mapToResponseDTO);
-    }
 
-
+//trovo tutte le risposte
     public List<AnswerResponseDTO> getAllAnswers() {
         return answerRepository.findAll().stream()
                 .map(this::mapToResponseDTO)
@@ -118,22 +113,6 @@ public List<AnswerResponseDTO> getAnswersByQuestion(UUID questionId) {
             .collect(Collectors.toList());
 }
 
-//trovo risposte giuste
-public List<AnswerResponseDTO> getCorrectAnswers() {
-    return answerRepository.findByIsCorrect(true).stream()
-            .map(this::mapToResponseDTO)
-            .collect(Collectors.toList());
-}
-
-//trovo risposte sbagliate
-
-
-
-    public List<AnswerResponseDTO> getInCorrectAnswers() {
-        return answerRepository.findByIsCorrect(false).stream()
-                .map(this::mapToResponseDTO)
-                .collect(Collectors.toList());
-    }
 
 
 //trovo risposta corretta x domanda
@@ -152,38 +131,6 @@ public List<AnswerResponseDTO> getCorrectAnswers() {
                         "Nessuna risposta corretta trovata per questa domanda"));
 
         return mapToResponseDTO(correctAnswer);
-    }
-
-//ve3rifico se la risposta è corretta
-public boolean isAnswerCorrect(UUID answerId) {
-    Answer answer = answerRepository.findById(answerId)
-            .orElseThrow(() -> new NotFoundException(
-                    "Risposta con id " + answerId + " non trovata"));
-    return answer.getCorrect();
-}
-
-//conto tutte le risposte
-
-    public long countAllAnswers() {
-        return answerRepository.count();
-    }
-//comto le rispopste x domanda
-
-    public long countAnswersByQuestion(UUID questionId) {
-        return answerRepository.findAll().stream()
-                .filter(answer -> answer.getQuestion().getId().equals(questionId))
-                .count();
-    }
-
-    //conto risposte corrette e risposte sbagliate
-
-    public long countCorrectAnswers() {
-        return answerRepository.findByIsCorrect(true).size();
-    }
-
-
-    public long countIncorrectAnswers() {
-        return answerRepository.findByIsCorrect(false).size();
     }
 
 

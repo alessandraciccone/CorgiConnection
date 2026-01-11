@@ -12,4 +12,4 @@ public record PostResponseDTO(
         int commentsCount
 
 ) {
-}
+}// questo record serve a ritornare le informazioni di un post senza esporre dati sensibili come email e password

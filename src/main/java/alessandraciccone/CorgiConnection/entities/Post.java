@@ -26,7 +26,7 @@ public class Post {
     public Post(String content, String title, LocalDate datePost, User author, List<Comment> comments) {
 
         this.content = content;
-        this.title = title;  // Impostiamo il titolo
+        this.title = title;
         this.datePost = datePost;
         this.author = author;
         this.comments = comments;

@@ -86,9 +86,6 @@ public class User implements UserDetails {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     @Override
     public String getUsername() {

@@ -6,6 +6,6 @@ public record AnswerResponseDTO(
         UUID id,
         String answerText,
         Boolean isCorrect,
-        QuestionSummaryDTO question
+        QuestionSummaryDTO question //
 ) {
 }

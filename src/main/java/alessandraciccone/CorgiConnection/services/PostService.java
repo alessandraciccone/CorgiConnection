@@ -34,8 +34,8 @@ public class PostService {
     private UserRepository userRepository;
 
 
-@Autowired
-public CloudinaryService cloudinaryService;
+//@Autowired
+//public CloudinaryService cloudinaryService;
     // Crea un nuovo post
     public PostResponseDTO createPost(PostDTO postDTO, User authenticatedUser) {
         Post newPost = new Post();
@@ -213,12 +213,12 @@ public CloudinaryService cloudinaryService;
 
 //conto post x autore
 
-    public long countPostsByAuthor(UUID authorId) {
-        User author = userRepository.findById(authorId)
-                .orElseThrow(() -> new NotFoundException(
-                        "Autore con id " + authorId + " non trovato"));
-        return postRepository.countByAuthor(author);
-    }
+//    public long countPostsByAuthor(UUID authorId) {
+//        User author = userRepository.findById(authorId)
+//                .orElseThrow(() -> new NotFoundException(
+//                        "Autore con id " + authorId + " non trovato"));
+//        return postRepository.countByAuthor(author);
+//    }
 
 //upload immagine
 public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException {
@@ -240,7 +240,7 @@ public void updatePostPhoto(UUID postId, MultipartFile file) throws IOException 
     }
 
     // Upload a Cloudinary
-    String imageUrl = cloudinaryService.upload(file, "posts/photos");
+//    String imageUrl = cloudinaryService.upload(file, "posts/photos");
 
 
 

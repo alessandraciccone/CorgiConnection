@@ -18,33 +18,33 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-@Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
+@Configuration // indica che questa classe contiene configurazioni di Spring
+@EnableWebSecurity// abilita le funzionalità di sicurezza web di Spring Security
+@EnableMethodSecurity// abilita la sicurezza a livello di metodo
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;
+    private final JwtFilter jwtFilter;// filtro personalizzato per l'autenticazione JWT
 
-    public SecurityConfig(JwtFilter jwtFilter) {
+    public SecurityConfig(JwtFilter jwtFilter) {// costruttore per l'iniezione del filtro JWT
         this.jwtFilter = jwtFilter;
     }
 
-    @Bean
+    @Bean//
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .formLogin(form -> form.disable())
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
+                .formLogin(form -> form.disable())// disabilita il login basato su form
+                .csrf(csrf -> csrf.disable())// disabilita la protezione CSRF (utile per API REST)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))// imposta la gestione della sessione come stateless
+                .authorizeHttpRequests(auth -> auth// configura le regole di autorizzazione delle richieste HTTP
                         .requestMatchers("/auth/**").permitAll()     // login, registrazione pubblici
                         .requestMatchers("/ws/**").permitAll()       //  WebSocket endpoint
-                        .requestMatchers("/app/**").permitAll()      // STOMP destinations
-                        .requestMatchers("/topic/**").permitAll()    // Broker topics
+                        .requestMatchers("/app/**").permitAll()      //  App destinazioni client WebSocket
+                        .requestMatchers("/topic/**").permitAll()    // Topic destinazioni client WebSocket
                         .requestMatchers("/user/**").permitAll()     //  User-specific destinations
-                        .anyRequest().authenticated()                // tutto il resto protetto
+                        .anyRequest().authenticated()                // tutto il r esto protetto
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)// aggiunge il filtro JWT prima del filtro di autenticazione standard
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));// configura il CORS
 
         return http.build();
     }
@@ -56,16 +56,16 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+        return config.getAuthenticationManager();// fornisce il gestore di autenticazione
     }
 
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {// configura le regole CORS
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
+                "http://localhost:5173",// per lo sviluppo locale
                 "https://corgi-connection-5yycfjwqa-alessandraciccones-projects.vercel.app", // URL attuale
                 "https://corgi-connection-ifr39rqjm-alessandraciccones-projects.vercel.app"  // URL vecchio
         ));
@@ -77,11 +77,11 @@ public class SecurityConfig {
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        config.setAllowedHeaders(List.of("*"));// consente tutti gli header
+        config.setAllowCredentials(true);// consente l'invio di credenziali (cookie, header di autorizzazione)
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", config);// applica la configurazione a tutte le rotte
         return source;
     }
 

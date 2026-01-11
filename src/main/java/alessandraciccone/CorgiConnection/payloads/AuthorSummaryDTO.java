@@ -11,4 +11,4 @@ public record AuthorSummaryDTO(
         String profileImage
 
 ) {
-}
+}// questo record serve a ritornare le informazioni di un autore senza esporre dati sensibili come email e password

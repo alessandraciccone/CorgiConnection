@@ -23,13 +23,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+//il controller chiama il service. il service parla con il db tramite la repository. il service lancia eccezioni che vengono gestite globalmente dal handler
 @Service
 public class UserService {
   @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; //inietto la repository x interagire con il db
 
    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder; //inietto password encoder x criptare la password
 
     //creo nuovo utente
     public UserResponseDTO createUser(UserDTO userDTO) {
@@ -44,7 +45,7 @@ public class UserService {
         User newUser = new User();
         newUser.setUsername(userDTO.username());
         newUser.setEmail(userDTO.email());
-        newUser.setPassword(passwordEncoder.encode(userDTO.password())); // 🔐
+        newUser.setPassword(passwordEncoder.encode(userDTO.password()));
         newUser.setFirstName(userDTO.firstName());
         newUser.setLastName(userDTO.lastName());
         newUser.setCity(userDTO.city());
@@ -55,21 +56,20 @@ public class UserService {
 
         //ritorna il dto di risposta
 
-        return mapToResponseDTO(savedUser);
+        return mapToResponseDTO(savedUser);//converto entity in dto restituisce i dati senza password
     }
 
-    //aòltrimenti non riesce a trovare la password nel login non essendoci nel dto. sto usando il sto x il login controller
     public User getUserByUsernameEntity(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Utente con username " + username + " non trovato"));
     }
-
+//recupero utente per username (entity)
 
 
     // trovo utente per id
-    public UserResponseDTO fetUserById(UUID id) {
+    public UserResponseDTO getUserById(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Utente con id " + id + "non è stato trovato!"));
-        return mapToResponseDTO(user);
+        return mapToResponseDTO(user); //converto entity in dto restituisce i dati senza password
     }
 
 
@@ -80,7 +80,7 @@ public class UserService {
         return mapToResponseDTO(user);
     }
 
-    public User getUserById(UUID id) {
+    public User fetUserById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Utente con ID " + id + " non trovato"));
     }
@@ -93,9 +93,11 @@ public class UserService {
         return mapToResponseDTO(user);
     }
 
+
+
     //promuovo utente esustente ad admuin
     public UserResponseDTO promoteToAdmin(UUID userId) {
-        User user = getUserById(userId);
+        User user = fetUserById(userId);
         user.setRoles(Roles.ADMIN);
         userRepository.save(user);
         return mapToResponseDTO(user);

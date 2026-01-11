@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
+public interface   UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
 
-   //uso optional. la classe optionale può contenere un valore come non può contenerlo. gestisce l'assenza di valore in modo più sicuro rispetto a null
-    Optional<User> findByEmail(String email);
+//optional serve per gestire il caso in cui l'utente non venga trovato nel database lo gestisce in modo elegante senza restituire null
+Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
 
     //verifico se esistono gli utenti
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
 }
+//la repository è l'interfaccia che permette di interagire con il database. estende JpaRepository che fornisce metodi CRUD e JpaSpecificationExecutor per query complesse

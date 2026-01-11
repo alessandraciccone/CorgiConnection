@@ -6,7 +6,6 @@ import alessandraciccone.CorgiConnection.exceptions.NotFoundException;
 import alessandraciccone.CorgiConnection.payloads.UserDTO;
 import alessandraciccone.CorgiConnection.payloads.UserResponseDTO;
 import alessandraciccone.CorgiConnection.payloads.UserUpdateDTO;
-import alessandraciccone.CorgiConnection.services.CloudinaryService;
 import alessandraciccone.CorgiConnection.services.UserService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-@Autowired
-CloudinaryService cloudinaryService;
-    // CREA NUOVO UTENTE
+
+    // CREA NUOVO UTENT
     //http://localhost:3001/users
     @PostMapping
     public UserResponseDTO createUser(@RequestBody UserDTO userDTO) {
@@ -39,7 +37,7 @@ CloudinaryService cloudinaryService;
     //http://localhost:3001/users/{id}
     @GetMapping("/{id}")
     public UserResponseDTO getUserById(@PathVariable UUID id) {
-        return userService.fetUserById(id);
+        return userService.getUserById(id);
     }
 
     // TROVA UTENTE PER USERNAME
@@ -90,7 +88,7 @@ CloudinaryService cloudinaryService;
     }
 
     @PostMapping("users/{id}/profile-image")
-    public ResponseEntity<UserResponseDTO>uploadProfileImage(
+    public ResponseEntity<User> uploadProfileImage(
             @PathVariable UUID id,
             @RequestParam("file") MultipartFile file )throws  IOException{
         if(file==null||file.isEmpty()){
@@ -108,15 +106,14 @@ CloudinaryService cloudinaryService;
         }
         // verifico utente esistemte e autorizzazione
 
-        User user = userService.getUserById(id);
+        User user = userService.fetUserById(id);
         if(user== null){
             throw new NotFoundException("Utente con id" +id +"non trovato");
         }
 
-        String ImageUrl= cloudinaryService.upload(file,"users/profiles");
-        userService.updateProfileImage(id, ImageUrl);
 
-        UserResponseDTO responseDTO= userService.fetUserById(id);
+
+        User responseDTO= userService.fetUserById(id);
         return ResponseEntity.ok(responseDTO);
 
     }

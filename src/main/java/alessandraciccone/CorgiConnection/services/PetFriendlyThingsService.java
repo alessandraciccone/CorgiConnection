@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
+@Service //service serve per la logica di business dell'applicazione
 public class PetFriendlyThingsService {
 
         @Autowired
@@ -110,26 +110,26 @@ public List<PetFriendlyThingsResponseDTO> findAll() {
             petFriendlyThingsRepository.delete(thing);
         }
 
-//disattiva
-
-        public PetFriendlyThingsResponseDTO deactivatePetFriendlyThing(UUID id) {
-            PetFriendlyThings thing = petFriendlyThingsRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException(
-                            "Luogo/Evento pet-friendly con id " + id + " non trovato"));
-            thing.setActive(false);
-            PetFriendlyThings updated = petFriendlyThingsRepository.save(thing);
-            return mapToResponseDTO(updated);
-        }
-
-        //riattiva
-        public PetFriendlyThingsResponseDTO reactivatePetFriendlyThing(UUID id) {
-            PetFriendlyThings thing = petFriendlyThingsRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException(
-                            "Luogo/Evento pet-friendly con id " + id + " non trovato"));
-            thing.setActive(true);
-            PetFriendlyThings updated = petFriendlyThingsRepository.save(thing);
-            return mapToResponseDTO(updated);
-        }
+////disattiva
+//
+//        public PetFriendlyThingsResponseDTO deactivatePetFriendlyThing(UUID id) {
+//            PetFriendlyThings thing = petFriendlyThingsRepository.findById(id)
+//                    .orElseThrow(() -> new NotFoundException(
+//                            "Luogo/Evento pet-friendly con id " + id + " non trovato"));
+//            thing.setActive(false);
+//            PetFriendlyThings updated = petFriendlyThingsRepository.save(thing);
+//            return mapToResponseDTO(updated);
+//        }
+//
+//        //riattiva
+//        public PetFriendlyThingsResponseDTO reactivatePetFriendlyThing(UUID id) {
+//            PetFriendlyThings thing = petFriendlyThingsRepository.findById(id)
+//                    .orElseThrow(() -> new NotFoundException(
+//                            "Luogo/Evento pet-friendly con id " + id + " non trovato"));
+//            thing.setActive(true);
+//            PetFriendlyThings updated = petFriendlyThingsRepository.save(thing);
+//            return mapToResponseDTO(updated);
+//        }
 
 
 //trova tutti con paginazione
@@ -141,14 +141,14 @@ public List<PetFriendlyThingsResponseDTO> findAll() {
         }
 
 
-        //trova solo gli attivi
-        public List<PetFriendlyThingsResponseDTO> getActivePetFriendlyThings() {
-            return petFriendlyThingsRepository.findAll()
-                    .stream()
-                    .filter(PetFriendlyThings::getActive)
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
+//        //trova solo gli attivi
+//        public List<PetFriendlyThingsResponseDTO> getActivePetFriendlyThings() {
+//            return petFriendlyThingsRepository.findAll()
+//                    .stream()
+//                    .filter(PetFriendlyThings::getActive)
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
 
         public Page<PetFriendlyThingsResponseDTO> searchPetFriendlyThings(
                 String name,
@@ -207,97 +207,97 @@ public List<PetFriendlyThingsResponseDTO> findAll() {
                     .map(this::mapToResponseDTO);
         }
 
-
+//specifiche ricerche
 //trovo x tipo
 
-        public List<PetFriendlyThingsResponseDTO> getPetFriendlyThingsByType(ThingsType type) {
-            Specification<PetFriendlyThings> spec = PetFriendlyThingSpecification.typeEquals(type);
-            return petFriendlyThingsRepository.findAll(spec).stream()
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
-
-        //trovo per cottà
-        public List<PetFriendlyThingsResponseDTO> getPetFriendlyThingByCity(String city) {
-            Specification<PetFriendlyThings> spec = PetFriendlyThingSpecification.cityContains(city);
-            return petFriendlyThingsRepository.findAll(spec).stream()
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
-
-        //trovo eventi futuri
-        public List<PetFriendlyThingsResponseDTO> getUpcomingEvents() {
-            Date now = new Date();
-            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.EVENT);
-            Specification<PetFriendlyThings> dateSpec = PetFriendlyThingSpecification.eventDateAfter(now);
-            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(dateSpec);
-
-            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
-
-        //cerco spiagge x città
-
-        public List<PetFriendlyThingsResponseDTO> getBeachesByCity(String city) {
-            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.BEACH);
-            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
-            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
-
-            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
-
-        //cerco ristoranti x città
-
-        public List<PetFriendlyThingsResponseDTO> getRestaurantsByCity(String city) {
-            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.RESTAURANT);
-            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
-            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
-
-            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
-
-        //cerco parchi x città
-
-        public List<PetFriendlyThingsResponseDTO> getParksByCity(String city) {
-            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.PARK);
-            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
-            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
-
-            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
-
-        //cerco hotel per città
-
-        public List<PetFriendlyThingsResponseDTO> getHotelsByCity(String city) {
-            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.HOTEL);
-            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
-            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
-
-            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
-
-        //cerco vet x città
-        public List<PetFriendlyThingsResponseDTO> getVetsByCity(String city) {
-            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.VET);
-            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
-            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
-
-            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
-                    .map(this::mapToResponseDTO)
-                    .collect(Collectors.toList());
-        }
-
-
-//conto eventi totali
+//        public List<PetFriendlyThingsResponseDTO> getPetFriendlyThingsByType(ThingsType type) {
+//            Specification<PetFriendlyThings> spec = PetFriendlyThingSpecification.typeEquals(type);
+//            return petFriendlyThingsRepository.findAll(spec).stream()
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        //trovo per cottà
+//        public List<PetFriendlyThingsResponseDTO> getPetFriendlyThingByCity(String city) {
+//            Specification<PetFriendlyThings> spec = PetFriendlyThingSpecification.cityContains(city);
+//            return petFriendlyThingsRepository.findAll(spec).stream()
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        //trovo eventi futuri
+//        public List<PetFriendlyThingsResponseDTO> getUpcomingEvents() {
+//            Date now = new Date();
+//            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.EVENT);
+//            Specification<PetFriendlyThings> dateSpec = PetFriendlyThingSpecification.eventDateAfter(now);
+//            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(dateSpec);
+//
+//            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        //cerco spiagge x città
+//
+//        public List<PetFriendlyThingsResponseDTO> getBeachesByCity(String city) {
+//            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.BEACH);
+//            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
+//            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
+//
+//            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        //cerco ristoranti x città
+//
+//        public List<PetFriendlyThingsResponseDTO> getRestaurantsByCity(String city) {
+//            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.RESTAURANT);
+//            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
+//            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
+//
+//            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        //cerco parchi x città
+//
+//        public List<PetFriendlyThingsResponseDTO> getParksByCity(String city) {
+//            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.PARK);
+//            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
+//            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
+//
+//            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        //cerco hotel per città
+//
+//        public List<PetFriendlyThingsResponseDTO> getHotelsByCity(String city) {
+//            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.HOTEL);
+//            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
+//            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
+//
+//            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
+//
+//        //cerco vet x città
+//        public List<PetFriendlyThingsResponseDTO> getVetsByCity(String city) {
+//            Specification<PetFriendlyThings> typeSpec = PetFriendlyThingSpecification.typeEquals(ThingsType.VET);
+//            Specification<PetFriendlyThings> citySpec = PetFriendlyThingSpecification.cityContains(city);
+//            Specification<PetFriendlyThings> combinedSpec = typeSpec.and(citySpec);
+//
+//            return petFriendlyThingsRepository.findAll(combinedSpec).stream()
+//                    .map(this::mapToResponseDTO)
+//                    .collect(Collectors.toList());
+//        }
+//
+//
+////conto eventi totali
 
 
         public long countAllPetFriendlyThings() {

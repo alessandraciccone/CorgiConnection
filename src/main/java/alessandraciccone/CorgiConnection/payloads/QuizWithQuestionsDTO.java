@@ -13,3 +13,4 @@ public record QuizWithQuestionsDTO(
 
         List<QuestionDTO> questions
 ) {}
+// questo record serve a trasportare i dati di un quiz insieme alle sue domande associate in una singola struttura dati.

@@ -17,3 +17,4 @@ public record UserUpdateDTO(
         String profileImage
 )
 {}
+// serve per aggiornare i dati dell'utente, tutti i campi sono opzionali
