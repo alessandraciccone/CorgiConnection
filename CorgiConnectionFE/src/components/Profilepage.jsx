@@ -5,13 +5,13 @@ import "../css/Profilo.css";
 import ChatPopup from "./ChatPopup";
 
 const ProfilePage = () => {
-  const { userId } = useParams();
-  const [user, setUser] = useState(null);
+  const { userId } = useParams(); //useParams per ottenere l'id dell'utente dal percorso
+  const [user, setUser] = useState(null); //nullo finché non carico i dati
   const [fotoProfilo, setFotoProfilo] = useState(null);
-  const [infoCane, setInfoCane] = useState("");
+  const [infoCane, setInfoCane] = useState(""); //info cane inizialmente vuote
   const token = localStorage.getItem("token");
 
-  // 🔥 FIX: convertiamo entrambi a stringa
+  // : convertiamo entrambi a stringa
   const loggedUserId = String(localStorage.getItem("userId"));
   const visitingId = String(userId);
 

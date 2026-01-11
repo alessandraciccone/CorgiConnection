@@ -130,26 +130,31 @@ const Curiosita = () => {
       </div>
       {/* Sezione collapsible */}
       <div className="collapsibles-wrapper">
-        {curiositaData.map((section) => (
-          <div className="collapsibletx" key={section.id}>
-            <input id={section.id} type="radio" name="collapsible" />
-            <label htmlFor={section.id}>{section.label}</label>
-
-            <div className="collapsible-body">
-              <span>
-                {section.points.map((text, idx) => (
-                  <p
-                    key={idx}
-                    className={idx === 0 ? "punto-titolo" : "punto-normale"}
-                    style={{ whiteSpace: "pre-line", marginBottom: "1rem" }}
-                  >
-                    {`${idx + 1}. ${text}`}
-                  </p>
-                ))}
-              </span>
+        {curiositaData.map(
+          (
+            section //section è ogni oggetto nell'array curiositaData
+          ) => (
+            <div className="collapsibletx" key={section.id}>
+              {" "}
+              //section.id è l'id unico per ogni sezione
+              <input id={section.id} type="radio" name="collapsible" />
+              <label htmlFor={section.id}>{section.label}</label>
+              <div className="collapsible-body">
+                <span>
+                  {section.points.map((text, idx) => (
+                    <p
+                      key={idx}
+                      className={idx === 0 ? "punto-titolo" : "punto-normale"}
+                      style={{ whiteSpace: "pre-line", marginBottom: "1rem" }}
+                    >
+                      {`${idx + 1}. ${text}`}
+                    </p>
+                  ))}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        )}
       </div>
       <hr /> {/* Sezione Quiz */}
       <div className="curiosita-container">

@@ -5,13 +5,14 @@ const Quiz = () => {
   const [answers, setAnswers] = useState({});
   const [allAnswers, setAllAnswers] = useState([]);
   const [result, setResult] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showQuiz, setShowQuiz] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0); // Indice della domanda corrente
+  const [showQuiz, setShowQuiz] = useState(false); // Stato per mostrare/nascondere il quiz
 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!showQuiz) return;
+    //useEffect per caricare domande e risposte
+    if (!showQuiz) return; // se il quiz non è mostrato, non fare nulla
 
     const fetchData = async () => {
       try {
@@ -27,7 +28,7 @@ const Quiz = () => {
         });
         const answersData = await answersRes.json();
 
-        setQuestions(questionsData.filter((q) => q.answerIds.length > 0));
+        setQuestions(questionsData.filter((q) => q.answerIds.length > 0)); // Solo domande con risposte
         setAllAnswers(answersData);
       } catch (error) {
         console.error("Errore fetch:", error);
@@ -59,8 +60,8 @@ const Quiz = () => {
       })),
     };
 
-    console.log("📤 DTO inviato:", dto);
-    console.log("📤 JSON:", JSON.stringify(dto));
+    console.log(" DTO inviato:", dto);
+    console.log(" JSON:", JSON.stringify(dto));
 
     try {
       const baseUrl = import.meta.env.VITE_API_URL;
@@ -74,7 +75,7 @@ const Quiz = () => {
         body: JSON.stringify(dto),
       });
 
-      console.log("📥 Response status:", res.status);
+      console.log(" Response status:", res.status);
 
       if (!res.ok) {
         const errorText = await res.text();
@@ -84,10 +85,10 @@ const Quiz = () => {
       }
 
       const resultData = await res.json();
-      console.log("✅ Risultato ricevuto:", resultData);
+      console.log(" Risultato ricevuto:", resultData);
       setResult(resultData);
     } catch (error) {
-      console.error("❌ Errore submit:", error);
+      console.error(" Errore submit:", error);
       alert("Errore durante l'invio del quiz: " + error.message);
     }
   };
@@ -172,7 +173,7 @@ const Quiz = () => {
         {/* RISULTATO */}
         {result && (
           <div className="quiz-result">
-            <h4>🎉 Risultato Quiz</h4>
+            <h4> Risultato Quiz</h4>
             <p>
               <strong>Punteggio:</strong> {result.score} /{" "}
               {result.totalQuestions}
@@ -180,13 +181,13 @@ const Quiz = () => {
             <p>
               <strong>Percentuale:</strong>{" "}
               {result.percentage === 100 || result.percentage === 0
-                ? result.percentage + "%"
+                ? result.percentage + "%" // se la percentuale è zero o 100 la mostro altrimenti mostro la percentuale arrotondata x eccesso
                 : result.percentage.toFixed(1) + "%"}
             </p>
 
             {result.percentage === 100 && (
               <p style={{ color: "green", fontWeight: "bold" }}>
-                🏆 Perfetto! Sei un esperto di animali!
+                🏆 Perfetto! Sei un esperto di corgini!
               </p>
             )}
             {result.percentage >= 70 && result.percentage < 100 && (
@@ -203,11 +204,11 @@ const Quiz = () => {
             <button
               className="quiz-start-btn"
               onClick={() => {
-                setShowQuiz(false);
+                setShowQuiz(false); //chiuuydo il quiz
                 setResult(null);
                 setAnswers({});
-                setCurrentIndex(0);
-              }}
+                setCurrentIndex(0); //torno alla prima domanda
+              }} //torno
             >
               🐣 Ricomincia
             </button>

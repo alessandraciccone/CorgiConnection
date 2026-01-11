@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/SearchBar.css";
 
 const SearchBar = ({ setFilters }) => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(""); // query di ricerca
   const [type, setType] = useState("posts"); // default search type
   const navigate = useNavigate();
 
@@ -11,7 +11,7 @@ const SearchBar = ({ setFilters }) => {
     if (query.trim() === "") return;
 
     setFilters({ query, searchType: type }); // invia query + tipo
-    navigate("/homepage");
+    navigate("/homepage"); //non welcome page ma home page dei risultati
   };
 
   return (

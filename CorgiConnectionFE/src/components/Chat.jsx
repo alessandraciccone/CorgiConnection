@@ -22,7 +22,7 @@ const Chat = ({ recipient }) => {
     });
 
     stompClient.onConnect = () => {
-      console.log("🟢 Connesso a WebSocket");
+      console.log(" Connesso a WebSocket");
       setConnected(true);
 
       stompClient.subscribe("/topic/public", (message) => {

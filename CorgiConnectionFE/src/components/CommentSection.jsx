@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../css/CommentSection.css";
 
 const CommentSection = ({ postId }) => {
+  //postId passato come prop quindi ogni post ha la sua sezione commenti
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
   const [username, setUsername] = useState("");
@@ -15,8 +16,8 @@ const CommentSection = ({ postId }) => {
     if (!token) return null;
 
     try {
-      const decoded = JSON.parse(atob(token.split(".")[1]));
-      return decoded.sub;
+      const decoded = JSON.parse(atob(token.split(".")[1])); //atob decodifica base64
+      return decoded.sub; //assumo che l'ID utente sia nel campo 'sub'
     } catch (error) {
       console.error("Errore decodifica token:", error);
       return null;
@@ -26,19 +27,21 @@ const CommentSection = ({ postId }) => {
   // Carica commenti da localStorage
   useEffect(() => {
     const saved = localStorage.getItem(`comments-${postId}`);
-    const parsed = saved ? JSON.parse(saved) : [];
+    const parsed = saved ? JSON.parse(saved) : []; //se non ci sono commenti uso array vuoto
 
     const fixed = parsed.map((c) => ({
-      ...c,
-      likes: Number.isFinite(c.likes) ? c.likes : 0,
+      //assicuro che ogni commento abbia i campi necessari
+      ...c, //spread operator per copiare tutte le proprietà esistenti
+      likes: Number.isFinite(c.likes) ? c.likes : 0, //se likes non è un numero valido lo imposto a 0
     }));
 
-    setComments(fixed);
+    setComments(fixed); // aggiorno lo stato dei commenti
     localStorage.setItem(`comments-${postId}`, JSON.stringify(fixed));
-  }, [postId]);
+  }, [postId]); // useEffect per caricare i commenti al montaggio o cambio postId
 
   //  Recupera username dal backend usando il token
   useEffect(() => {
+    //useeffect per caricare lo username al montaggio
     const fetchUsername = async () => {
       const userId = getUserIdFromToken();
       if (!userId) {
@@ -50,6 +53,7 @@ const CommentSection = ({ postId }) => {
         const token = getToken();
         const baseUrl = import.meta.env.VITE_API_URL;
         const res = await fetch(`${baseUrl}/users/${userId}`, {
+          //fetch per ottenere i dati utente
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -76,12 +80,12 @@ const CommentSection = ({ postId }) => {
 
   // Aggiungi commento
   const handleSubmit = () => {
-    if (!text.trim()) return;
+    if (!text.trim()) return; //trim per rimuovere spazi vuoti
 
     const newComment = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID(), // genera un ID unico
       text,
-      date: new Date().toISOString(),
+      date: new Date().toISOString(), // data e ora corrente in formato ISO
       author: username,
       likes: 0,
     };
@@ -99,8 +103,11 @@ const CommentSection = ({ postId }) => {
 
   // Like +1
   const handleLike = (id) => {
-    const newComments = comments.map((c) =>
-      c.id === id ? { ...c, likes: (c.likes || 0) + 1 } : c
+    //id è l'id del commento da likare
+    const newComments = comments.map(
+      (
+        c //.map per creare un nuovo array con i commenti aggiornati
+      ) => (c.id === id ? { ...c, likes: (c.likes || 0) + 1 } : c) //se l'id corrisponde incremento i like altrimenti lascio invariato
     );
 
     saveComments(newComments);
@@ -130,7 +137,7 @@ const CommentSection = ({ postId }) => {
               <div className="like-row" style={{ marginTop: "6px" }}>
                 <span
                   className="like-button"
-                  onClick={() => handleLike(c.id)}
+                  onClick={() => handleLike(c.id)} //handlelike con id del commento
                   style={{
                     cursor: "pointer",
                     color: "red",

@@ -76,13 +76,15 @@ const CosaFacciamo = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    // useEffect per fetch dei dati per ogni regione
     const fetchDatiPerRegione = async (regione) => {
-      let page = 0;
-      const size = 100;
-      let tuttiIDati = [];
-      let hasMore = true;
+      let page = 0; //paginazione
+      const size = 100; //dimensione pagina
+      let tuttiIDati = []; //array per accumulare i dati
+      let hasMore = true; //flag per controllare se ci sono più pagine
 
       while (hasMore) {
+        // ciclo finché ci sono più pagine
         try {
           const baseUrl = import.meta.env.VITE_API_URL;
           const res = await fetch(
