@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PostCard from "./PostCard";
 const PostList = () => {
   const [posts, setPosts] = useState([]);
-  const [newPostContent, setNewPostContent] = useState("");
+  const [newPostContent, setNewPostContent] = useState(""); // Stato per il nuovo post
 
   const token = localStorage.getItem("token");
 
@@ -11,17 +11,17 @@ const PostList = () => {
     try {
       const baseUrl = import.meta.env.VITE_API_URL;
       const res = await fetch(`${baseUrl}/posts`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }, // Header per autorizzazione
       });
 
       if (res.ok) {
         const data = await res.json();
         setPosts(
-          Array.isArray(data.content)
-            ? data.content
-            : Array.isArray(data)
-            ? data
-            : []
+          Array.isArray(data.content) // se data.content è un array lo uso
+            ? data.content // altrimenti uso un array vuoto
+            : Array.isArray(data) // se data è un array lo uso
+            ? data // altrimenti uso un array vuoto
+            : [] // se nessuno dei due è un array uso un array vuoto
         );
       } else {
         console.error("Errore fetch posts:", res.status);

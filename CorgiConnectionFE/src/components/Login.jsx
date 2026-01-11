@@ -5,15 +5,16 @@ import ragazza from "../assets/img/ragazza.png";
 import "../css/Login.css";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook per la navigazione programmatica reindirizza l'utente altrove
 
   const [formData, setFormData] = useState({
+    //stato per il form
     username: "",
     password: "",
   });
 
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false); // stato per il successo del login
+  const [error, setError] = useState(""); // stato per gli errori
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +25,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setSuccess(false);
+    //asybch perché faccio una chiamata al server
 
     try {
       const baseUrl = import.meta.env.VITE_API_URL;
@@ -40,14 +42,14 @@ const Login = () => {
         throw new Error(errorData.message || "Errore nel login");
       }
       const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userId", data.userId); // ✅ fondamentale
+      localStorage.setItem("token", data.token); // salvo il token per autenticare le richieste future
+      localStorage.setItem("userId", data.userId); // salvo userId per poterlo usare in seguito
 
       setSuccess(true);
       setFormData({ username: "", password: "" });
       console.log("Risposta login:", data);
 
-      // ✅ Vai al profilo
+      // Reindirizzo l'utente alla pagina del profilo dopo il login
       navigate("/profilo");
     } catch (err) {
       setError(err.message);

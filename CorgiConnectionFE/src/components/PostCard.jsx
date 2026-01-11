@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import CommentSection from "./CommentSection";
 
 const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
-  const [editContent, setEditContent] = useState(post.content);
-  const [isEditing, setIsEditing] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [editContent, setEditContent] = useState(post.content); // content  è il testo del post
+  const [isEditing, setIsEditing] = useState(false); // editing è lo stato di modifica
+  const [showConfirm, setShowConfirm] = useState(false); //showConfirm è lo stato di conferma eliminazione
 
   const [reactions, setReactions] = useState({
     "❤️": [],
@@ -15,7 +15,9 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   });
 
   const token = localStorage.getItem("token");
-  const isLoggedIn = !!token;
+  const isLoggedIn = !!token; // Verifica se l'utente è loggato
+
+  // Decodifica il token per ottenere l'ID utente
 
   let userId = null;
   if (token) {
@@ -31,14 +33,14 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
     }
   }
 
-  const isPostOwner =
-    post.author?.id && userId && String(post.author.id) === String(userId);
+  const isPostOwner = //se l'utente loggato è il proprietario del post
+    post.author?.id && userId && String(post.author.id) === String(userId); //confronto gli id come stringhe
 
   // Carica reactions
   useEffect(() => {
     const saved = localStorage.getItem(`post-${post.id}-reactions`);
     if (saved) setReactions(JSON.parse(saved));
-  }, [post.id]);
+  }, [post.id]); // useEffect per caricare le reactions al montaggio o cambio post.id
 
   const saveReactions = (newReactions) => {
     setReactions(newReactions);
@@ -49,17 +51,18 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
   };
 
   const handleReaction = (emoji) => {
+    //gestisce le reazioni. rimuove la reazione se già presente, altrimenti la aggiunge
     if (!userId) return;
 
     const newReactions = { ...reactions };
 
     for (const key of Object.keys(newReactions)) {
       newReactions[key] = newReactions[key].filter((id) => id !== userId);
-    }
+    } // rimuovo l'utente da tutte le reazioni
 
     if (!reactions[emoji].includes(userId)) {
       newReactions[emoji].push(userId);
-    }
+    } // aggiungo l'utente alla reazione selezionata
 
     saveReactions(newReactions);
   };
@@ -143,11 +146,11 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
         )}
 
         {/* INFO CORGI */}
-        {post.corgi && (
+        {/* {post.corgi && (
           <div className="alert alert-primary mt-2">
             <strong>🐕 {post.corgi.name}</strong> — {post.corgi.age} anni
           </div>
-        )}
+        )} */}
 
         {/* REACTIONS */}
         <div
@@ -159,20 +162,24 @@ const PostCard = ({ post, onPostUpdated, onPostDeleted }) => {
             cursor: "pointer",
           }}
         >
-          {Object.keys(reactions).map((emoji) => (
-            <span
-              key={emoji}
-              onClick={() => handleReaction(emoji)}
-              style={{
-                color: reactions[emoji].includes(userId) ? "red" : "#555",
-                userSelect: "none",
-              }}
-              title={`${reactions[emoji].length} reazioni`}
-            >
-              {emoji}{" "}
-              {reactions[emoji].length > 0 ? reactions[emoji].length : ""}
-            </span>
-          ))}
+          {Object.keys(reactions).map(
+            (
+              emoji //.map serve per creare un elemento per ogni reazione
+            ) => (
+              <span
+                key={emoji}
+                onClick={() => handleReaction(emoji)}
+                style={{
+                  color: reactions[emoji].includes(userId) ? "red" : "#555",
+                  userSelect: "none", // Impedisce la selezione del testo durante il click
+                }}
+                title={`${reactions[emoji].length} reazioni`}
+              >
+                {emoji}{" "}
+                {reactions[emoji].length > 0 ? reactions[emoji].length : ""}
+              </span>
+            )
+          )}
         </div>
 
         {/* BOTTONI */}

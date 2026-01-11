@@ -4,8 +4,8 @@ import "../css/Home.css";
 import corgipost from "../assets/img/corgipost.png";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
-  const token = localStorage.getItem("token");
+  const [posts, setPosts] = useState([]); // registro lo stato del post
+  const token = localStorage.getItem("token"); // recupero il token dal localStorage
 
   const fetchPosts = async () => {
     if (!token) {
@@ -25,14 +25,14 @@ const Home = () => {
 
       if (!res.ok) {
         const errorText = await res.text();
-        console.error("Errore nella ricerca dei post:", res.status, errorText);
+        console.error("Errore nella ricerca dei post:", res.status, errorText); //res.status mi da il codice di stato
         return;
       }
 
-      const data = await res.json();
+      const data = await res.json(); //aspetto la risposta in formato json
       const postsWithUser = (data.content || []).map((post) => ({
-        ...post,
-        authorUsername: post.author?.username || "Anonimo",
+        ...post, // se data.content è undefined, uso un array vuoto per evitare errori
+        authorUsername: post.author?.username || "Anonimo", // Aggiungo il nome utente dell'autore al post
       }));
 
       setPosts(postsWithUser);
@@ -42,6 +42,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    // useEffect per eseguire fetchPosts al montaggio del componente
     fetchPosts();
   }, []);
 

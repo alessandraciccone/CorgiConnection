@@ -6,14 +6,17 @@ import correrecorgi from "../assets/img/correrecorgi.png";
 // --- FUNZIONI INDEXEDDB ---
 const openDB = () => {
   return new Promise((resolve, reject) => {
+    // Apri (o crea) il database indexedDB che funziona in modo asincrono. indebex è più ampio del localstorage perché può salvare file binari come le immagini.
     const request = indexedDB.open("UserDB", 1);
     request.onupgradeneeded = (event) => {
-      const db = event.target.result;
+      // Crea l'object store se non esiste
+      const db = event.target.result; // Ottieni il database
       if (!db.objectStoreNames.contains("profileImages")) {
-        db.createObjectStore("profileImages", { keyPath: "userId" });
+        // Crea un object store per le immagini del profilo
+        db.createObjectStore("profileImages", { keyPath: "userId" }); // Usa userId come chiave primaria
       }
     };
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => resolve(request.result); // Risolvi la promessa con il database aperto
     request.onerror = () => reject(request.error);
   });
 };
@@ -23,11 +26,11 @@ const saveProfileImage = async (userId, blob) => {
   const tx = db.transaction("profileImages", "readwrite");
   const store = tx.objectStore("profileImages");
   store.put({ userId, image: blob });
-  return tx.complete;
+  return tx.complete; // Completa la transazione
 };
 
 const getProfileImage = async (userId) => {
-  const db = await openDB();
+  const db = await openDB(); // Apri il database
   return new Promise((resolve) => {
     const tx = db.transaction("profileImages", "readonly");
     const store = tx.objectStore("profileImages");
@@ -36,13 +39,13 @@ const getProfileImage = async (userId) => {
   });
 };
 
-// --- COMPONENTE PROFILO ---
 const Profilo = () => {
   const navigate = useNavigate();
-  const { userId: profileUserId } = useParams(); // ✅ ID dal URL
+  const { userId: profileUserId } = useParams(); // Ottieni l'userId dai parametri URL (se presente)
 
-  const [utente, setUtente] = useState(null);
+  const [utente, setUtente] = useState(null); //nullo perché inizialmente non ci sono dati
   const [profiloUtente, setProfiloUtente] = useState({
+    //memorizzo i dati del profilo che possono essere modificati
     username: "",
     email: "",
     firstName: "",
@@ -50,19 +53,20 @@ const Profilo = () => {
     city: "",
     province: "",
   });
-  const [fotoProfilo, setFotoProfilo] = useState(null);
+  const [fotoProfilo, setFotoProfilo] = useState(null); //stato per l'immagine del profilo
   const [infoCane, setInfoCane] = useState("");
-  const [modificaUtente, setModificaUtente] = useState(false);
+  const [modificaUtente, setModificaUtente] = useState(false); //false perché inizialmente non si sta modificando
 
-  const fileInputProfiloRef = useRef(null);
+  const fileInputProfiloRef = useRef(null); //useRef per il caricamento della foto del profilo
 
   //  Determina se è il proprio profilo
   const myUserId = localStorage.getItem("userId");
-  const isMyProfile = !profileUserId || profileUserId === myUserId;
-  const targetUserId = profileUserId || myUserId;
+  const isMyProfile = !profileUserId || profileUserId === myUserId; // Se non c'è userId nei parametri o corrisponde a quello salvato, è il proprio profilo
+  const targetUserId = profileUserId || myUserId; // Usa l'userId dai parametri o quello salvato
 
   // --- FETCH DATI UTENTE ---
   useEffect(() => {
+    // esegue il codice al caricamento del componente o al cambiamento di targetUserId
     const token = localStorage.getItem("token");
     if (!token || !targetUserId) return;
 
@@ -78,34 +82,37 @@ const Profilo = () => {
         setUtente(data);
         setProfiloUtente(data);
 
-        const blob = await getProfileImage(targetUserId);
-        if (blob) setFotoProfilo(URL.createObjectURL(blob));
+        const blob = await getProfileImage(targetUserId); // Recupera l'immagine del profilo da indexedDB
+        if (blob) setFotoProfilo(URL.createObjectURL(blob)); // Crea un URL per l'immagine e aggiornala nello stato
 
-        const infoSalvata = localStorage.getItem(`infoCane-${targetUserId}`);
+        const infoSalvata = localStorage.getItem(`infoCane-${targetUserId}`); // Recupera le info del cane dal localStorage
         setInfoCane(infoSalvata || "");
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchUtente();
-  }, [targetUserId]);
+    fetchUtente(); // Chiamata alla funzione di fetch
+  }, [targetUserId]); // Esegui quando targetUserId cambia
 
   // --- FUNZIONI FOTO PROFILO ---
   const handleFotoProfilo = (e) => {
     const file = e.target.files[0];
     const userId = localStorage.getItem("userId");
-    if (!file || !userId) return;
+    if (!file || !userId) return; //se manca il file o l'userId esci
 
-    const reader = new FileReader();
+    const reader = new FileReader(); // legge il mfile come reader o base64
     reader.onload = (event) => {
+      // quando il file è caricato lo processa in IMG
       const img = new Image();
       img.onload = () => {
-        const canvas = document.createElement("canvas");
+        // quando l'immagine è caricata la ridimensiona se necessario
+        const canvas = document.createElement("canvas"); // crea un canvas per il ridimensionamento
         const maxSize = 500;
-        let { width, height } = img;
+        let { width, height } = img; // ottieni larghezza e altezza originali
 
         if (width > height) {
+          // controlla se la larghezza è maggiore dell'altezza
           if (width > maxSize) {
             height *= maxSize / width;
             width = maxSize;
@@ -117,25 +124,27 @@ const Profilo = () => {
           }
         }
 
-        canvas.width = width;
+        canvas.width = width; // imposta le nuove dimensioni
         canvas.height = height;
-        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height); // disegna l'immagine ridimensionata nel canvas
 
         canvas.toBlob(async (blob) => {
+          // converte il canvas in un blob
+          // blob è l'immagine ridimensionata
           if (blob.size < 5 * 1024 * 1024) {
-            await saveProfileImage(userId, blob);
-            setFotoProfilo(URL.createObjectURL(blob));
+            await saveProfileImage(userId, blob); // salva l'immagine ridimensionata in indexedDB
+            setFotoProfilo(URL.createObjectURL(blob)); // aggiorna lo stato con la nuova immagine
           } else {
             alert("Immagine troppo grande, prova un file più leggero!");
           }
-        }, "image/png");
+        }, "image/png"); // formato dell'immagine
       };
       img.src = event.target.result;
     };
     reader.readAsDataURL(file);
   };
 
-  // --- CAMBIO DATI UTENTE ---
+  // --- CAMBIO DATI UTENTE --
   const handleChangeUtente = (e) => {
     const { name, value } = e.target;
     setProfiloUtente((prev) => ({ ...prev, [name]: value }));
@@ -149,9 +158,10 @@ const Profilo = () => {
   };
 
   const handleInviaUtente = async () => {
+    // Invia i dati modificati al server
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
-    if (!token || !userId) return;
+    if (!token || !userId) return; //se manca il token o l'userId esci
 
     try {
       const baseUrl = import.meta.env.VITE_API_URL;
@@ -208,19 +218,23 @@ const Profilo = () => {
                       "lastName",
                       "city",
                       "province",
-                    ].map((field) => (
-                      <input
-                        key={field}
-                        type={field === "email" ? "email" : "text"}
-                        name={field}
-                        placeholder={
-                          field.charAt(0).toUpperCase() + field.slice(1)
-                        }
-                        value={profiloUtente[field]}
-                        onChange={handleChangeUtente}
-                        className="input-block"
-                      />
-                    ))}
+                    ].map(
+                      (
+                        field //.map serve per creare un array di input in base ai campi
+                      ) => (
+                        <input
+                          key={field}
+                          type={field === "email" ? "email" : "text"} //tipo email per il campo email il ? serve per fare una condizione inline. se input è email allora type email altrimenti text
+                          name={field}
+                          placeholder={
+                            field.charAt(0).toUpperCase() + field.slice(1) //prima lettera maiuscola
+                          }
+                          value={profiloUtente[field]}
+                          onChange={handleChangeUtente}
+                          className="input-block"
+                        />
+                      )
+                    )}
                     <div className="card mt-2">
                       <div className="card-body canecard">
                         <textarea
@@ -247,7 +261,7 @@ const Profilo = () => {
                       ✔️
                     </span>
                   </>
-                ) : utente ? (
+                ) : utente ? ( // mostra i dati utente se non si sta modificando
                   <>
                     <h4 className="card-title">
                       {utente.firstName} {utente.lastName}

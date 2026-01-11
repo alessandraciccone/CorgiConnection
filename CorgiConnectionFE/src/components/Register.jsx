@@ -6,6 +6,8 @@ import corgiregister from "../assets/img/corgiregister.png";
 
 const Register = () => {
   const [formData, setFormData] = useState({
+    // stato per i dati del form. il setform serve per aggiornare i dati
+
     username: "",
     email: "",
     password: "",
@@ -16,35 +18,41 @@ const Register = () => {
     profileImage: "",
   });
 
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false); // stato per il successo della registrazione
+  const [error, setError] = useState(""); // stato per gli errori
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+  //..prev è lo spread operator che copia i valori precedenti di formData
+  //con hanflechange aggiorno i valori di formData in base a quello che scrivo nei campi del form
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccess(false);
+    //invio del form
+    e.preventDefault(); //previene il comportamento predefinito del form che è il refresh della pagina
+    setError(""); //azzero gli errori
+    setSuccess(false); //azzero il successo(come ad esempio se avevo già fatto una registrazione con successo e poi rifaccio il form)
 
     try {
-      const baseUrl = import.meta.env.VITE_API_URL;
+      //blocco try catch per gestire gli errori
+      const baseUrl = import.meta.env.VITE_API_URL; //prendo l'url dell'api dalle variabili d'ambiente
       const response = await fetch(`${baseUrl}/auth/register`, {
+        //await per aspettare la risposta del server
         method: "POST",
         headers: {
+          //intestazioni della richiesta
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), //corpo della richiesta, trasformo i dati del form in json
       });
 
       if (!response.ok) {
+        //se la risposta non è ok, lancio un errore
         const errorData = await response.json();
         throw new Error(errorData.message || "Errore nella registrazione");
       }
 
-      setSuccess(true);
+      setSuccess(true); //se la registrazione va a buon fine, setto il successo a true
       setFormData({
         username: "",
         email: "",
@@ -56,6 +64,7 @@ const Register = () => {
         profileImage: "",
       });
     } catch (err) {
+      //gestione degli errori. se non va a un buon fine itnercetto l'errore e mando il messaggio
       setError(err.message);
     }
   };
@@ -70,6 +79,8 @@ const Register = () => {
         </p>
       </div>
       <form onSubmit={handleSubmit}>
+        {" "}
+        {/* gestione dell'invio del form */}
         <div className="form-group">
           <label htmlFor="username">Username 🧸 </label>
           <input
@@ -79,10 +90,9 @@ const Register = () => {
             value={formData.username}
             onChange={handleChange}
             placeholder="Scrivi il tuo Username 🐾"
-            required
+            required //campo obbligatorio
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="firstName">Nome 🧝 </label>
           <input
@@ -95,7 +105,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="lastName">Cognome 🧬 </label>
           <input
@@ -108,7 +117,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="city">Città 🏡</label>
           <input
@@ -121,7 +129,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="province">Provincia 🗺️</label>
           <input
@@ -134,7 +141,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="email">Email 📨</label>
           <input
@@ -147,7 +153,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="password">Password 🔑</label>
           <input
@@ -160,7 +165,6 @@ const Register = () => {
             required
           />
         </div>
-
         {/* <div className="form-group">
         <label htmlFor="profileImage">Immagine profilo 🖼️</label>
         <input
@@ -172,9 +176,7 @@ const Register = () => {
           placeholder="URL immagine profilo 🐾"
         />
       </div> */}
-
         <button type="submit">Invia</button>
-
         {success && (
           <p className="success-message">
             Registrazione completata con successo!

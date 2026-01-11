@@ -4,9 +4,10 @@ import queen from "../assets/img/queen.png";
 import { Link } from "react-router-dom";
 
 const PaperNav = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); //stato per menu hamburger serve per mobile
 
-  const handleNavClick = () => setMenuOpen(false);
+  // usestate in react serve per gestire la memoria interna di un componente funzionale
+  const handleNavClick = () => setMenuOpen(false); //chiude il menu quando si clicca su un link
 
   return (
     <nav className="navbar navbar-expand-lg custom-nav sticky-top">
@@ -22,11 +23,11 @@ const PaperNav = () => {
 
         {/* Hamburger Button */}
         <button
-          className="navbar-toggler"
-          type="button"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-controls="navbarNav"
-          aria-expanded={menuOpen}
+          className="navbar-toggler" //classe per bottone hamburger
+          type="button" //tipo bottone
+          onClick={() => setMenuOpen(!menuOpen)} //toggle menu aperto/chiuso alla pressione
+          aria-controls="navbarNav" //
+          aria-expanded={menuOpen} //aggiorna attributo aria-expanded serve per accessibilità
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
@@ -34,7 +35,7 @@ const PaperNav = () => {
 
         {/* Menu Items */}
         <div
-          className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}
+          className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`} // sse menuOpen è true aggiunge classe show per mostrare il menu
           id="navbarNav"
         >
           <ul className="navbar-nav ms-auto ">
@@ -47,7 +48,7 @@ const PaperNav = () => {
               <Link
                 to="/curiosita"
                 className="nav-link"
-                onClick={handleNavClick}
+                onClick={handleNavClick} //chiude menu al click quando seleziono una voce
               >
                 Lo sapevi?
               </Link>
